@@ -5337,8 +5337,12 @@ async function handleRequest(req, res) {
     let filePath = url.pathname;
     if (filePath === '/' || filePath === '') filePath = '/index.html';
     
-    // Normalize path to frontend folder
-    const fullPath = path.join(__dirname, '..', 'frontend', filePath);
+    // Use FRONTEND_PATH from .env or default to ../frontend
+    const frontendBase = process.env.FRONTEND_PATH 
+      ? path.resolve(__dirname, process.env.FRONTEND_PATH)
+      : path.join(__dirname, '..', 'frontend');
+    
+    const fullPath = path.join(frontendBase, filePath);
     
     if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
       const ext = path.extname(fullPath).toLowerCase();

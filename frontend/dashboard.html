@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard | Accepted Offer to Close</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe3ee;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-dark:#115e59;
+      --danger:#991b1b;
+      --warn:#92400e;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    header {
+      background:white;
+      border-bottom:1px solid var(--line);
+      padding:18px 22px;
+    }
+    .wrap {
+      max-width:1240px;
+      margin:0 auto;
+    }
+    nav {
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    nav strong {
+      font-size:17px;
+    }
+    nav a {
+      color:var(--accent-dark);
+      font-weight:800;
+      text-decoration:none;
+      margin-left:14px;
+    }
+    main {
+      padding:28px 22px 70px;
+    }
+    .topline {
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-end;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    h1 {
+      font-size:34px;
+      margin:0 0 6px;
+      letter-spacing:-.02em;
+    }
+    .small {
+      color:var(--muted);
+      margin:0;
+      line-height:1.45;
+    }
+    .actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .button {
+      display:inline-block;
+      border-radius:11px;
+      padding:11px 14px;
+      text-decoration:none;
+      font-weight:900;
+      border:1px solid var(--line);
+      background:white;
+      color:var(--accent-dark);
+    }
+    .button.primary {
+      background:var(--accent);
+      color:white;
+      border-color:var(--accent);
+    }
+    .cards {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .metric {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+    }
+    .metric .label {
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+    .metric .value {
+      font-size:30px;
+      font-weight:900;
+    }
+    .card {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+    }
+    .table-wrap {
+      overflow-x:auto;
+      margin-top:14px;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+    }
+    th, td {
+      text-align:left;
+      padding:11px 10px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      font-size:14px;
+    }
+    th {
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    a {
+      color:var(--accent-dark);
+    }
+    .muted {
+      color:var(--muted);
+      font-size:13px;
+    }
+    .pill {
+      display:inline-block;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:900;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      color:var(--muted);
+    }
+    .attention-pill {
+      display:inline-block;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:900;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:var(--warn);
+    }
+    .blocked-pill {
+      display:inline-block;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:900;
+      background:#fef2f2;
+      border:1px solid #fecaca;
+      color:var(--danger);
+      margin-top:4px;
+    }
+    .error {
+      color:var(--danger);
+      font-weight:900;
+    }
+    @media (max-width:900px) {
+      .cards {
+        grid-template-columns:1fr 1fr;
+      }
+      nav a {
+        margin-left:0;
+        margin-right:14px;
+      }
+    }
+    @media (max-width:640px) {
+      .cards {
+        grid-template-columns:1fr;
+      }
+      h1, .dashboard-title {
+        font-size:32px;
+      }
+      .dashboard-hero {
+        padding:22px;
+      }
+    }
+  
+    .dashboard-hero {
+      background:
+        radial-gradient(circle at top left, rgba(15,118,110,.18), transparent 34%),
+        linear-gradient(135deg,#102034 0%,#123b45 46%,#0f766e 100%);
+      color:white;
+      border-radius:22px;
+      padding:28px;
+      margin-bottom:18px;
+      box-shadow:0 18px 40px rgba(23,32,51,.14);
+      border:1px solid rgba(255,255,255,.16);
+    }
+    .dashboard-hero-inner {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .dashboard-eyebrow {
+      display:inline-block;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.10);
+      color:#d1fae5;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    .dashboard-title {
+      color:white;
+      font-size:42px;
+      line-height:1;
+      margin:0 0 10px;
+      letter-spacing:-.045em;
+    }
+    .dashboard-lead {
+      color:rgba(255,255,255,.78);
+      line-height:1.5;
+      margin:0;
+      max-width:760px;
+      font-size:16px;
+    }
+    .dashboard-status {
+      color:#d1fae5;
+      font-size:13px;
+      font-weight:900;
+      margin-top:12px;
+    }
+    .dashboard-hero .button {
+      border-color:rgba(255,255,255,.30);
+      background:rgba(255,255,255,.12);
+      color:white;
+    }
+    .dashboard-hero .button.primary {
+      background:white;
+      color:#115e59;
+      border-color:white;
+    }
+
+
+    .clearance-dashboard-note {
+      margin-top:12px;
+      border:1px solid #bbf7d0;
+      background:#ecfdf5;
+      color:#115e59;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:800;
+      line-height:1.4;
+    }
+
+</style>
+  <link rel="stylesheet" href="./dealdesk-ui-lock.css?v=1">
+</head>
+<body>
+  <header>
+  <div class="wrap">
+    <nav>
+      <a href="./index.html">Back</a>
+    </nav>
+  </div>
+</header>
+
+  <main>
+    <div class="wrap">
+      <section class="dashboard-hero">
+        <div class="dashboard-hero-inner">
+          <div>
+            <span class="dashboard-eyebrow">Active accepted-offer files</span>
+            <h1 class="dashboard-title">Command Center</h1>
+            <p class="dashboard-lead">
+              Work active accepted offers, clearance items, blockers, attorney and lender follow-up,
+              communications, offer reviews, and closing follow-through from one operational view. The goal is simple: know what must be cleared, who must confirm it, and what communication closed it.
+            </p>
+            <div class="dashboard-status" id="dashboardStatus">Loading live dashboard data...</div>
+          </div>
+          <div class="actions">
+            <a class="button primary" href="./input.html">New Accepted Offer</a>
+            <a class="button" href="./contacts.html">Contacts</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="cards">
+        <div class="metric">
+          <div class="label">Active Offers</div>
+          <div class="value" id="acceptedOffers">—</div>
+        </div>
+        <div class="metric">
+          <div class="label">Needs Review</div>
+          <div class="value" id="missingItems">—</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Active Offers</h2>
+<div class="clearance-dashboard-note">
+          
+        </div>
+
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Status</th>
+                <th>Seller</th>
+                <th>Purchaser</th>
+                <th>Clearance</th>
+                <th>Next Clearance-On</th>
+                <th>Next Due</th>
+                <th>Next Action</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody id="activeOffersBody">
+              <tr><td colspan="9">Loading active accepted offers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      var date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString();
+    }
+
+    function setText(id, value) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = value == null ? '0' : value;
+    }
+
+    function renderDeals(deals) {
+      var body = document.getElementById('activeOffersBody');
+
+      if (!body) return;
+
+      if (!deals || !deals.length) {
+        body.innerHTML = '<tr><td colspan="9">No active accepted offers yet.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = deals.map(function(deal) {
+        var waitingCount = Number(deal.waiting_on_count || 0);
+        var blockedCount = Number(deal.blocked_count || 0);
+
+        var waitingHtml = waitingCount
+          ? '<span class="attention-pill">' + waitingCount + '  open</span>'
+          : '<span class="pill">Clear</span>';
+
+        if (blockedCount) {
+          waitingHtml += '<br><span class="blocked-pill">' + blockedCount + ' blocked</span>';
+        }
+
+        return '<tr>' +
+          '<td><a href="./detail.html?id=' + encodeURIComponent(deal.public_id) + '"><strong>' + escapeHtml(deal.property_address || '') + '</strong></a><br><span class="muted">MLS: ' + escapeHtml(deal.mls_number || '') + '</span></td>' +
+          '<td>' + escapeHtml(deal.transaction_status || '') + '</td>' +
+          '<td>' + escapeHtml(deal.seller_name || '') + '</td>' +
+          '<td>' + escapeHtml(deal.purchaser_name || '') + '</td>' +
+          '<td>' + waitingHtml + '</td>' +
+          '<td>' + escapeHtml(deal.next_waiting_on || '') + '</td>' +
+          '<td>' + escapeHtml(formatDate(deal.next_due_date)) + '</td>' +
+          '<td>' + escapeHtml(deal.next_action || 'Review Clearance Path and verify required contacts.') + '</td>' +
+          '<td>' + escapeHtml(formatDate(deal.created_at)) + '</td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    async function loadDashboard() {
+      var body = document.getElementById('activeOffersBody');
+
+      try {
+        var response = await fetch('./api/dashboard', {
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store'
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok || !data.dashboard) {
+          throw new Error(data.error || 'Dashboard API did not return data');
+        }
+
+        var dashboard = data.dashboard;
+
+        setText('acceptedOffers', dashboard.accepted_offers || 0);
+        var needsReviewCount = (dashboard.recent_deals || []).filter(function(deal) {
+          return Number(deal.waiting_on_count || 0) > 0 || Number(deal.blocked_count || 0) > 0;
+        }).length;
+
+        setText('missingItems', needsReviewCount);
+
+        renderDeals(dashboard.recent_deals || []);
+
+        setText('dashboardStatus', 'Live backend connected.');
+      } catch (err) {
+        if (body) {
+          body.innerHTML = '<tr><td colspan="9" class="error">Could not load dashboard: ' + escapeHtml(err.message) + '</td></tr>';
+        }
+        setText('dashboardStatus', 'Could not load live dashboard.');
+      }
+    }
+
+    loadDashboard();
+  </script>
+
+<!-- DEALDESK_CLAIRE_INTEGRATION_V1 -->
+<style id="dealdesk-claire-integration-style">
+  .dd-claire-launcher {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2147483000;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: #071b2c;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 12px 32px rgba(7, 27, 44, .28);
+    border: 2px solid #14b8a6;
+  }
+  .dd-claire-launcher:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 38px rgba(7, 27, 44, .34);
+  }
+  .dd-claire-launcher span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #14b8a6;
+  }
+  @media print {
+    .dd-claire-launcher { display: none !important; }
+  }
+</style>
+<a class="dd-claire-launcher" href="./claire-dealdesk-view.html" title="Open CLAIRE Deal Desk View">
+  <span></span>
+  CLAIRE Intake Reader
+</a>
+<!-- END_DEALDESK_CLAIRE_INTEGRATION_V1 -->
+
+</body>
+</html>

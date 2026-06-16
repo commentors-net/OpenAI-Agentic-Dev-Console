@@ -1,0 +1,22 @@
+{
+  "name": "accepted-offer-to-close-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private backend for Accepted Offer to Close at servicedepartment.ai/dealdesk",
+  "main": "server.js",
+  "scripts": {
+    "check": "node --check server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "imapflow": "^1.4.0",
+    "mailparser": "^3.9.9",
+    "mammoth": "^1.12.0",
+    "mysql2": "^3.22.5",
+    "nodemailer": "^8.0.11",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.19.1",
+    "puppeteer": "^25.1.0"
+  }
+}

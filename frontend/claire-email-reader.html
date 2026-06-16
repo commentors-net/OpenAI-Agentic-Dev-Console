@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CLAIRE Email Reader</title>
+  <style>
+    :root{--navy:#071b2c;--teal:#14b8a6;--bg:#f4f7fb;--card:#fff;--border:#dbe5ef;--text:#122033;--muted:#66758a;--bad:#b42318;--ok:#067647;--warn:#b54708}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+    header{background:linear-gradient(135deg,var(--navy),#0b263d);color:#fff;padding:18px 20px;border-bottom:4px solid var(--teal)}
+    h1{margin:0;font-size:23px} header p{margin:6px 0 0;color:#c7d8e8}
+    main{max-width:1180px;margin:18px auto 40px;padding:0 14px}.grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 28px rgba(15,35,55,.06);overflow:hidden}
+    .card h2{margin:0;padding:14px 16px;font-size:16px;background:#f8fbfe;border-bottom:1px solid var(--border)}.body{padding:16px}
+    label{display:block;font-size:12px;font-weight:700;color:#344054;margin:12px 0 5px}
+    input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;font-size:14px}
+    button{border:0;border-radius:10px;padding:11px 13px;font-weight:700;cursor:pointer;background:var(--navy);color:white}button.secondary{background:#e6eef7;color:#102a43}button.teal{background:var(--teal);color:#06251f}button:disabled{opacity:.55}
+    .row{display:flex;gap:10px}.row>*{flex:1}.buttons{display:grid;gap:10px;margin-top:14px}
+    .status{padding:12px 14px;border-radius:12px;margin-bottom:12px;border:1px solid var(--border);background:#f8fbfe;color:#344054;font-size:14px;white-space:pre-wrap}.status.ok{background:#ecfdf3;border-color:#abefc6;color:var(--ok)}.status.err{background:#fef3f2;border-color:#fecdca;color:var(--bad)}.status.warn{background:#fffaeb;border-color:#fedf89;color:var(--warn)}
+    .email-list{display:grid;gap:10px;max-height:540px;overflow:auto}.email{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;cursor:pointer}.email:hover{border-color:var(--teal);background:#f7fffd}.uid{font-size:12px;color:var(--teal);font-weight:800}.subj{font-weight:800;margin-top:5px}.meta{font-size:12px;color:var(--muted);margin-top:4px}
+    .top-actions{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:#fff}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#e6eef7;color:#24415c;font-size:12px;font-weight:700}
+    .readout{padding:18px;line-height:1.45;white-space:pre-wrap;font-size:14px}.placeholder{color:var(--muted);padding:28px;text-align:center}.small{color:var(--muted);font-size:12px;margin-top:8px}.endpoint{font-family:Menlo,Consolas,monospace;font-size:12px;background:#f1f5f9;border:1px solid #dbe5ef;border-radius:8px;padding:8px;overflow:auto}
+  </style>
+</head>
+<body>
+<header><h1>CLAIRE Email Reader</h1><p>Reads an email and its attached documents. No deal creation. No database write. Review first.</p></header>
+<main>
+  <div class="grid">
+    <section class="card"><h2>Email Controls</h2><div class="body">
+      <div id="status" class="status warn">Ready. Click List Emails or Read Latest Matching Email.</div>
+      <label>API Base</label><input id="apiBase" value="./api/claire-reader">
+      <label>From / search filter</label><input id="fromFilter" value="zach">
+      <div class="row"><div><label>Limit</label><input id="limit" value="20"></div><div><label>UID</label><input id="uid" placeholder="optional"></div></div>
+      <div class="buttons"><button id="listBtn">List Emails</button><button id="latestBtn" class="teal">Read Latest Matching Email</button><button id="uidBtn" class="secondary">Read UID</button></div>
+      <p class="small">Secrets stay server-side. This page calls the CLAIRE reader sidecar.</p>
+      <label>Endpoints</label><div class="endpoint">GET ./api/claire-reader/emails?from=zach&limit=20
+GET ./api/claire-reader/read?from=zach&latest=1
+GET ./api/claire-reader/read?uid=123</div>
+    </div></section>
+    <section class="card"><div class="top-actions"><span class="pill">Email list</span><button id="clearBtn" class="secondary">Clear</button></div><div class="body"><div id="emails" class="email-list"><div class="placeholder">No emails loaded yet.</div></div></div></section>
+  </div>
+  <section class="card" style="margin-top:16px"><div class="top-actions"><span class="pill">CLAIRE Readout</span><button id="copyBtn" class="secondary">Copy Readout</button></div><div id="readout" class="readout"><div class="placeholder">Read an email to see the document-by-document digest here.</div></div></section>
+</main>
+<script>
+(function(){
+  const $=id=>document.getElementById(id), status=$("status"), emails=$("emails"), readout=$("readout");
+  function setStatus(m,t){status.className="status "+(t||"");status.textContent=m}
+  function base(){return $("apiBase").value.replace(/\/+$/,"")}
+  function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+  async function json(url){const r=await fetch(url,{headers:{Accept:"application/json"},cache:"no-store"});const tx=await r.text();let d;try{d=tx?JSON.parse(tx):{}}catch(e){throw new Error("Backend did not return JSON: "+tx.slice(0,300))}if(!r.ok||d.ok===false)throw new Error(d.error||("HTTP "+r.status));return d}
+  function renderEmails(list){if(!list||!list.length){emails.innerHTML='<div class="placeholder">No matching emails.</div>';return}emails.innerHTML=list.map(x=>`<div class="email" data-uid="${esc(x.uid)}"><div class="uid">UID ${esc(x.uid)}</div><div class="subj">${esc(x.subject||"(no subject)")}</div><div class="meta">${esc(x.from)}</div><div class="meta">${esc(x.date)} ${x.seen?"seen":"unread"}</div></div>`).join("");emails.querySelectorAll(".email").forEach(el=>el.onclick=()=>{$("uid").value=el.dataset.uid;readUid()})}
+  function renderReadout(d){readout.textContent=d.readout||d.output||d.text||JSON.stringify(d,null,2)}
+  async function listEmails(){setStatus("Listing emails...","");emails.innerHTML='<div class="placeholder">Loading...</div>';try{const d=await json(`${base()}/emails?from=${encodeURIComponent($("fromFilter").value)}&limit=${encodeURIComponent($("limit").value||20)}`);renderEmails(d.emails);setStatus("Emails loaded.","ok")}catch(e){setStatus(e.message,"err")}}
+  async function readLatest(){setStatus("CLAIRE is reading latest matching email...","");readout.textContent="Reading email and attachments...";try{const d=await json(`${base()}/read?latest=1&from=${encodeURIComponent($("fromFilter").value)}`);renderReadout(d);setStatus("Readout complete.","ok")}catch(e){setStatus(e.message,"err");readout.textContent=""}}
+  async function readUid(){const uid=$("uid").value.trim();if(!uid){setStatus("Enter or click a UID.","warn");return}setStatus("CLAIRE is reading UID "+uid+"...","");readout.textContent="Reading email and attachments...";try{const d=await json(`${base()}/read?uid=${encodeURIComponent(uid)}`);renderReadout(d);setStatus("Readout complete.","ok")}catch(e){setStatus(e.message,"err");readout.textContent=""}}
+  $("listBtn").onclick=listEmails;$("latestBtn").onclick=readLatest;$("uidBtn").onclick=readUid;$("clearBtn").onclick=()=>{emails.innerHTML='<div class="placeholder">No emails loaded yet.</div>';readout.innerHTML='<div class="placeholder">Read an email to see the document-by-document digest here.</div>';setStatus("Cleared.","warn")};$("copyBtn").onclick=async()=>{await navigator.clipboard.writeText(readout.textContent||"");setStatus("Readout copied.","ok")}
+})();
+</script>
+</body>
+</html>

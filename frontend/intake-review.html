@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Review Intake Draft | CLAIRE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f4f7fb; color:#0f172a; }
+    .top { background:linear-gradient(135deg,#0f172a,#0f766e); color:white; padding:16px; display:flex; justify-content:space-between; align-items:center; gap:10px; position:sticky; top:0; z-index:5; }
+    .top h1 { margin:0; font-size:20px; line-height:1.15; }
+    .top p { margin:4px 0 0; color:#dbeafe; font-size:13px; }
+    .top a { color:white; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:10px; padding:8px 10px; font-size:13px; white-space:nowrap; }
+    .wrap { max-width:980px; margin:0 auto; padding:14px; display:grid; gap:14px; }
+    .panel { background:white; border:1px solid #dbe3ef; border-radius:16px; padding:14px; box-shadow:0 10px 26px rgba(15,23,42,.08); }
+    .hero h2 { margin:0; font-size:22px; }
+    .question { font-size:18px; font-weight:900; margin:12px 0 0; }
+    .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:12px; }
+    .field { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px; }
+    .label { font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:900; color:#64748b; margin-bottom:4px; }
+    .value { font-weight:800; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .notice { background:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:12px; border-radius:12px; }
+    .docs { display:grid; gap:12px; }
+    .doc { background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:12px; }
+    .docTop { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+    .doc strong { display:block; overflow-wrap:anywhere; }
+    .doc span { display:block; font-size:12px; color:#64748b; margin-top:3px; }
+    .docActions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .preview { display:none; margin-top:10px; border:1px solid #cbd5e1; border-radius:12px; overflow:hidden; background:white; }
+    iframe { width:100%; height:520px; border:0; display:block; background:white; }
+    pre { white-space:pre-wrap; background:#0f172a; color:#e2e8f0; padding:12px; border-radius:12px; max-height:320px; overflow:auto; font-size:12px; }
+    textarea { width:100%; min-height:220px; box-sizing:border-box; border:1px solid #cbd5e1; border-radius:12px; padding:10px; font-family:monospace; font-size:12px; }
+    .actions { display:grid; grid-template-columns:1fr; gap:10px; margin-top:12px; }
+    button, .button { border:0; border-radius:12px; padding:13px 14px; background:#0f766e; color:white; cursor:pointer; font-weight:900; text-decoration:none; display:inline-block; text-align:center; font-size:16px; }
+    button.secondary, .button.secondary { background:#334155; }
+    button.danger { background:#b91c1c; }
+    button:disabled { opacity:.6; cursor:wait; }
+    details summary { cursor:pointer; font-weight:900; }
+    @media (max-width: 720px) {
+      .top { align-items:flex-start; }
+      .grid { grid-template-columns:1fr; }
+      .hero h2 { font-size:20px; }
+      .question { font-size:17px; }
+      .panel { border-radius:14px; }
+      iframe { height:430px; }
+      .docTop { display:block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div>
+      <h1>CLAIRE Review</h1>
+      <p>Accepted Offer to Close</p>
+    </div>
+    <a href="./intake-inbox.html">Back</a>
+  </div>
+  <main class="wrap" id="content">
+    <div class="panel">Loading draft...</div>
+  </main>
+
+<script>
+function escapeHtml(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function(ch) {
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]);
+  });
+}
+function money(v) {
+  const n = Number(v || 0);
+  if (!n) return '';
+  return n.toLocaleString(undefined, {style:'currency', currency:'USD', maximumFractionDigits:0});
+}
+function getParam(name) { return new URLSearchParams(location.search).get(name) || ''; }
+function isPdf(d) {
+  return String(d.mime_type || '').toLowerCase().includes('pdf') || String(d.filename || '').toLowerCase().endsWith('.pdf');
+}
+function textStatus(d) {
+  const t = String(d.text_extract || '');
+  if (!t) return 'Original document saved; text extraction empty.';
+  if (t.indexOf('text extraction failed') >= 0) return t.slice(0, 160);
+  return 'Text read: ' + t.length + ' characters';
+}
+async function fetchJson(url, options) {
+  const res = await fetch(url, Object.assign({headers:{Accept:'application/json'}, cache:'no-store'}, options || {}));
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; }
+  catch (err) { throw new Error('API returned HTML/non-JSON HTTP ' + res.status + ': ' + text.replace(/<[^>]*>/g,' ').slice(0,180)); }
+  if (!res.ok || data.ok === false) throw new Error(data.error || 'Request failed');
+  return data;
+}
+function renderDocuments(docs) {
+  if (!docs.length) {
+    return '<div class="notice">No attachments were found on this intake email.</div>';
+  }
+
+  return '<div class="docs">' + docs.map((d, index) => {
+    const viewUrl = './api/email-intake/attachments/' + encodeURIComponent(d.public_id) + '/view';
+    const previewId = 'preview_' + index;
+    const pdf = isPdf(d);
+    return [
+      '<div class="doc">',
+        '<div class="docTop">',
+          '<div>',
+            '<strong>' + escapeHtml(d.filename || 'Document') + '</strong>',
+            '<span>' + escapeHtml(d.mime_type || 'file') + '</span>',
+            '<span>' + escapeHtml(textStatus(d)) + '</span>',
+          '</div>',
+          '<div class="docActions">',
+            '<a class="button" href="' + viewUrl + '" target="_blank" rel="noopener">View Document</a>',
+            pdf ? '<button class="secondary" data-preview="' + previewId + '" data-src="' + viewUrl + '">Preview PDF</button>' : '',
+          '</div>',
+        '</div>',
+        pdf ? '<div class="preview" id="' + previewId + '"><iframe title="PDF preview"></iframe></div>' : '',
+        d.text_extract ? '<details style="margin-top:10px"><summary>Show extracted text</summary><pre>' + escapeHtml(String(d.text_extract).slice(0, 12000)) + '</pre></details>' : '',
+      '</div>'
+    ].join('');
+  }).join('') + '</div>';
+}
+function render(draft) {
+  const extracted = draft.extracted || {};
+  const missing = draft.missing_fields || [];
+  const dup = draft.duplicate_check || {};
+  const docs = draft.attachments || [];
+  const property = draft.property_address || extracted.property_address || 'this accepted offer';
+
+  document.getElementById('content').innerHTML = [
+    '<section class="panel hero">',
+      '<h2>' + escapeHtml(property) + '</h2>',
+      '<div class="question">Do you want to set up a deal file for this accepted offer?</div>',
+      '<div class="actions">',
+        '<button id="createDealBtn">Yes, Create Deal File</button>',
+        '<button class="secondary" id="readyBtn">Review First / Mark Ready</button>',
+        '<button class="danger" id="rejectBtn">Reject</button>',
+      '</div>',
+    '</section>',
+
+    '<section class="panel">',
+      '<div class="grid">',
+        '<div class="field"><div class="label">Price</div><div class="value">' + escapeHtml(money(extracted.purchase_price) || 'Missing') + '</div></div>',
+        '<div class="field"><div class="label">Confidence</div><div class="value">' + escapeHtml(draft.confidence_score || 0) + '%</div></div>',
+        '<div class="field"><div class="label">Seller</div><div class="value">' + escapeHtml((extracted.seller_names || []).join(', ') || 'Missing') + '</div></div>',
+        '<div class="field"><div class="label">Purchaser</div><div class="value">' + escapeHtml((extracted.purchaser_names || []).join(', ') || 'Missing') + '</div></div>',
+        '<div class="field"><div class="label">Seller Attorney</div><div class="value">' + escapeHtml(extracted.seller_attorney_name || 'Missing') + '</div></div>',
+        '<div class="field"><div class="label">Purchaser Attorney</div><div class="value">' + escapeHtml(extracted.purchaser_attorney_name || 'Missing') + '</div></div>',
+      '</div>',
+    '</section>',
+
+    missing.length ? '<section class="panel notice"><strong>Missing / needs review:</strong><br>' + escapeHtml(missing.join(', ')) + '</section>' : '',
+    dup.possible_duplicate ? '<section class="panel notice"><strong>Possible duplicate found.</strong><pre>' + escapeHtml(JSON.stringify(dup.matches || [], null, 2)) + '</pre></section>' : '',
+
+    '<section class="panel">',
+      '<h2>Documents Found: ' + docs.length + '</h2>',
+      '<p style="color:#64748b;margin-top:0">Open the original PDFs/documents here before creating the deal file.</p>',
+      renderDocuments(docs),
+    '</section>',
+
+    '<section class="panel">',
+      '<details>',
+        '<summary>Show extracted intake data</summary>',
+        '<textarea readonly>' + escapeHtml(JSON.stringify(extracted, null, 2)) + '</textarea>',
+      '</details>',
+    '</section>',
+
+    '<section class="panel">',
+      '<details>',
+        '<summary>Show original email text</summary>',
+        '<pre>' + escapeHtml(draft.body_text || '') + '</pre>',
+      '</details>',
+    '</section>'
+  ].join('');
+
+  document.querySelectorAll('[data-preview]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = document.getElementById(btn.getAttribute('data-preview'));
+      const iframe = box.querySelector('iframe');
+      if (!iframe.getAttribute('src')) iframe.setAttribute('src', btn.getAttribute('data-src'));
+      const open = box.style.display === 'block';
+      box.style.display = open ? 'none' : 'block';
+      btn.textContent = open ? 'Preview PDF' : 'Hide Preview';
+    });
+  });
+
+  document.getElementById('createDealBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('createDealBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creating deal file...';
+    try {
+      const data = await fetchJson('./api/intake-drafts/' + encodeURIComponent(draft.public_id) + '/create-deal', {
+        method:'POST',
+        headers:{'Content-Type':'application/json', Accept:'application/json'},
+        body: JSON.stringify({created_by:'operator'})
+      });
+      const deal = data.deal || {};
+      location.href = './detail.html?id=' + encodeURIComponent(deal.public_id || deal.id);
+    } catch (err) {
+      alert(err.message);
+      btn.disabled = false;
+      btn.textContent = 'Yes, Create Deal File';
+    }
+  });
+
+  document.getElementById('readyBtn').addEventListener('click', async () => {
+    await fetchJson('./api/intake-drafts/' + encodeURIComponent(draft.public_id) + '/status', {
+      method:'POST',
+      headers:{'Content-Type':'application/json', Accept:'application/json'},
+      body: JSON.stringify({draft_status:'Ready to Review', reviewed_by:'operator'})
+    });
+    location.reload();
+  });
+
+  document.getElementById('rejectBtn').addEventListener('click', async () => {
+    if (!confirm('Reject this intake draft?')) return;
+    await fetchJson('./api/intake-drafts/' + encodeURIComponent(draft.public_id) + '/reject', {
+      method:'POST',
+      headers:{'Content-Type':'application/json', Accept:'application/json'},
+      body: JSON.stringify({reviewed_by:'operator'})
+    });
+    location.href = './intake-inbox.html';
+  });
+}
+async function load() {
+  const id = getParam('id');
+  if (!id) {
+    document.getElementById('content').innerHTML = '<div class="panel">Missing draft id.</div>';
+    return;
+  }
+  try {
+    const data = await fetchJson('./api/intake-drafts/' + encodeURIComponent(id));
+    render(data.draft);
+  } catch (err) {
+    document.getElementById('content').innerHTML = '<div class="panel">Could not load draft: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+load();
+</script>
+
+<script>
+// CLAIRE_DOCUMENT_REREAD_REVIEW_PATCH_V1
+(function() {
+  function addRereadButton() {
+    if (document.getElementById('rereadDocumentsBtn')) return;
+    const createBtn = document.getElementById('createDealBtn');
+    const draftId = new URLSearchParams(location.search).get('id') || '';
+    if (!createBtn || !draftId) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'rereadDocumentsBtn';
+    btn.className = 'secondary';
+    btn.type = 'button';
+    btn.textContent = 'Re-read Documents';
+
+    btn.addEventListener('click', async function() {
+      btn.disabled = true;
+      btn.textContent = 'Reading PDFs...';
+
+      try {
+        const res = await fetch('./api/intake-drafts/' + encodeURIComponent(draftId) + '/reread-documents', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          cache: 'no-store'
+        });
+        const text = await res.text();
+        let data = {};
+        try { data = text ? JSON.parse(text) : {}; } catch (err) { throw new Error('Server returned non-JSON: ' + text.slice(0,180)); }
+        if (!res.ok || data.ok === false) throw new Error(data.error || 'Re-read failed');
+
+        alert('Documents re-read. Attachments: ' + data.attachment_count + '\nText characters: ' + data.combined_text_chars + '\nConfidence: ' + data.confidence_score + '%');
+        location.reload();
+      } catch (err) {
+        alert(err.message);
+        btn.disabled = false;
+        btn.textContent = 'Re-read Documents';
+      }
+    });
+
+    createBtn.parentNode.insertBefore(btn, createBtn.nextSibling);
+  }
+
+  const obs = new MutationObserver(addRereadButton);
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+  addRereadButton();
+})();
+</script>
+
+</body>
+</html>

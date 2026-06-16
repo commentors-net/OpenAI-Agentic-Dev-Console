@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CLAIRE Intake Read / Notes</title>
+<style>
+:root{--ink:#071b2c;--muted:#66758a;--line:#dbe5ef;--bg:#f4f7fb;--card:#fff;--teal:#0f766e}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+h1{margin:0;font-size:28px}.sub{color:var(--muted);margin-top:6px;line-height:1.4}.btn{display:inline-block;border:1px solid var(--line);background:white;color:var(--ink);text-decoration:none;border-radius:10px;padding:10px 12px;font-weight:800}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 26px rgba(15,35,55,.06);overflow:hidden;margin:16px 0}.hd{padding:14px 16px;background:#f8fbfe;border-bottom:1px solid var(--line);font-weight:900}.bd{padding:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:850px){.grid{grid-template-columns:1fr}.top{display:block}.top .btn{margin-top:12px}}
+ul{margin:8px 0 0 20px;padding:0}li{margin:5px 0;line-height:1.4}.doc{display:block;padding:11px 12px;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);font-weight:800;margin:8px 0;background:white}.muted{color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;background:#071b2c;color:#eaf2f8;border-radius:12px;padding:14px;max-height:520px;overflow:auto}.pill{display:inline-block;border:1px solid #99f6e4;background:#ecfdf5;color:#115e59;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:900;margin-left:8px}.warn{border-color:#f7d08a;background:#fff8e6}
+</style>
+</head>
+<body><div class="wrap">
+<div class="top"><div><h1>CLAIRE Intake Read / Notes</h1><div class="sub">Full document read preserved from the accepted-offer email. Additional Terms stays short; this page keeps the deeper read.</div></div><a id="backLink" class="btn" href="./dashboard.html">Back to Deal Desk</a></div>
+<div id="status" class="card"><div class="bd muted">Loading CLAIRE intake read...</div></div><div id="content"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function param(name){return new URL(location.href).searchParams.get(name)||""}
+function dealId(){return param("id")||param("deal_id")||param("public_id")||param("property")||""}
+function list(title, arr){if(!Array.isArray(arr)||!arr.length)return "";return `<div class="card"><div class="hd">${esc(title)} <span class="pill">${arr.length}</span></div><div class="bd"><ul>${arr.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div>`}
+function kv(title, obj){if(!obj||typeof obj!=="object")return "";const rows=Object.entries(obj).filter(([k,v])=>v!==null&&v!==undefined&&String(v).trim()!==""&&typeof v!=="object");if(!rows.length)return "";return `<div class="card"><div class="hd">${esc(title)}</div><div class="bd">${rows.map(([k,v])=>`<div><strong>${esc(k.replaceAll("_"," "))}:</strong> ${esc(v)}</div>`).join("")}</div></div>`}
+function docsHtml(docs){docs=docs||[];if(!docs.length)return `<div class="card warn"><div class="hd">Source Documents</div><div class="bd">No PDF source documents found in this manifest.</div></div>`;return `<div class="card"><div class="hd">Source Documents</div><div class="bd">${docs.map(d=>`<a class="doc" target="_blank" rel="noopener" href="${esc(d.url)}">${esc(d.filename||d.stored_filename||"Document")}</a>`).join("")}</div></div>`}
+function readHtml(data){
+  const r=data.claire_result||data.result||{}; const f=r.dealdesk_fields||{}; let html=docsHtml(data.source_documents||[]);
+  if(!data.claire_result&&!data.result){html+=`<div class="card warn"><div class="hd">Full CLAIRE Read Not Found</div><div class="bd">The PDFs may exist, but the verbose CLAIRE read was not saved into this deal's manifest. For future deals this page will preserve it automatically. For this one, use the CLAIRE reader Raw JSON tab if the read is still on screen.</div></div><div class="card"><div class="hd">Manifest JSON</div><div class="bd"><pre>${esc(JSON.stringify(data,null,2))}</pre></div></div>`;return html;}
+  html+=`<div class="card"><div class="hd">Executive Read</div><div class="bd">${r.operator_summary?`<p><strong>Summary:</strong> ${esc(r.operator_summary)}</p>`:""}${r.recommended_next_action?`<p><strong>Recommended next action:</strong> ${esc(r.recommended_next_action)}</p>`:""}</div></div>`;
+  html+=`<div class="grid"><div>${list("Notes",f.notes||r.notes)}${list("Missing Items",f.missing_items||r.missing_items)}</div><div>${list("Review Flags",f.review_flags||r.review_flags)}${list("Conflicts",f.conflicts||r.conflicts)}</div></div>`;
+  html+=`<div class="grid"><div>${kv("Property",f.property)}${kv("Seller",f.seller)}${kv("Purchaser",f.purchaser)}${kv("Financial Terms",f.financial_terms)}</div><div>${kv("Attorneys",f.attorneys)}${kv("Financing",f.financing)}${kv("Listing Side",f.listing_side)}${kv("Buyer Side",f.buyer_side)}</div></div>`;
+  html+=`<div class="card"><div class="hd">Raw CLAIRE JSON</div><div class="bd"><details><summary style="cursor:pointer;font-weight:900;">Open raw JSON</summary><pre>${esc(JSON.stringify(r,null,2))}</pre></details></div></div>`;
+  return html;
+}
+async function load(){
+  const id=dealId(); $("backLink").href=id?`./detail.html?id=${encodeURIComponent(id)}`:"./dashboard.html";
+  if(!id){$("status").innerHTML='<div class="bd">No deal id supplied. Open this page from a deal detail screen.</div>';return}
+  try{const res=await fetch(`./api/claire-dealview/source-docs?deal_id=${encodeURIComponent(id)}`,{headers:{Accept:"application/json"},cache:"no-store"});const data=await res.json();$("status").style.display="none";$("content").innerHTML=readHtml(data)}
+  catch(e){$("status").innerHTML='<div class="bd">Could not load CLAIRE intake read: '+esc(e.message||e)+'</div>'}
+}
+load();
+</script></body></html>

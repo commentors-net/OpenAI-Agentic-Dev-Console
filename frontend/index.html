@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Accepted Offer to Close</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe3ee;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-dark:#115e59;
+      --soft:#ecfdf5;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    header {
+      background:white;
+      border-bottom:1px solid var(--line);
+      padding:18px 22px;
+    }
+    .wrap {
+      max-width:1160px;
+      margin:0 auto;
+    }
+    nav {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    nav strong {
+      font-size:17px;
+    }
+    nav a {
+      color:var(--accent-dark);
+      font-weight:800;
+      text-decoration:none;
+      margin-left:14px;
+    }
+    .hero {
+      padding:54px 22px 30px;
+      background:linear-gradient(180deg,#ffffff 0%,#f5f7fb 100%);
+      border-bottom:1px solid var(--line);
+    }
+    .hero-grid {
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+    }
+    .eyebrow {
+      display:inline-block;
+      background:var(--soft);
+      color:var(--accent-dark);
+      border:1px solid #bbf7d0;
+      border-radius:999px;
+      padding:7px 11px;
+      font-weight:900;
+      font-size:13px;
+      margin-bottom:14px;
+    }
+    h1 {
+      font-size:46px;
+      line-height:1.05;
+      margin:0 0 16px;
+      letter-spacing:-.03em;
+    }
+    .lead {
+      font-size:19px;
+      color:var(--muted);
+      line-height:1.55;
+      margin:0 0 22px;
+      max-width:780px;
+    }
+    .button {
+      display:inline-block;
+      border-radius:12px;
+      padding:13px 17px;
+      text-decoration:none;
+      font-weight:900;
+      border:1px solid var(--accent);
+      background:var(--accent);
+      color:white;
+    }
+    .hero-card {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:22px;
+      box-shadow:0 10px 30px rgba(23,32,51,.07);
+    }
+    .hero-card h2 {
+      margin:0 0 12px;
+      font-size:21px;
+    }
+    .hero-card ul {
+      margin:0;
+      padding-left:20px;
+      color:var(--muted);
+      line-height:1.7;
+    }
+    main {
+      padding:34px 22px 70px;
+    }
+    .section-head h2 {
+      font-size:30px;
+      margin:0;
+      letter-spacing:-.02em;
+    }
+    .section-head p {
+      margin:6px 0 18px;
+      color:var(--muted);
+      line-height:1.5;
+      max-width:820px;
+    }
+    .manager-chat-card {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 10px 30px rgba(23,32,51,.06);
+      margin-bottom:28px;
+    }
+    .manager-chat-card h2 {
+      margin:0 0 8px;
+      font-size:26px;
+      letter-spacing:-.02em;
+    }
+    .manager-chat-card p {
+      color:var(--muted);
+      line-height:1.5;
+      margin:0 0 14px;
+    }
+    .manager-chat-form {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:start;
+    }
+    .manager-chat-form textarea {
+      width:100%;
+      min-height:78px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:13px;
+      font-size:15px;
+      resize:vertical;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+    .manager-chat-form button {
+      border:0;
+      border-radius:14px;
+      padding:14px 18px;
+      background:var(--accent);
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      min-width:120px;
+    }
+    .manager-chat-form button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .manager-chat-answer {
+      display:none;
+      white-space:pre-wrap;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      border-radius:16px;
+      padding:16px;
+      margin-top:14px;
+      line-height:1.5;
+    }
+    .manager-chat-answer.active {
+      display:block;
+    }
+    .manager-chat-question {
+      display:block;
+      color:#115e59;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+    .manager-chat-examples {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .manager-chat-examples button {
+      border:1px solid var(--line);
+      background:#f8fafc;
+      color:var(--accent-dark);
+      border-radius:999px;
+      padding:8px 11px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .cards {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+      margin-bottom:28px;
+    }
+    .card {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+    }
+    .card h3 {
+      margin:0 0 8px;
+      font-size:18px;
+    }
+    .card p {
+      color:var(--muted);
+      line-height:1.5;
+      margin:0;
+    }
+    .workflow {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      counter-reset:steps;
+    }
+    .step {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+    }
+    .step:before {
+      counter-increment:steps;
+      content:counter(steps);
+      display:inline-grid;
+      place-items:center;
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      background:var(--accent);
+      color:white;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+    .step h3 {
+      margin:0 0 8px;
+      font-size:17px;
+    }
+    .step p {
+      margin:0;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    footer {
+      border-top:1px solid var(--line);
+      padding:22px;
+      color:var(--muted);
+      background:white;
+    }
+    @media (max-width:900px) {
+      .hero-grid, .banner-shell, .cards, .workflow, .manager-chat-form {
+        grid-template-columns:1fr;
+      }
+      h1, .banner-title {
+        font-size:36px;
+      }
+      .banner-microgrid {
+        grid-template-columns:1fr;
+      }
+      nav a {
+        margin-left:0;
+        margin-right:14px;
+      }
+    }
+  
+    .product-banner {
+      padding:48px 22px 34px;
+      background:
+        radial-gradient(circle at top left, rgba(15,118,110,.16), transparent 34%),
+        linear-gradient(135deg,#102034 0%,#123b45 46%,#0f766e 100%);
+      color:white;
+      border-bottom:1px solid rgba(255,255,255,.16);
+    }
+    .banner-shell {
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:28px;
+      align-items:center;
+    }
+    .banner-eyebrow {
+      display:inline-block;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.10);
+      color:#d1fae5;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:16px;
+      letter-spacing:.01em;
+    }
+    .banner-title {
+      font-size:58px;
+      line-height:.98;
+      letter-spacing:-.055em;
+      margin:0 0 18px;
+      max-width:820px;
+    }
+    .banner-lead {
+      color:rgba(255,255,255,.82);
+      font-size:20px;
+      line-height:1.55;
+      max-width:780px;
+      margin:0 0 24px;
+    }
+    .banner-actions {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .banner-button {
+      display:inline-block;
+      border-radius:13px;
+      padding:13px 17px;
+      text-decoration:none;
+      font-weight:900;
+      background:white;
+      color:#115e59;
+      border:1px solid white;
+      box-shadow:0 10px 22px rgba(0,0,0,.12);
+    }
+    .banner-note {
+      color:rgba(255,255,255,.72);
+      font-size:14px;
+      font-weight:800;
+    }
+    .banner-panel {
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 18px 40px rgba(0,0,0,.18);
+      backdrop-filter:blur(8px);
+    }
+    .banner-panel h2 {
+      color:white;
+      margin:0 0 14px;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+    .banner-panel ul {
+      margin:0;
+      padding-left:20px;
+      color:rgba(255,255,255,.80);
+      line-height:1.7;
+    }
+    .banner-microgrid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:18px;
+    }
+    .banner-micro {
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+    }
+    .banner-micro strong {
+      display:block;
+      color:white;
+      font-size:15px;
+      margin-bottom:4px;
+    }
+    .banner-micro span {
+      color:rgba(255,255,255,.70);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+
+    .manager-chat-thread {
+      border:1px solid var(--line);
+      background:#f8fafc;
+      border-radius:18px;
+      padding:14px;
+      min-height:170px;
+      max-height:420px;
+      overflow:auto;
+      margin:14px 0;
+    }
+    .manager-message {
+      max-width:88%;
+      border-radius:16px;
+      padding:12px 14px;
+      margin:0 0 10px;
+      white-space:pre-wrap;
+      line-height:1.48;
+      font-size:14px;
+    }
+    .manager-message.assistant {
+      background:white;
+      border:1px solid var(--line);
+      color:var(--ink);
+    }
+    .manager-message.user {
+      background:#0f766e;
+      color:white;
+      margin-left:auto;
+      border:1px solid #0f766e;
+    }
+    .manager-message.loading {
+      color:var(--muted);
+      font-style:italic;
+    }
+    .manager-chat-input-row {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:end;
+    }
+    .manager-chat-input-row textarea {
+      width:100%;
+      min-height:58px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:13px;
+      font-size:15px;
+      resize:vertical;
+      font-family:Arial, Helvetica, sans-serif;
+      background:white;
+    }
+    .manager-chat-input-row button {
+      border:0;
+      border-radius:14px;
+      padding:14px 18px;
+      background:var(--accent);
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      min-width:120px;
+    }
+    .manager-chat-input-row button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .manager-chat-hint {
+      color:var(--muted);
+      font-size:13px;
+      margin-top:8px;
+    }
+
+
+    .manager-chat-card {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:0;
+      box-shadow:0 10px 30px rgba(23,32,51,.06);
+      margin-bottom:28px;
+      overflow:hidden;
+    }
+    .manager-chat-topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background:#ffffff;
+    }
+    .manager-chat-title {
+      font-weight:900;
+      color:var(--ink);
+    }
+    .manager-chat-live {
+      color:#115e59;
+      font-size:13px;
+      font-weight:900;
+    }
+    .manager-chat-thread {
+      background:#f8fafc;
+      min-height:360px;
+      max-height:520px;
+      overflow:auto;
+      padding:18px;
+    }
+    .manager-message {
+      max-width:86%;
+      border-radius:18px;
+      padding:13px 15px;
+      margin:0 0 12px;
+      white-space:pre-wrap;
+      line-height:1.48;
+      font-size:15px;
+    }
+    .manager-message.assistant {
+      background:white;
+      border:1px solid var(--line);
+      color:var(--ink);
+    }
+    .manager-message.user {
+      background:#0f766e;
+      color:white;
+      margin-left:auto;
+      border:1px solid #0f766e;
+    }
+    .manager-message.loading {
+      color:var(--muted);
+      font-style:italic;
+    }
+    .manager-chat-composer {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:end;
+      padding:14px;
+      border-top:1px solid var(--line);
+      background:white;
+    }
+    .manager-chat-composer textarea {
+      width:100%;
+      min-height:58px;
+      max-height:160px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px 14px;
+      font-size:15px;
+      resize:vertical;
+      font-family:Arial, Helvetica, sans-serif;
+      background:white;
+    }
+    .manager-chat-composer button {
+      border:0;
+      border-radius:16px;
+      padding:14px 18px;
+      background:var(--accent);
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      min-width:88px;
+    }
+    .manager-chat-composer button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+
+</style>
+  <link rel="stylesheet" href="./dealdesk-ui-lock.css?v=1">
+</head>
+<body>
+<section class="product-banner">
+    <div class="wrap banner-shell">
+      <div>
+        <span class="banner-eyebrow">Accepted Offer to Close</span>
+        <h1 class="banner-title">The operating layer after the offer is accepted.</h1>
+        <p class="banner-lead">
+          Track the accepted-offer file from deal sheet intake through attorney handoff,
+          lender follow-up, inspection, appraisal, communication history, offer review,
+          printable deal sheet, and closing follow-through.
+        </p>
+        <div class="banner-actions">
+          <a class="banner-button" href="./dashboard.html">Open Dashboard</a>
+          <span class="banner-note">Serious work happens inside the dashboard.</span>
+        </div>
+      </div>
+
+      <aside class="banner-panel">
+        <h2>Built around the real file</h2>
+        <ul>
+          <li>Who are we waiting for?</li>
+          <li>Who did we speak with?</li>
+          <li>What did the attorney, lender, inspector, appraiser, or title office confirm?</li>
+          <li>What is blocking contract, closing, or final file status?</li>
+        </ul>
+
+        <div class="banner-microgrid">
+          <div class="banner-micro">
+            <strong>Tracker</strong>
+            <span>Waiting-on items, blockers, due dates, and status.</span>
+          </div>
+          <div class="banner-micro">
+            <strong>Comms</strong>
+            <span>Calls, emails, confirmations, and follow-ups.</span>
+          </div>
+          <div class="banner-micro">
+            <strong>Review</strong>
+            <span>Missing items, readiness, and next action.</span>
+          </div>
+          <div class="banner-micro">
+            <strong>Print</strong>
+            <span>Clean deal sheet for handoff or signing.</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+
+  <main>
+    <div class="wrap">
+
+      <section class="manager-chat-card">
+        <div class="manager-chat-topbar">
+          <div class="manager-chat-title">Manager Chat</div>
+        </div>
+
+        <div class="manager-chat-thread" id="managerChatThread"></div>
+
+        <form class="manager-chat-composer" id="managerChatForm">
+          <textarea id="managerChatQuestion" placeholder="Ask anything about active deals, totals, attorneys, agents, clearance, communications, or status..."></textarea>
+          <button id="managerChatButton" type="submit">Send</button>
+        </form>
+      </section>
+
+
+
+      <div class="section-head">
+        <h2>What it manages</h2>
+        <p>
+          The system keeps accepted-offer work organized across brokerage staff, agents, attorney offices,
+          lender offices, inspectors, appraisers, title contacts, buyers, and sellers.
+        </p>
+      </div>
+
+      <div class="cards">
+        <section class="card">
+          <h3>Deal Sheet Intake</h3>
+          <p>Capture property, price, deposit, mortgage, attorneys, agents, additional terms, property condition status, and acknowledgments.</p>
+        </section>
+
+        <section class="card">
+          <h3>Transaction Tracker</h3>
+          <p>Track what is missing, who is responsible, who was contacted, due dates, blockers, and status.</p>
+        </section>
+
+        <section class="card">
+          <h3>Communication Log</h3>
+          <p>Record calls, emails, texts, confirmations, follow-ups, office contacts, paralegals, processors, inspectors, and appraisers.</p>
+        </section>
+
+        <section class="card">
+          <h3>Offer Review</h3>
+          <p>Review the file for missing facts, discrepancies, open blockers, contract-readiness, and attorney handoff readiness.</p>
+        </section>
+
+        <section class="card">
+          <h3>Contacts</h3>
+          <p>Reuse attorneys, agents, lenders, inspectors, appraisers, title contacts, coordinators, and office staff.</p>
+        </section>
+
+        <section class="card">
+          <h3>Printable and Email-Ready</h3>
+          <p>Print a clean deal sheet and generate start-email drafts inside the deal file for copy/paste sending.</p>
+        </section>
+      </div>
+
+      <div class="workflow">
+        <section class="step">
+          <h3>Accepted offer</h3>
+          <p>The process begins when the offer has been accepted.</p>
+        </section>
+        <section class="step">
+          <h3>Intake</h3>
+          <p>Create the file and capture the accepted-offer details.</p>
+        </section>
+        <section class="step">
+          <h3>Track</h3>
+          <p>Follow waiting-on items, communications, blockers, and next actions.</p>
+        </section>
+        <section class="step">
+          <h3>Close out</h3>
+          <p>Maintain the file through contract, closing, closed, and final status.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Accepted Offer to Close — brokerage transaction coordination from accepted offer through closing follow-through.
+    </div>
+  </footer>
+
+  <script>
+    var managerChatHistory = [];
+
+    function managerThread() {
+      return document.getElementById('managerChatThread');
+    }
+
+    function appendManagerMessage(role, text, extraClass) {
+      var thread = managerThread();
+      if (!thread) return null;
+
+      var div = document.createElement('div');
+      div.className = 'manager-message ' + role + (extraClass ? ' ' + extraClass : '');
+      div.textContent = text;
+      thread.appendChild(div);
+      thread.scrollTop = thread.scrollHeight;
+      return div;
+    }
+
+    async function askManagerChat(question) {
+      var input = document.getElementById('managerChatQuestion');
+      var button = document.getElementById('managerChatButton');
+      var asked = String(question || '').trim();
+
+      if (!asked) {
+        if (input) input.focus();
+        return;
+      }
+
+      appendManagerMessage('user', asked);
+
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Reading';
+      }
+
+      var pending = appendManagerMessage('assistant', 'Reading the live deal database...', 'loading');
+
+      try {
+        var response = await fetch('./api/manager-chat-smart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify({
+            question: asked,
+            history: managerChatHistory.slice(-8),
+            created_by: 'manager'
+          })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok || !data.reply) {
+          throw new Error(data.error || 'Manager Chat failed.');
+        }
+
+        var reply = String(data.reply.answer || 'No answer returned.').replace(/\\n/g, '\n');
+
+        managerChatHistory.push({
+          question: asked,
+          answer: reply
+        });
+
+        if (managerChatHistory.length > 12) {
+          managerChatHistory = managerChatHistory.slice(-12);
+        }
+
+        if (pending) {
+          pending.className = 'manager-message assistant';
+          pending.textContent = reply;
+          managerThread().scrollTop = managerThread().scrollHeight;
+        }
+      } catch (err) {
+        if (pending) {
+          pending.className = 'manager-message assistant';
+          pending.textContent = 'Could not answer from the live database: ' + err.message;
+        }
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Send';
+        }
+        if (input) input.focus();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('managerChatForm');
+      var input = document.getElementById('managerChatQuestion');
+
+      if (form) {
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+          askManagerChat(input ? input.value : '');
+        });
+      }
+
+      if (input) {
+        input.addEventListener('keydown', function(event) {
+          if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+            event.preventDefault();
+            askManagerChat(input.value);
+          }
+        });
+      }
+    });
+  </script>
+
+
+
+
+<!-- DEALDESK_CLAIRE_INTEGRATION_V1 -->
+<style id="dealdesk-claire-integration-style">
+  .dd-claire-launcher {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2147483000;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: #071b2c;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 12px 32px rgba(7, 27, 44, .28);
+    border: 2px solid #14b8a6;
+  }
+  .dd-claire-launcher:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 38px rgba(7, 27, 44, .34);
+  }
+  .dd-claire-launcher span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #14b8a6;
+  }
+  @media print {
+    .dd-claire-launcher { display: none !important; }
+  }
+</style>
+<a class="dd-claire-launcher" href="./claire-dealdesk-view.html" title="Open CLAIRE Deal Desk View">
+  <span></span>
+  CLAIRE Intake Reader
+</a>
+<!-- END_DEALDESK_CLAIRE_INTEGRATION_V1 -->
+
+</body>
+</html>

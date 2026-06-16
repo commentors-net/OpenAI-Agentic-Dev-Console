@@ -1,0 +1,1294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Accepted Offer Intake | Accepted Offer to Close</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe3ee;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-dark:#115e59;
+      --danger:#b91c1c;
+      --success:#166534;
+      --soft:#ecfdf5;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    header {
+      background:white;
+      border-bottom:1px solid var(--line);
+      padding:18px 22px;
+    }
+    .wrap {
+      max-width:1140px;
+      margin:0 auto;
+    }
+    nav {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+    nav a {
+      color:var(--accent-dark);
+      font-weight:800;
+      text-decoration:none;
+    }
+    main {
+      padding:28px 22px 70px;
+    }
+    h1 {
+      font-size:34px;
+      margin:0 0 8px;
+    }
+    .intro {
+      color:var(--muted);
+      margin:0 0 22px;
+      line-height:1.5;
+      max-width:850px;
+    }
+    form {
+      display:grid;
+      gap:18px;
+    }
+    fieldset {
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+    }
+    legend {
+      font-weight:900;
+      padding:0 8px;
+      font-size:18px;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .grid.two {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    label {
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:6px;
+    }
+    input, select, textarea {
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:11px 12px;
+      font-size:15px;
+      background:white;
+      color:var(--ink);
+    }
+    textarea {
+      min-height:96px;
+      resize:vertical;
+    }
+    .hint {
+      color:var(--muted);
+      font-size:13px;
+      margin-top:8px;
+    }
+    .directory-tools {
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:16px;
+    }
+    .directory-tools h3 {
+      margin:0 0 10px;
+      font-size:15px;
+    }
+    .actions {
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    button, .button {
+      border:0;
+      border-radius:10px;
+      padding:13px 18px;
+      font-weight:900;
+      font-size:15px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-block;
+    }
+    button.primary {
+      background:var(--accent);
+      color:white;
+    }
+    button.primary:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .button.secondary {
+      background:white;
+      border:1px solid var(--line);
+      color:var(--accent-dark);
+    }
+    .message {
+      display:none;
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:18px;
+      border:1px solid var(--line);
+      background:white;
+      line-height:1.45;
+    }
+    .message.success {
+      display:block;
+      border-color:#bbf7d0;
+      background:var(--soft);
+      color:var(--success);
+    }
+    .message.error {
+      display:block;
+      border-color:#fecaca;
+      background:#fef2f2;
+      color:var(--danger);
+    }
+    .required {
+      color:var(--danger);
+    }
+    @media (max-width:850px) {
+      .grid, .grid.two { grid-template-columns:1fr; }
+      h1 { font-size:28px; }
+      nav { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+
+<style id="intake-product-banner-style">
+  header {
+    background:white;
+    border-bottom:1px solid var(--line, #dbe3ee);
+    padding:18px 22px;
+  }
+  header nav {
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  header nav a {
+    color:var(--accent-dark, #115e59);
+    font-weight:800;
+    text-decoration:none;
+  }
+  .product-banner {
+    padding:48px 22px 34px;
+    background:
+      radial-gradient(circle at top left, rgba(15,118,110,.16), transparent 34%),
+      linear-gradient(135deg,#102034 0%,#123b45 46%,#0f766e 100%);
+    color:white;
+    border-bottom:1px solid rgba(255,255,255,.16);
+  }
+  .product-banner .wrap {
+    max-width:1160px;
+  }
+  .banner-shell {
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:28px;
+    align-items:center;
+  }
+  .banner-eyebrow {
+    display:inline-block;
+    border:1px solid rgba(255,255,255,.28);
+    background:rgba(255,255,255,.10);
+    color:#d1fae5;
+    border-radius:999px;
+    padding:7px 11px;
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:16px;
+    letter-spacing:.01em;
+  }
+  .banner-title {
+    color:white;
+    font-size:58px;
+    line-height:.98;
+    letter-spacing:-.055em;
+    margin:0 0 18px;
+    max-width:820px;
+  }
+  .banner-lead {
+    color:rgba(255,255,255,.82);
+    font-size:20px;
+    line-height:1.55;
+    max-width:780px;
+    margin:0;
+  }
+  .banner-panel {
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 18px 40px rgba(0,0,0,.18);
+    backdrop-filter:blur(8px);
+  }
+  .banner-panel h2 {
+    color:white;
+    margin:0 0 14px;
+    font-size:22px;
+    letter-spacing:-.02em;
+  }
+  .banner-panel ul {
+    margin:0;
+    padding-left:20px;
+    color:rgba(255,255,255,.80);
+    line-height:1.7;
+  }
+  @media (max-width:900px) {
+    .banner-shell { grid-template-columns:1fr; }
+    .banner-title { font-size:36px; }
+  }
+</style>
+
+<style id="input-dashboard-hero-locked">
+  header {
+    background:white;
+    border-bottom:1px solid var(--line, #dbe3ee);
+    padding:18px 22px;
+  }
+  header nav {
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+  }
+  header nav a {
+    color:#115e59;
+    font-weight:800;
+    text-decoration:none;
+  }
+  .dashboard-hero {
+    background:
+      radial-gradient(circle at top left, rgba(15,118,110,.18), transparent 34%),
+      linear-gradient(135deg,#102034 0%,#123b45 46%,#0f766e 100%);
+    color:white;
+    border-radius:22px;
+    padding:28px;
+    margin-bottom:18px;
+    box-shadow:0 18px 40px rgba(23,32,51,.14);
+    border:1px solid rgba(255,255,255,.16);
+  }
+  .dashboard-eyebrow {
+    display:inline-block;
+    border:1px solid rgba(255,255,255,.28);
+    background:rgba(255,255,255,.10);
+    color:#d1fae5;
+    border-radius:999px;
+    padding:7px 11px;
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:14px;
+  }
+  .dashboard-title {
+    color:white;
+    font-size:42px;
+    line-height:1;
+    margin:0 0 10px;
+    letter-spacing:-.045em;
+  }
+  .dashboard-lead {
+    color:rgba(255,255,255,.78);
+    line-height:1.5;
+    margin:0;
+    max-width:760px;
+    font-size:16px;
+  }
+  @media (max-width:640px) {
+    .dashboard-title { font-size:32px; }
+    .dashboard-hero { padding:22px; }
+  }
+</style>
+
+  <link rel="stylesheet" href="./dealdesk-ui-lock.css?v=1">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="./dashboard.html">Back</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="dashboard-hero">
+      <span class="dashboard-eyebrow">Accepted-offer intake</span>
+      <h1 class="dashboard-title">New Accepted Offer</h1>
+      <p class="dashboard-lead">
+        Enter the accepted-offer file once so the system can create the deal record, parties,
+        financial terms, Clearance Path, and attorney handoff workflow.
+      </p>
+    </section>
+
+<div id="saveMessage" class="message"></div>
+
+      <datalist id="directory_attorney"></datalist>
+      <datalist id="directory_agent"></datalist>
+      <datalist id="directory_lender"></datalist>
+
+      <form id="acceptedOfferForm">
+        <fieldset>
+          <legend>Accepted Offer Information</legend>
+          <div class="grid">
+            <div>
+              <label for="accepted_offer_date">Accepted Offer Date</label>
+              <input id="accepted_offer_date" name="accepted_offer_date" type="date">
+            </div>
+            <div>
+              <label for="mls_number">MLS Number</label>
+              <input id="mls_number" name="mls_number" type="text" placeholder="Example: 1004094">
+            </div>
+            <div>
+              <label for="transaction_status">Transaction Status</label>
+              <select id="transaction_status" name="transaction_status">
+                <option>Accepted Offer Intake Started</option>
+                <option>Missing Information</option>
+                <option>Ready for Review</option>
+                <option>Ready for Attorney Handoff</option>
+                <option>Contract Pending</option>
+                <option>In Contract</option>
+                <option>Closing Scheduled</option>
+                <option>Closed</option>
+                <option>Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label for="property_address">Property Address <span class="required">*</span></label>
+            <input id="property_address" name="property_address" type="text" placeholder="Street, city, state, ZIP" required>
+            <div>
+              <label for="property_type">Property Type</label>
+              <select id="property_type" name="property_type">
+                <option value="">Select property type</option>
+                <option>Single Family</option>
+                <option>Condo</option>
+                <option>Co-op</option>
+                <option>Townhouse</option>
+                <option>Multi-Family</option>
+                <option>Land</option>
+                <option>Commercial</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Accepted Offer Terms</legend>
+          <div class="grid">
+            <div>
+              <label for="purchase_price">Purchase Price</label>
+              <input id="purchase_price" name="purchase_price" type="text" placeholder="$" data-money-format="1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="seller_concession">Seller Concession</label>
+              <input id="seller_concession" name="seller_concession" type="text" placeholder="$" data-money-format="1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="contract_deposit">Contract Deposit</label>
+              <input id="contract_deposit" name="contract_deposit" type="text" placeholder="$" data-money-format="1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="mortgage_amount">Mortgage Amount</label>
+              <input id="mortgage_amount" name="mortgage_amount" type="text" placeholder="$" data-money-format="1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="cash_at_closing">Cash at Closing</label>
+              <input id="cash_at_closing" name="cash_at_closing" type="text" placeholder="$" data-money-format="1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="total_price">Total</label>
+              <input id="total_price" name="total_price" type="text" placeholder="$" data-money-format="1" inputmode="decimal">
+            </div>
+            <div>
+              <label for="contract_date_text">On or About Contract Date</label>
+              <input id="contract_date_text" name="contract_date_text" type="text" placeholder="Example: ASAP">
+            </div>
+            <div>
+              <label for="closing_date_text">On or About Closing Date</label>
+              <input id="closing_date_text" name="closing_date_text" type="text" placeholder="Example: 7/15/2026">
+            </div>
+            <div>
+              <label for="commission_paid_by_seller">Commission Paid by Seller</label>
+              <input id="commission_paid_by_seller" name="commission_paid_by_seller" type="text" placeholder="Example: 4% total">
+            </div>
+            <div>
+              <label for="commission_paid_by_purchaser">Commission Paid by Purchaser</label>
+              <input id="commission_paid_by_purchaser" name="commission_paid_by_purchaser" type="text">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Seller and Purchaser</legend>
+          <div class="grid two">
+            <div>
+              <label for="seller_name">Seller Name(s)</label>
+              <input id="seller_name" name="seller_name" type="text">
+            </div>
+            <div>
+              <label for="purchaser_name">Purchaser Name(s)</label>
+              <input id="purchaser_name" name="purchaser_name" type="text">
+            </div>
+            <div>
+              <label for="seller_legal_address">Legal Address of Seller</label>
+              <input id="seller_legal_address" name="seller_legal_address" type="text">
+            </div>
+            <div>
+              <label for="purchaser_legal_address">Legal Address of Purchaser</label>
+              <input id="purchaser_legal_address" name="purchaser_legal_address" type="text">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Attorneys</legend>
+          <div class="directory-tools">
+            <h3>Use saved attorneys</h3>
+            <div class="grid two">
+              <div>
+                <label for="seller_attorney_directory">Saved Seller Attorney</label>
+                <input id="seller_attorney_directory" type="text" list="directory_attorney" placeholder="Start typing an attorney name">
+              </div>
+              <div>
+                <label for="purchaser_attorney_directory">Saved Purchaser Attorney</label>
+                <input id="purchaser_attorney_directory" type="text" list="directory_attorney" placeholder="Start typing an attorney name">
+              </div>
+            </div>
+            <p class="hint">Selecting a saved attorney fills the fields below. The deal still keeps its own snapshot.</p>
+          </div>
+          <div class="grid two">
+            <div>
+              <label for="seller_attorney_name">Seller Attorney Name</label>
+              <input id="seller_attorney_name" name="seller_attorney_name" type="text">
+            </div>
+            <div>
+              <label for="purchaser_attorney_name">Purchaser Attorney Name</label>
+              <input id="purchaser_attorney_name" name="purchaser_attorney_name" type="text">
+            </div>
+            <div>
+              <label for="seller_attorney_address">Seller Attorney Address</label>
+              <input id="seller_attorney_address" name="seller_attorney_address" type="text">
+            </div>
+            <div>
+              <label for="purchaser_attorney_address">Purchaser Attorney Address</label>
+              <input id="purchaser_attorney_address" name="purchaser_attorney_address" type="text">
+            </div>
+            <div>
+              <label for="seller_attorney_phone">Seller Attorney Phone</label>
+              <input id="seller_attorney_phone" name="seller_attorney_phone" type="tel">
+            </div>
+            <div>
+              <label for="purchaser_attorney_phone">Purchaser Attorney Phone</label>
+              <input id="purchaser_attorney_phone" name="purchaser_attorney_phone" type="tel">
+            </div>
+            <div>
+              <label for="seller_attorney_email">Seller Attorney Email</label>
+              <input id="seller_attorney_email" name="seller_attorney_email" type="email">
+            </div>
+            <div>
+              <label for="purchaser_attorney_email">Purchaser Attorney Email</label>
+              <input id="purchaser_attorney_email" name="purchaser_attorney_email" type="email">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Agents</legend>
+          <div class="directory-tools">
+            <h3>Use saved agents</h3>
+            <div class="grid two">
+              <div>
+                <label for="seller_agent_directory">Saved Seller Agent</label>
+                <input id="seller_agent_directory" type="text" list="directory_agent" placeholder="Start typing an agent name">
+              </div>
+              <div>
+                <label for="purchaser_agent_directory">Saved Purchaser Agent</label>
+                <input id="purchaser_agent_directory" type="text" list="directory_agent" placeholder="Start typing an agent name">
+              </div>
+            </div>
+            <p class="hint">Selecting a saved agent fills broker, license, phone, and email when available.</p>
+          </div>
+          <div class="grid two">
+            <div>
+              <label for="seller_agent_name">Seller Agent Name</label>
+              <input id="seller_agent_name" name="seller_agent_name" type="text">
+            </div>
+            <div>
+              <label for="purchaser_agent_name">Purchaser Agent Name</label>
+              <input id="purchaser_agent_name" name="purchaser_agent_name" type="text">
+            </div>
+            <div>
+              <label for="seller_agent_license">Seller Agent License Number</label>
+              <input id="seller_agent_license" name="seller_agent_license" type="text">
+            </div>
+            <div>
+              <label for="purchaser_agent_license">Purchaser Agent License Number</label>
+              <input id="purchaser_agent_license" name="purchaser_agent_license" type="text">
+            </div>
+            <div>
+              <label for="seller_agent_broker">Seller Agent Broker</label>
+              <input id="seller_agent_broker" name="seller_agent_broker" type="text">
+            </div>
+            <div>
+              <label for="purchaser_agent_broker">Purchaser Agent Broker</label>
+              <input id="purchaser_agent_broker" name="purchaser_agent_broker" type="text">
+            </div>
+            <div>
+              <label for="seller_agent_phone">Seller Agent Phone</label>
+              <input id="seller_agent_phone" name="seller_agent_phone" type="tel">
+            </div>
+            <div>
+              <label for="purchaser_agent_phone">Purchaser Agent Phone</label>
+              <input id="purchaser_agent_phone" name="purchaser_agent_phone" type="tel">
+            </div>
+            <div>
+              <label for="seller_agent_email">Seller Agent Email</label>
+              <input id="seller_agent_email" name="seller_agent_email" type="email">
+            </div>
+            <div>
+              <label for="purchaser_agent_email">Purchaser Agent Email</label>
+              <input id="purchaser_agent_email" name="purchaser_agent_email" type="email">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Lender</legend>
+          <div class="directory-tools">
+            <h3>Use saved lender</h3>
+            <div>
+              <label for="lender_directory">Saved Lender</label>
+              <input id="lender_directory" type="text" list="directory_lender" placeholder="Start typing a lender or loan officer">
+            </div>
+            <p class="hint">Lender is not on every deal sheet, but it belongs in the accepted-offer-to-close workflow.</p>
+          </div>
+          <div class="grid two">
+            <div>
+              <label for="lender_name">Lender / Loan Officer Name</label>
+              <input id="lender_name" name="lender_name" type="text">
+            </div>
+            <div>
+              <label for="lender_company">Lender Company</label>
+              <input id="lender_company" name="lender_company" type="text">
+            </div>
+            <div>
+              <label for="lender_phone">Lender Phone</label>
+              <input id="lender_phone" name="lender_phone" type="tel">
+            </div>
+            <div>
+              <label for="lender_email">Lender Email</label>
+              <input id="lender_email" name="lender_email" type="email">
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label for="lender_address">Lender Address</label>
+            <input id="lender_address" name="lender_address" type="text">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Property Condition Statement</legend>
+          <div class="grid two">
+            <div>
+              <label for="property_condition_statement_status">Has the buyer or their representative received a property condition statement?</label>
+              <select id="property_condition_statement_status" name="property_condition_statement_status">
+                <option value="">Select</option>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Exempt - Condo/Coop</option>
+                <option>Unknown</option>
+              </select>
+              <p class="hint">Condos/coops are exempt.</p>
+            </div>
+            <div>
+              <label for="next_action">Next Action</label>
+              <input id="next_action" name="next_action" type="text" placeholder="Example: Send accepted-offer package to attorney">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Additional Terms</legend>
+          <div>
+            <label for="additional_terms">Additional Terms</label>
+            <textarea id="additional_terms" name="additional_terms" placeholder="Example: Inspection completed, no issues."></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Acknowledgment of Receipt</legend>
+          <div class="grid two">
+            <div>
+              <label for="seller_acknowledgment_name">Seller Acknowledgment Name</label>
+              <input id="seller_acknowledgment_name" name="seller_acknowledgment_name" type="text" placeholder="Seller(s)">
+            </div>
+            <div>
+              <label for="seller_acknowledgment_date">Seller Acknowledgment Date</label>
+              <input id="seller_acknowledgment_date" name="seller_acknowledgment_date" type="date">
+            </div>
+            <div>
+              <label for="purchaser_acknowledgment_name">Purchaser Acknowledgment Name</label>
+              <input id="purchaser_acknowledgment_name" name="purchaser_acknowledgment_name" type="text" placeholder="Purchaser(s)">
+            </div>
+            <div>
+              <label for="purchaser_acknowledgment_date">Purchaser Acknowledgment Date</label>
+              <input id="purchaser_acknowledgment_date" name="purchaser_acknowledgment_date" type="date">
+            </div>
+          </div>
+          <p class="hint">
+            Saving this form creates the accepted-offer record, financial terms, parties, checklist items, acknowledgment fields, history event, and usage-ledger entry.
+          </p>
+        </fieldset>
+
+        <input type="hidden" name="source_label" value="Manual accepted-offer intake">
+        <input type="hidden" name="created_by" value="pilot">
+
+        <div class="actions">
+          <button class="primary" id="saveButton" type="submit">Save Accepted Offer</button>
+          <a class="button secondary" href="./dashboard.html">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    var form = document.getElementById('acceptedOfferForm');
+    var button = document.getElementById('saveButton');
+    var message = document.getElementById('saveMessage');
+
+
+    var directoryOptionMap = {};
+
+    function contactLabel(contact) {
+      var parts = [];
+      if (contact.display_name) parts.push(contact.display_name);
+      if (contact.company_name) parts.push(contact.company_name);
+      if (contact.broker_name) parts.push(contact.broker_name);
+      if (contact.email) parts.push(contact.email);
+      return parts.join(' | ');
+    }
+
+    async function loadDirectory(type) {
+      try {
+        var response = await fetch('./api/directory?type=' + encodeURIComponent(type), {
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store'
+        });
+
+        if (!response.ok) return;
+
+        var data = await response.json();
+        if (!data.ok || !Array.isArray(data.contacts)) return;
+
+        var datalist = document.getElementById('directory_' + type);
+        if (!datalist) return;
+
+        datalist.innerHTML = '';
+
+        data.contacts.forEach(function(contact) {
+          var label = contactLabel(contact);
+          if (!label) return;
+
+          directoryOptionMap[type + '::' + label] = contact;
+
+          var option = document.createElement('option');
+          option.value = label;
+          datalist.appendChild(option);
+        });
+      } catch (err) {
+      }
+    }
+
+    function setField(id, value) {
+      var el = document.getElementById(id);
+      if (el && value != null && value !== '') el.value = value;
+    }
+
+    function setupDirectoryPicker(inputId, type, fieldMap) {
+      var input = document.getElementById(inputId);
+      if (!input) return;
+
+      input.addEventListener('change', function() {
+        var contact = directoryOptionMap[type + '::' + input.value];
+        if (!contact) return;
+
+        Object.keys(fieldMap).forEach(function(sourceKey) {
+          setField(fieldMap[sourceKey], contact[sourceKey]);
+        });
+      });
+    }
+
+    loadDirectory('attorney');
+    loadDirectory('agent');
+    loadDirectory('lender');
+
+    setupDirectoryPicker('seller_attorney_directory', 'attorney', {
+      display_name: 'seller_attorney_name',
+      legal_address: 'seller_attorney_address',
+      phone: 'seller_attorney_phone',
+      email: 'seller_attorney_email'
+    });
+
+    setupDirectoryPicker('purchaser_attorney_directory', 'attorney', {
+      display_name: 'purchaser_attorney_name',
+      legal_address: 'purchaser_attorney_address',
+      phone: 'purchaser_attorney_phone',
+      email: 'purchaser_attorney_email'
+    });
+
+    setupDirectoryPicker('seller_agent_directory', 'agent', {
+      display_name: 'seller_agent_name',
+      broker_name: 'seller_agent_broker',
+      license_number: 'seller_agent_license',
+      phone: 'seller_agent_phone',
+      email: 'seller_agent_email'
+    });
+
+    setupDirectoryPicker('purchaser_agent_directory', 'agent', {
+      display_name: 'purchaser_agent_name',
+      broker_name: 'purchaser_agent_broker',
+      license_number: 'purchaser_agent_license',
+      phone: 'purchaser_agent_phone',
+      email: 'purchaser_agent_email'
+    });
+
+    setupDirectoryPicker('lender_directory', 'lender', {
+      display_name: 'lender_name',
+      company_name: 'lender_company',
+      legal_address: 'lender_address',
+      phone: 'lender_phone',
+      email: 'lender_email'
+    });
+
+
+
+    function showMessage(type, html) {
+      message.className = 'message ' + type;
+      message.innerHTML = html;
+      message.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formToObject(formEl) {
+      var data = {};
+      var fd = new FormData(formEl);
+      fd.forEach(function(value, key) {
+        data[key] = String(value).trim();
+      });
+      return data;
+    }
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Saving...';
+
+      try {
+        var payload = formToObject(form);
+
+        var response = await fetch('./api/deals', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify(payload)
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Save failed');
+        }
+
+        showMessage(
+          'success',
+          '<strong>Accepted offer saved.</strong><br>' +
+          escapeHtml(data.deal.property_address) +
+          '<br>Status: ' + escapeHtml(data.deal.transaction_status) +
+          '<br><br><a href="./dashboard.html">Return to dashboard</a>'
+        );
+
+        form.reset();
+      } catch (err) {
+        showMessage('error', '<strong>Could not save accepted offer.</strong><br>' + escapeHtml(err.message));
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Save Accepted Offer';
+      }
+    });
+  </script>
+
+<script id="dealdesk-money-format-script">
+(function() {
+  var moneyFields = {
+    purchase_price: true,
+    seller_concession: true,
+    contract_deposit: true,
+    mortgage_amount: true,
+    cash_at_closing: true,
+    total_price: true
+  };
+
+  function cleanMoney(value) {
+    value = String(value || '').replace(/[$,\s]/g, '');
+    value = value.replace(/[^\d.\-]/g, '');
+
+    var negative = value.charAt(0) === '-';
+    value = value.replace(/-/g, '');
+    var parts = value.split('.');
+    var whole = parts.shift() || '';
+    var cents = parts.join('').slice(0, 2);
+
+    whole = whole.replace(/^0+(?=\d)/, '');
+
+    return (negative ? '-' : '') + whole + (cents ? '.' + cents : '');
+  }
+
+  function formatMoney(value) {
+    var clean = cleanMoney(value);
+    if (!clean) return '';
+
+    var negative = clean.charAt(0) === '-';
+    if (negative) clean = clean.slice(1);
+
+    var parts = clean.split('.');
+    var whole = parts[0] || '0';
+    var cents = parts[1] || '';
+
+    whole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    return '$' + (negative ? '-' : '') + whole + (cents ? '.' + cents : '');
+  }
+
+  function bindMoneyField(input) {
+    if (!input || input.dataset.moneyBound === '1') return;
+
+    input.dataset.moneyBound = '1';
+    input.type = 'text';
+    input.inputMode = 'decimal';
+
+    input.addEventListener('focus', function() {
+      input.value = cleanMoney(input.value);
+    });
+
+    input.addEventListener('blur', function() {
+      input.value = formatMoney(input.value);
+    });
+
+    input.addEventListener('input', function() {
+      var clean = cleanMoney(input.value);
+      if (clean && clean.length > 3) {
+        input.value = formatMoney(clean);
+      }
+    });
+
+    if (input.value) {
+      input.value = formatMoney(input.value);
+    }
+  }
+
+  function installMoneyFormatting() {
+    Object.keys(moneyFields).forEach(function(name) {
+      document.querySelectorAll('input[name="' + name + '"]').forEach(bindMoneyField);
+    });
+  }
+
+  document.addEventListener('submit', function() {
+    Object.keys(moneyFields).forEach(function(name) {
+      document.querySelectorAll('input[name="' + name + '"]').forEach(function(input) {
+        input.value = cleanMoney(input.value);
+      });
+    });
+  }, true);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installMoneyFormatting);
+  } else {
+    installMoneyFormatting();
+  }
+
+  setTimeout(installMoneyFormatting, 500);
+  setTimeout(installMoneyFormatting, 1500);
+})();
+</script>
+
+
+<script id="dealdesk-accepted-terms-math-script">
+(function() {
+  var componentFields = [
+    'mortgage_amount',
+    'seller_concession',
+    'contract_deposit',
+    'cash_at_closing'
+  ];
+
+  var allMoneyFields = [
+    'purchase_price',
+    'mortgage_amount',
+    'seller_concession',
+    'contract_deposit',
+    'cash_at_closing',
+    'total_price'
+  ];
+
+  function field(name) {
+    return document.querySelector('[name="' + name + '"]');
+  }
+
+  function cleanMoney(value) {
+    return String(value || '')
+      .replace(/[$,\s]/g, '')
+      .replace(/[^\d.\-]/g, '');
+  }
+
+  function toCents(value) {
+    var n = Number(cleanMoney(value));
+    if (!Number.isFinite(n)) return 0;
+    return Math.round(n * 100);
+  }
+
+  function formatCents(cents) {
+    var negative = cents < 0;
+    cents = Math.abs(cents);
+    var dollars = Math.floor(cents / 100);
+    var remainder = cents % 100;
+    var shown = dollars.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return '$' + (negative ? '-' : '') + shown + (remainder ? '.' + String(remainder).padStart(2, '0') : '');
+  }
+
+  function ensureMathStatus(totalField) {
+    var box = document.getElementById('acceptedTermsMathStatus');
+    if (!box && totalField && totalField.parentNode) {
+      box = document.createElement('div');
+      box.id = 'acceptedTermsMathStatus';
+      box.style.marginTop = '6px';
+      box.style.fontSize = '13px';
+      box.style.fontWeight = '800';
+      box.style.lineHeight = '1.35';
+      totalField.parentNode.appendChild(box);
+    }
+    return box;
+  }
+
+  function setAcceptedTermsLabel() {
+    var label = document.querySelector('label[for="total_price"]');
+    if (label) label.textContent = 'Accepted Terms Total';
+  }
+
+  function updateAcceptedTermsTotal() {
+    var purchase = field('purchase_price');
+    var total = field('total_price');
+    if (!total) return true;
+
+    setAcceptedTermsLabel();
+
+    total.readOnly = true;
+    total.setAttribute('aria-readonly', 'true');
+    total.style.background = '#f1f5f9';
+    total.style.fontWeight = '900';
+
+    var totalCents = componentFields.reduce(function(sum, name) {
+      return sum + toCents(field(name) ? field(name).value : 0);
+    }, 0);
+
+    total.value = totalCents ? formatCents(totalCents) : '';
+
+    var purchaseCents = purchase ? toCents(purchase.value) : 0;
+    var box = ensureMathStatus(total);
+
+    if (!box) return true;
+
+    if (!purchaseCents && !totalCents) {
+      box.textContent = 'Accepted Terms Total is calculated automatically.';
+      box.style.color = '#64748b';
+      total.style.borderColor = '';
+      return true;
+    }
+
+    if (purchaseCents === totalCents) {
+      box.textContent = 'Accepted Terms Total matches Purchase Price.';
+      box.style.color = '#0f766e';
+      total.style.borderColor = '#0f766e';
+      return true;
+    }
+
+    var diff = purchaseCents - totalCents;
+    box.textContent = 'Accepted Terms Total must equal Purchase Price. Difference: ' + formatCents(diff) + '.';
+    box.style.color = '#b91c1c';
+    total.style.borderColor = '#b91c1c';
+    return false;
+  }
+
+  function installCommissionDropdown(name) {
+    var existing = field(name);
+    if (!existing || existing.tagName === 'SELECT') return;
+
+    var select = document.createElement('select');
+    select.name = existing.name;
+    select.id = existing.id || existing.name;
+    select.className = existing.className || '';
+    select.required = existing.required;
+
+    var current = String(existing.value || '').replace(/[^\d.]/g, '') || '4';
+    if (!['2','3','4','5','6'].includes(current)) current = '4';
+
+    ['2','3','4','5','6'].forEach(function(value) {
+      var option = document.createElement('option');
+      option.value = value + '%';
+      option.textContent = value + '%';
+      if (value === current) option.selected = true;
+      select.appendChild(option);
+    });
+
+    existing.parentNode.replaceChild(select, existing);
+  }
+
+  function installAcceptedTermsLogic() {
+    installCommissionDropdown('commission_paid_by_seller');
+    installCommissionDropdown('commission_paid_by_purchaser');
+
+    allMoneyFields.forEach(function(name) {
+      var el = field(name);
+      if (!el || el.dataset.acceptedTermsBound === '1') return;
+      el.dataset.acceptedTermsBound = '1';
+      el.addEventListener('input', updateAcceptedTermsTotal);
+      el.addEventListener('blur', updateAcceptedTermsTotal);
+      el.addEventListener('change', updateAcceptedTermsTotal);
+    });
+
+    updateAcceptedTermsTotal();
+  }
+
+  document.addEventListener('submit', function(event) {
+    var total = field('total_price');
+    if (!total) return;
+
+    var ok = updateAcceptedTermsTotal();
+    if (!ok) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      alert('Accepted Terms Total must equal Purchase Price before this accepted offer can be submitted.');
+      total.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  }, true);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installAcceptedTermsLogic);
+  } else {
+    installAcceptedTermsLogic();
+  }
+
+  setTimeout(installAcceptedTermsLogic, 500);
+  setTimeout(installAcceptedTermsLogic, 1500);
+})();
+</script>
+
+
+<script id="dealdesk-input-field-polish-script">
+(function() {
+  function byName(name) {
+    return document.querySelector('[name="' + name + '"]');
+  }
+
+  function labelFor(name) {
+    var input = byName(name);
+    if (!input) return null;
+    if (input.id) {
+      var label = document.querySelector('label[for="' + input.id + '"]');
+      if (label) return label;
+    }
+    return input.closest('label') || (input.parentNode ? input.parentNode.querySelector('label') : null);
+  }
+
+  function addHelpAfterField(name, id, text) {
+    var input = byName(name);
+    if (!input || document.getElementById(id)) return;
+
+    var help = document.createElement('div');
+    help.id = id;
+    help.className = 'field-help-note';
+    help.textContent = text;
+    help.style.marginTop = '6px';
+    help.style.color = '#64748b';
+    help.style.fontSize = '13px';
+    help.style.lineHeight = '1.35';
+
+    if (input.parentNode) {
+      input.parentNode.appendChild(help);
+    }
+  }
+
+  function installClosingDatePicker() {
+    var closing = byName('closing_date_text');
+    if (!closing) return;
+
+    closing.type = 'date';
+    closing.placeholder = '';
+
+    var label = labelFor('closing_date_text');
+    if (label) label.textContent = 'On or About Closing Date';
+}
+
+  function onlyDigits(value) {
+    return String(value || '').replace(/\D/g, '').slice(0, 10);
+  }
+
+  function formatPhone(value) {
+    var d = onlyDigits(value);
+
+    if (!d) return '';
+    if (d.length <= 3) return '(' + d;
+    if (d.length <= 6) return '(' + d.slice(0, 3) + ') ' + d.slice(3);
+    return '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6, 10);
+  }
+
+  function bindPhone(input) {
+    if (!input || input.dataset.phoneFormatBound === '1') return;
+
+    input.dataset.phoneFormatBound = '1';
+    input.type = 'tel';
+    input.inputMode = 'numeric';
+    input.autocomplete = 'tel';
+    input.maxLength = 14;
+    input.placeholder = input.placeholder || '(555) 555-5555';
+
+    input.addEventListener('input', function() {
+      input.value = formatPhone(input.value);
+    });
+
+    input.addEventListener('blur', function() {
+      input.value = formatPhone(input.value);
+    });
+
+    if (input.value) {
+      input.value = formatPhone(input.value);
+    }
+  }
+
+  function installPhoneFormatting() {
+    document.querySelectorAll('input[name*="phone" i]').forEach(bindPhone);
+  }
+
+  function installPropertyConditionHelp() {
+    var pcs = byName('property_condition_statement_status');
+    if (pcs) {
+      addHelpAfterField(
+        'property_condition_statement_status',
+        'propertyConditionHelpNote',
+        'Use this to record whether the Property Condition Statement was received, waived, not applicable, or still needs review. This should support the Clearance Path.'
+      );
+    }
+
+    var nextAction = byName('next_action');
+    if (nextAction) {
+      addHelpAfterField(
+        'next_action',
+        'nextActionHelpNote',
+        'Use Next Action only for the immediate operator follow-up after intake. The Clearance Path remains the source of truth for required items.'
+      );
+    }
+  }
+
+  function installInputFieldPolish() {
+    installClosingDatePicker();
+    installPhoneFormatting();
+    installPropertyConditionHelp();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', installInputFieldPolish);
+  } else {
+    installInputFieldPolish();
+  }
+
+  setTimeout(installInputFieldPolish, 500);
+  setTimeout(installInputFieldPolish, 1500);
+})();
+</script>
+
+
+<!-- DEALDESK_CLAIRE_INTEGRATION_V1 -->
+<style id="dealdesk-claire-integration-style">
+  .dd-claire-launcher {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2147483000;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: #071b2c;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 12px 32px rgba(7, 27, 44, .28);
+    border: 2px solid #14b8a6;
+  }
+  .dd-claire-launcher:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 38px rgba(7, 27, 44, .34);
+  }
+  .dd-claire-launcher span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #14b8a6;
+  }
+  @media print {
+    .dd-claire-launcher { display: none !important; }
+  }
+</style>
+<a class="dd-claire-launcher" href="./claire-dealdesk-view.html" title="Open CLAIRE Deal Desk View">
+  <span></span>
+  CLAIRE Intake Reader
+</a>
+<!-- END_DEALDESK_CLAIRE_INTEGRATION_V1 -->
+
+</body>
+</html>

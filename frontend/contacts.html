@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Contacts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe3ee;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-dark:#115e59;
+      --danger:#991b1b;
+      --warn:#92400e;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    header {
+      background:white;
+      border-bottom:1px solid var(--line);
+      padding:18px 22px;
+    }
+    .wrap {
+      max-width:1240px;
+      margin:0 auto;
+    }
+    nav {
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    nav a {
+      color:var(--accent-dark);
+      font-weight:800;
+      text-decoration:none;
+      margin-left:14px;
+    }
+    main {
+      padding:28px 22px 70px;
+    }
+    .dashboard-hero {
+      background:
+        radial-gradient(circle at top left, rgba(15,118,110,.18), transparent 34%),
+        linear-gradient(135deg,#102034 0%,#123b45 46%,#0f766e 100%);
+      color:white;
+      border-radius:22px;
+      padding:28px;
+      margin-bottom:18px;
+      box-shadow:0 18px 40px rgba(23,32,51,.14);
+      border:1px solid rgba(255,255,255,.16);
+    }
+    .dashboard-hero-inner {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .dashboard-eyebrow {
+      display:inline-block;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.10);
+      color:#d1fae5;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:13px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    .dashboard-title {
+      color:white;
+      font-size:42px;
+      line-height:1;
+      margin:0 0 10px;
+      letter-spacing:-.045em;
+    }
+    .dashboard-lead {
+      color:rgba(255,255,255,.78);
+      line-height:1.5;
+      margin:0;
+      max-width:760px;
+      font-size:16px;
+    }
+    .dashboard-status {
+      color:#d1fae5;
+      font-size:13px;
+      font-weight:900;
+      margin-top:12px;
+    }
+    .actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .button {
+      display:inline-block;
+      border-radius:11px;
+      padding:11px 14px;
+      text-decoration:none;
+      font-weight:900;
+      border:1px solid var(--line);
+      background:white;
+      color:var(--accent-dark);
+      cursor:pointer;
+      font:inherit;
+    }
+    .button.primary {
+      background:var(--accent);
+      color:white;
+      border-color:var(--accent);
+    }
+    .dashboard-hero .button {
+      border-color:rgba(255,255,255,.30);
+      background:rgba(255,255,255,.12);
+      color:white;
+    }
+    .dashboard-hero .button.primary {
+      background:white;
+      color:#115e59;
+      border-color:white;
+    }
+    .toolbar {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+      margin-bottom:18px;
+    }
+    .tools {
+      display:grid;
+      grid-template-columns:220px minmax(260px,1fr) 150px auto;
+      gap:10px;
+      align-items:center;
+    }
+    input, select, textarea {
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:11px;
+      padding:11px 12px;
+      font:inherit;
+      background:white;
+      color:var(--ink);
+    }
+    textarea {
+      min-height:88px;
+      resize:vertical;
+    }
+    .small {
+      color:var(--muted);
+      margin:0;
+      line-height:1.45;
+    }
+    .muted {
+      color:var(--muted);
+      font-size:13px;
+    }
+    .workspace {
+      display:grid;
+      grid-template-columns:410px minmax(0,1fr);
+      gap:18px;
+      align-items:start;
+    }
+    .card {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+    }
+    h2 {
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+    .result-list {
+      display:grid;
+      gap:8px;
+      max-height:650px;
+      overflow:auto;
+      padding-right:2px;
+    }
+    .result {
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#f8fafc;
+      cursor:pointer;
+    }
+    .result:hover,
+    .result.active {
+      border-color:#99f6e4;
+      background:#ecfdf5;
+    }
+    .result-name {
+      font-weight:900;
+      line-height:1.25;
+      color:var(--ink);
+    }
+    .result-meta {
+      color:var(--muted);
+      font-size:13px;
+      margin-top:5px;
+      line-height:1.35;
+    }
+    .pill {
+      display:inline-block;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:900;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      color:var(--muted);
+      margin-top:7px;
+    }
+    .contact-pill {
+      display:inline-block;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:900;
+      background:#ecfdf5;
+      border:1px solid #bbf7d0;
+      color:#115e59;
+      margin-top:7px;
+    }
+    .detail-empty {
+      border:1px dashed var(--line);
+      border-radius:16px;
+      padding:20px;
+      background:#f8fafc;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .detail-name {
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.03em;
+      margin-bottom:6px;
+    }
+    .detail-sub {
+      color:var(--muted);
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    .line {
+      margin-top:8px;
+      color:#334155;
+      line-height:1.4;
+      word-break:break-word;
+      font-size:15px;
+    }
+    .line b {
+      color:var(--muted);
+    }
+    .add-wrap {
+      margin-top:16px;
+      border-top:1px solid var(--line);
+      padding-top:16px;
+    }
+    .add-form {
+      display:none;
+      margin-top:14px;
+    }
+    .add-form.open {
+      display:block;
+    }
+    .form-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    label {
+      display:grid;
+      gap:6px;
+      color:#334155;
+      font-size:13px;
+      font-weight:900;
+    }
+    .form-actions {
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      align-items:center;
+      margin-top:12px;
+    }
+    .error {
+      color:var(--danger);
+      font-weight:900;
+    }
+    @media (max-width:900px) {
+      .workspace,
+      .tools,
+      .form-grid {
+        grid-template-columns:1fr;
+      }
+      nav a {
+        margin-left:0;
+      }
+    }
+    @media (max-width:640px) {
+      .dashboard-title {
+        font-size:32px;
+      }
+      .dashboard-hero {
+        padding:22px;
+      }
+      main {
+        padding:22px 14px 60px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="./dealdesk-ui-lock.css?v=1">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav>
+        <a href="./dashboard.html">Back</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="dashboard-hero">
+        <div class="dashboard-hero-inner">
+          <div>
+            <span class="dashboard-eyebrow">Working contact roster</span>
+            <h1 class="dashboard-title">Contacts</h1>
+            <p class="dashboard-lead">
+              Search law offices, working contacts, agents, and support contacts without scrolling through the entire roster.
+              Use the filters first, then open one contact into the detail panel.
+            </p>
+            <div class="dashboard-status" id="contactsStatus">Loading contacts...</div>
+          </div>
+          <div class="actions">
+            <button class="button primary" type="button" id="heroAddBtn">Add Contact</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolbar">
+        <div class="tools">
+          <select id="typeFilter">
+            <option value="">All contact types</option>
+            <option value="attorney">Attorneys / Law Offices</option>
+            <option value="agent">Agents</option>
+            <option value="support">Support / Ops</option>
+            <option value="other">Other</option>
+          </select>
+          <input id="searchBox" placeholder="Search name, office, email, phone, broker, role, notes...">
+          <select id="limitSelect">
+            <option value="25">Show 25</option>
+            <option value="50">Show 50</option>
+            <option value="100">Show 100</option>
+          </select>
+          <button class="button primary" id="refreshBtn" type="button">Refresh</button>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="card">
+          <h2>Results</h2>
+          <p class="small" id="resultSummary">Start typing or choose a contact type.</p>
+          <div id="results" class="result-list"></div>
+        </div>
+
+        <div class="card">
+          <h2>Contact Detail</h2>
+          <div id="detail" class="detail-empty">Choose a contact from the results, or search to narrow the list.</div>
+
+          <div class="add-wrap">
+            <button class="button" id="toggleAdd" type="button">Add Contact</button>
+            <form id="addForm" class="add-form">
+              <div class="form-grid">
+                <label>Type
+                  <select name="contact_type">
+                    <option value="attorney">Attorney / Law Office</option>
+                    <option value="agent">Agent</option>
+                    <option value="support">Support / Ops</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+                <label>Organization / Office<input name="organization_name"></label>
+                <label>Display Name<input name="display_name"></label>
+                <label>Working Contact<input name="working_contact_name"></label>
+                <label>Working Contact Role<input name="working_contact_role"></label>
+                <label>Phone<input name="phone"></label>
+                <label>Email<input name="email"></label>
+                <label>Address<input name="legal_address"></label>
+                <label>Broker<input name="broker_name"></label>
+                <label>License #<input name="license_number"></label>
+                <label>Subtype<input name="contact_subtype"></label>
+              </div>
+              <label style="margin-top:10px">Notes<textarea name="clearance_notes"></textarea></label>
+              <div class="form-actions">
+                <span id="formStatus" class="muted"></span>
+                <button class="button primary" type="submit">Save Contact</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    var allContacts = [];
+    var filteredContacts = [];
+    var selectedContact = null;
+
+    function byId(id) { return document.getElementById(id); }
+
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function typeLabel(value) {
+      var v = String(value || '').toLowerCase();
+      if (v === 'attorney') return 'Attorney / Law Office';
+      if (v === 'agent') return 'Agent';
+      if (v === 'support') return 'Support / Ops';
+      return value || 'Other';
+    }
+
+    function contactName(contact) {
+      return contact.display_name || contact.organization_name || contact.working_contact_name || 'Unnamed Contact';
+    }
+
+    function contactBlob(contact) {
+      return Object.values(contact).filter(Boolean).join(' ').toLowerCase();
+    }
+
+    async function apiRequest(method, body) {
+      var response = await fetch('./api/directory', {
+        method: method || 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store',
+        body: body ? JSON.stringify(body) : undefined
+      });
+
+      var text = await response.text();
+      var data = {};
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (err) {
+        throw new Error('Contacts endpoint returned non-JSON.');
+      }
+
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.error || 'Request failed.');
+      }
+
+      return data;
+    }
+
+    function applyFilters() {
+      var type = byId('typeFilter').value.toLowerCase();
+      var query = byId('searchBox').value.trim().toLowerCase();
+      var limit = Number(byId('limitSelect').value || 25);
+
+      if (!type && !query) {
+        filteredContacts = [];
+        byId('contactsStatus').textContent = allContacts.length + ' total contacts loaded.';
+        byId('resultSummary').textContent = 'Start typing or choose a contact type.';
+        byId('results').innerHTML = '<div class="detail-empty">Start typing in search or choose a contact type to show matching contacts.</div>';
+        byId('detail').className = 'detail-empty';
+        byId('detail').textContent = 'Choose a contact from the results, or search to narrow the list.';
+        return;
+      }
+
+      filteredContacts = allContacts.filter(function(contact) {
+        var contactType = String(contact.contact_type || '').toLowerCase();
+        if (type && contactType !== type) return false;
+        if (query && !contactBlob(contact).includes(query)) return false;
+        return true;
+      }).sort(function(a, b) {
+        return contactName(a).localeCompare(contactName(b));
+      });
+
+      var shown = filteredContacts.slice(0, limit);
+      byId('contactsStatus').textContent = allContacts.length + ' total contacts loaded.';
+      byId('resultSummary').textContent = filteredContacts.length + ' match' + (filteredContacts.length === 1 ? '' : 'es') + ' found. Showing ' + shown.length + '.';
+
+      byId('results').innerHTML = shown.length
+        ? shown.map(renderResult).join('')
+        : '<div class="detail-empty">No matching contacts. Change the type filter or search text.</div>';
+
+      document.querySelectorAll('.result').forEach(function(el) {
+        el.addEventListener('click', function() {
+          selectContact(Number(el.getAttribute('data-index')));
+        });
+      });
+
+      if (!selectedContact && shown.length) {
+        selectContact(0);
+      }
+    }
+
+    function renderResult(contact, index) {
+      var meta = [
+        contact.organization_name,
+        contact.working_contact_name,
+        contact.email,
+        contact.phone,
+        contact.broker_name
+      ].filter(Boolean).join(' · ');
+
+      return [
+        '<div class="result" data-index="' + index + '">',
+          '<div class="result-name">' + escapeHtml(contactName(contact)) + '</div>',
+          '<span class="contact-pill">' + escapeHtml(typeLabel(contact.contact_type)) + '</span>',
+          '<div class="result-meta">' + escapeHtml(meta || 'No detail shown') + '</div>',
+        '</div>'
+      ].join('');
+    }
+
+    function selectContact(index) {
+      var limit = Number(byId('limitSelect').value || 25);
+      var contact = filteredContacts.slice(0, limit)[index];
+      if (!contact) return;
+
+      selectedContact = contact;
+      renderDetail(contact);
+
+      document.querySelectorAll('.result').forEach(function(el, idx) {
+        el.classList.toggle('active', idx === index);
+      });
+    }
+
+    function renderDetail(contact) {
+      var rows = [
+        ['Organization / Office', contact.organization_name],
+        ['Working Contact', contact.working_contact_name],
+        ['Role', contact.working_contact_role || contact.contact_subtype],
+        ['Phone', contact.phone],
+        ['Email', contact.email],
+        ['Address', contact.legal_address],
+        ['Broker', contact.broker_name],
+        ['License #', contact.license_number],
+        ['Notes', contact.clearance_notes]
+      ].filter(function(row) { return row[1]; });
+
+      byId('detail').className = '';
+      byId('detail').innerHTML = [
+        '<div class="detail-name">' + escapeHtml(contactName(contact)) + '</div>',
+        '<div class="detail-sub">' + escapeHtml(typeLabel(contact.contact_type)) + '</div>',
+        rows.map(function(row) {
+          return '<div class="line"><b>' + escapeHtml(row[0]) + ':</b> ' + escapeHtml(row[1]) + '</div>';
+        }).join('')
+      ].join('');
+    }
+
+    async function loadContacts() {
+      byId('contactsStatus').textContent = 'Loading contacts...';
+
+      try {
+        var data = await apiRequest('GET');
+        allContacts = data.contacts || [];
+        selectedContact = null;
+        applyFilters();
+      } catch (err) {
+        byId('contactsStatus').innerHTML = '<span class="error">Could not load contacts: ' + escapeHtml(err.message) + '</span>';
+      }
+    }
+
+    function toggleAddForm(open) {
+      var form = byId('addForm');
+      if (open === true) {
+        form.classList.add('open');
+      } else {
+        form.classList.toggle('open');
+      }
+    }
+
+    ['typeFilter', 'searchBox', 'limitSelect'].forEach(function(id) {
+      byId(id).addEventListener('input', function() {
+        selectedContact = null;
+        applyFilters();
+      });
+    });
+
+    byId('refreshBtn').addEventListener('click', loadContacts);
+    byId('toggleAdd').addEventListener('click', function() { toggleAddForm(); });
+    byId('heroAddBtn').addEventListener('click', function() { toggleAddForm(true); byId('addForm').scrollIntoView({ behavior:'smooth', block:'center' }); });
+
+    byId('addForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      var payload = Object.fromEntries(new FormData(event.target).entries());
+      Object.keys(payload).forEach(function(key) {
+        payload[key] = String(payload[key] || '').trim();
+      });
+
+      if (!payload.display_name) {
+        payload.display_name = payload.organization_name || payload.working_contact_name || '';
+      }
+
+      if (!payload.display_name) {
+        byId('formStatus').innerHTML = '<span class="error">Enter a name, office, or working contact.</span>';
+        return;
+      }
+
+      try {
+        byId('formStatus').textContent = 'Saving...';
+        await apiRequest('POST', payload);
+        event.target.reset();
+        byId('formStatus').textContent = 'Contact added.';
+        await loadContacts();
+      } catch (err) {
+        byId('formStatus').innerHTML = '<span class="error">' + escapeHtml(err.message) + '</span>';
+      }
+    });
+
+    loadContacts();
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+backend/.env
+backend/storage/
+backend/node_modules/
+backend/cache/
+backend/logs/
+backend/sql/
+backend/backups/
+frontend/node_modules/
+fontend/generated-docs/
+frontend/source-docs/
+documentation/
+.htaccess

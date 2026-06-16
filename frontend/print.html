@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Deal Sheet | Accepted Offer to Close</title>
+  <!-- Larger approved preview layout v7 - acknowledgment fields are manual blanks -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #e5e7eb;
+      color: #183444;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      line-height: 1.18;
+    }
+
+    .toolbar {
+      background: #111827;
+      color: #ffffff;
+      padding: 12px 18px;
+    }
+
+    .toolbar-inner {
+      max-width: 8in;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .toolbar a,
+    .toolbar button {
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.10);
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 8px 11px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .sheet {
+      width: 8.25in;
+      min-height: 10.82in;
+      margin: 18px auto;
+      background: #ffffff;
+      padding: .20in .22in .18in;
+      box-shadow: 0 10px 28px rgba(15,23,42,.18);
+      overflow: hidden;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 1fr 2.35in;
+      gap: .12in;
+      align-items: start;
+      border-bottom: 2px solid #7aa06d;
+      padding-bottom: .03in;
+      margin-bottom: .06in;
+    }
+
+    .deal-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      line-height: .95;
+      color: #183444;
+      letter-spacing: -.04em;
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .logo {
+      width: 2.32in;
+      max-height: .60in;
+      object-fit: contain;
+      display: block;
+      margin-left: auto;
+      position: static;
+    }
+
+    .disclaimer {
+      font-size: 10.5px;
+      line-height: 1.18;
+      color: #2c3f48;
+      margin: .045in 0 .095in;
+    }
+
+    .disclaimer p {
+      margin: 1px 0;
+    }
+
+    .top-line {
+      display: grid;
+      grid-template-columns: 1.08in 1.12in 1fr;
+      gap: .10in;
+      margin: .065in 0 .095in;
+      align-items: end;
+    }
+
+    .line-field {
+      display: flex;
+      align-items: flex-end;
+      gap: .04in;
+      min-height: .23in;
+      white-space: nowrap;
+    }
+
+    .line-label {
+      color: #253f4a;
+      font-size: 11.4px;
+      white-space: nowrap;
+    }
+
+    .line-value {
+      flex: 1;
+      min-height: .17in;
+      border-bottom: 1px solid #5f6870;
+      padding: 0 .035in 0;
+      color: #111827;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+    }
+
+    .financial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: .20in;
+      row-gap: .055in;
+      margin-bottom: .11in;
+    }
+
+    .money-row {
+      display: grid;
+      grid-template-columns: 1.62in .17in 1fr;
+      align-items: end;
+      min-height: .215in;
+    }
+
+    .date-row,
+    .plain-row {
+      display: grid;
+      grid-template-columns: 1.95in 1fr;
+      align-items: end;
+      min-height: .215in;
+    }
+
+    .party-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: .20in;
+      row-gap: .06in;
+    }
+
+    .party-block {
+      break-inside: avoid;
+      margin-bottom: .07in;
+    }
+
+    .block-title {
+      font-size: 13.2px;
+      line-height: 1;
+      color: #183444;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0 0 .065in;
+    }
+
+    .small-line {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .04in;
+      align-items: end;
+      min-height: .215in;
+      margin-bottom: .035in;
+    }
+
+    .small-line .line-label {
+      font-size: 10.5px;
+    }
+
+    .agent-title-line {
+      display: grid;
+      grid-template-columns: auto .42in 1fr;
+      gap: .035in;
+      align-items: end;
+      margin-bottom: .035in;
+    }
+
+    .property-condition {
+      margin-top: .07in;
+      font-size: 10px;
+      line-height: 1.02;
+    }
+
+    .checkbox-row {
+      margin-top: .015in;
+      display: flex;
+      gap: .06in;
+      align-items: center;
+    }
+
+    .box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: .13in;
+      height: .13in;
+      border: 1px solid #111827;
+      vertical-align: middle;
+      margin-right: .025in;
+      font-size: 9.4px;
+      line-height: 1;
+    }
+
+    .additional {
+      margin-top: .07in;
+    }
+
+    .additional .line-value {
+      min-height: .145in;
+    }
+
+    .extra-line {
+      border-bottom: 1px solid #5f6870;
+      height: .23in;
+    }
+
+    .ack {
+      margin-top: .07in;
+    }
+
+    .ack-title {
+      font-size: 11px;
+      color: #253f4a;
+      margin-bottom: .035in;
+    }
+
+    .ack-grid {
+      display: grid;
+      grid-template-columns: 1fr .55in 1fr .55in;
+      gap: .05in;
+      align-items: end;
+    }
+
+    .notice {
+      font-size: 7.8px;
+      line-height: 1.0;
+      margin-top: .045in;
+      color: #263b44;
+    }
+
+    .footer {
+      margin-top: .025in;
+      padding-top: .02in;
+      border-top: 2px solid #7aa06d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #111827;
+      font-size: 9.4px;
+      font-weight: 800;
+    }
+
+    .footer-left {
+      display: flex;
+      gap: .05in;
+      align-items: center;
+    }
+
+    .mini-icon {
+      width: .12in;
+      height: .12in;
+      border: 1px solid #111827;
+      display: inline-block;
+    }
+
+    .loading,
+    .error {
+      width: 8.25in;
+      margin: 18px auto;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 18px;
+      font-weight: 800;
+    }
+
+    .error {
+      color: #b91c1c;
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    @media print {
+      @page {
+        size: letter;
+        margin: .10in;
+      }
+
+      html,
+      body {
+        background: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .sheet {
+        width: auto;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        overflow: visible;
+      }
+    }
+  </style>
+
+
+  <style id="v4-larger-final-override">
+    .sheet {
+      width: 8.35in !important;
+      min-height: 10.90in !important;
+      padding: .16in .17in .13in !important;
+    }
+
+    .header {
+      grid-template-columns: 1fr 2.42in !important;
+      margin-bottom: .075in !important;
+    }
+
+    .deal-title {
+      font-size: 48px !important;
+      line-height: .92 !important;
+    }
+
+    .logo {
+      width: 2.42in !important;
+      max-height: .66in !important;
+    }
+
+    .disclaimer {
+      font-size: 11.9px !important;
+      line-height: 1.14 !important;
+      margin: .045in 0 .105in !important;
+    }
+
+    .top-line {
+      grid-template-columns: 1.12in 1.18in 1fr !important;
+      margin: .075in 0 .105in !important;
+      gap: .10in !important;
+    }
+
+    .financial-grid {
+      column-gap: .21in !important;
+      row-gap: .062in !important;
+      margin-bottom: .12in !important;
+    }
+
+    .money-row {
+      grid-template-columns: 1.72in .18in 1fr !important;
+    }
+
+    .date-row,
+    .plain-row {
+      grid-template-columns: 2.08in 1fr !important;
+    }
+
+    .line-label {
+      font-size: 13.1px !important;
+    }
+
+    .line-value {
+      font-size: 13.1px !important;
+      min-height: .185in !important;
+    }
+
+    .money-row,
+    .date-row,
+    .plain-row,
+    .small-line {
+      min-height: .245in !important;
+    }
+
+    .party-grid {
+      column-gap: .22in !important;
+      row-gap: .07in !important;
+    }
+
+    .party-block {
+      margin-bottom: .075in !important;
+    }
+
+    .block-title {
+      font-size: 15.2px !important;
+      margin-bottom: .075in !important;
+    }
+
+    .small-line .line-label {
+      font-size: 12px !important;
+    }
+
+    .agent-title-line {
+      margin-bottom: .045in !important;
+    }
+
+    .property-condition {
+      font-size: 11.5px !important;
+      line-height: 1.1 !important;
+      margin-top: .08in !important;
+    }
+
+    .box {
+      width: .145in !important;
+      height: .145in !important;
+      font-size: 10px !important;
+    }
+
+    .additional {
+      margin-top: .075in !important;
+    }
+
+    .extra-line {
+      height: .255in !important;
+    }
+
+    .ack {
+      margin-top: .075in !important;
+    }
+
+    .ack-title {
+      font-size: 12.5px !important;
+      margin-bottom: .04in !important;
+    }
+
+    .notice {
+      font-size: 8.8px !important;
+      line-height: 1.08 !important;
+      margin-top: .07in !important;
+    }
+
+    .footer {
+      font-size: 10.6px !important;
+      margin-top: .045in !important;
+    }
+
+    .mini-icon {
+      width: .135in !important;
+      height: .135in !important;
+    }
+
+    @media print {
+      @page {
+        size: letter;
+        margin: .08in;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .sheet {
+        width: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+      }
+    }
+  </style>
+
+
+  <style id="v5-footer-logo-override">
+    .footer-logos {
+      display: inline-flex;
+      align-items: center;
+      gap: .045in;
+    }
+
+    .footer-logo {
+      width: .145in;
+      height: .145in;
+      display: inline-block;
+      vertical-align: middle;
+      flex: 0 0 auto;
+    }
+
+    .footer-logo svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    @media print {
+      .footer-logo {
+        width: .135in !important;
+        height: .135in !important;
+      }
+    }
+  </style>
+
+
+  <style id="v7-manual-signature-override">
+    .manual-signature-grid .line-value {
+      min-height: .24in !important;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <a id="backLink" href="./dashboard.html">Back to File</a>
+      <button type="button" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+
+  <div id="app">
+    <div class="loading">Loading printable deal sheet...</div>
+  </div>
+
+  <script>
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      var date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString();
+    }
+
+    function formatMoney(value) {
+      if (value == null || value === '') return '';
+      var n = Number(String(value).replace(/[$,]/g, ''));
+      if (!Number.isFinite(n)) return value;
+      return n.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function party(record, role) {
+      return (record.parties || []).find(function(p) {
+        return p.role_key === role;
+      }) || {};
+    }
+
+    function lineField(label, value) {
+      return '<div class="line-field">' +
+        '<span class="line-label">' + escapeHtml(label) + '</span>' +
+        '<span class="line-value">' + escapeHtml(value || '') + '</span>' +
+      '</div>';
+    }
+
+    function moneyRow(label, value) {
+      return '<div class="money-row">' +
+        '<span class="line-label">' + escapeHtml(label) + '</span>' +
+        '<span class="line-label">$</span>' +
+        '<span class="line-value">' + escapeHtml(formatMoney(value)) + '</span>' +
+      '</div>';
+    }
+
+    function dateRow(label, value) {
+      return '<div class="date-row">' +
+        '<span class="line-label">' + escapeHtml(label) + '</span>' +
+        '<span class="line-value">' + escapeHtml(value || '') + '</span>' +
+      '</div>';
+    }
+
+    function plainRow(label, value) {
+      return '<div class="plain-row">' +
+        '<span class="line-label">' + escapeHtml(label) + '</span>' +
+        '<span class="line-value">' + escapeHtml(value || '') + '</span>' +
+      '</div>';
+    }
+
+    function smallLine(label, value) {
+      return '<div class="small-line">' +
+        '<span class="line-label">' + escapeHtml(label) + '</span>' +
+        '<span class="line-value">' + escapeHtml(value || '') + '</span>' +
+      '</div>';
+    }
+
+    function partyBlock(title, lines) {
+      return '<div class="party-block">' +
+        '<h2 class="block-title">' + escapeHtml(title) + '</h2>' +
+        lines.join('') +
+      '</div>';
+    }
+
+    function render(record) {
+      var deal = record.deal || {};
+      var f = record.financials || {};
+      var seller = party(record, 'seller');
+      var purchaser = party(record, 'purchaser');
+      var sellerAttorney = party(record, 'seller_attorney');
+      var purchaserAttorney = party(record, 'purchaser_attorney');
+      var sellerAgent = party(record, 'seller_agent');
+      var purchaserAgent = party(record, 'purchaser_agent');
+
+      document.getElementById('backLink').href =
+        './detail.html?id=' + encodeURIComponent(deal.public_id || '');
+
+      var pcs = String(deal.property_condition_statement_status || '').toLowerCase();
+      var pcsYes = pcs.includes('yes') || pcs.includes('received');
+      var pcsNo = pcs.includes('no') || pcs.includes('missing') || pcs.includes('needs');
+
+      document.getElementById('app').innerHTML =
+        '<main class="sheet">' +
+          '<div class="header">' +
+            '<h1 class="deal-title">Deal Sheet</h1>' +
+            '<img class="logo" src="./assets/signature-premier-properties-logo.png?v=5" alt="Signature Premier Properties">' +
+          '</div>' +
+
+          '<div class="disclaimer">' +
+            '<p>This document is to facilitate the creation of the contract of sale and is not to be construed as legally binding.</p>' +
+            '<p>BROKER COMPENSATION IS NOT SET BY LAW OR ANY REALTOR® ASSOCIATION OR ONEKEY® MLS AND IS FULLY NEGOTIABLE.</p>' +
+            '<p>THE RATE OR AMOUNT OF COMMISSION CHARGED FOR THE SALE, LEASE, APPRAISAL OR MANAGEMENT OF REAL ESTATE SHALL BE NEGOTIATED BETWEEN EACH BROKER AND THEIR CLIENT.</p>' +
+          '</div>' +
+
+          '<div class="top-line">' +
+            lineField('Date:', formatDate(deal.accepted_offer_date)) +
+            lineField('MLS#:', deal.mls_number) +
+            lineField('Property Address:', deal.property_address) +
+          '</div>' +
+
+          '<div class="financial-grid">' +
+            moneyRow('Purchase Price', f.purchase_price) +
+            dateRow('On or About Contract Date', f.contract_date_text) +
+
+            moneyRow("Seller's Concession", f.seller_concession) +
+            dateRow('On or About Closing Date', f.closing_date_text) +
+
+            moneyRow('Contract Deposit', f.contract_deposit) +
+            plainRow('Commission Paid by Seller', f.commission_paid_by_seller) +
+
+            moneyRow('Mortgage Amount', f.mortgage_amount) +
+            plainRow('Commission Paid by Purchaser', f.commission_paid_by_purchaser) +
+
+            moneyRow('Cash at Closing', f.cash_at_closing) +
+            '<div></div>' +
+
+            moneyRow('Total', f.total_price) +
+            '<div></div>' +
+          '</div>' +
+
+          '<div class="party-grid">' +
+            partyBlock('Seller:', [
+              smallLine('Name(s)', seller.display_name),
+              smallLine('Legal address of seller', seller.legal_address)
+            ]) +
+
+            partyBlock('Purchaser:', [
+              smallLine('Name(s)', purchaser.display_name),
+              smallLine('Legal address of purchaser', purchaser.legal_address)
+            ]) +
+
+            partyBlock("Seller's Attorney:", [
+              smallLine('Name', sellerAttorney.display_name),
+              smallLine('Address', sellerAttorney.legal_address),
+              smallLine('Phone', sellerAttorney.phone),
+              smallLine('Email', sellerAttorney.email)
+            ]) +
+
+            partyBlock("Purchaser's Attorney:", [
+              smallLine('Name', purchaserAttorney.display_name),
+              smallLine('Address', purchaserAttorney.legal_address),
+              smallLine('Phone', purchaserAttorney.phone),
+              smallLine('Email', purchaserAttorney.email)
+            ]) +
+
+            partyBlock("Seller's Agent:", [
+              '<div class="agent-title-line"><span class="line-label">Lic#</span><span class="line-value">' + escapeHtml(sellerAgent.license_number || '') + '</span></div>',
+              smallLine('Name', sellerAgent.display_name),
+              smallLine('Broker', sellerAgent.broker_name),
+              smallLine('Phone', sellerAgent.phone),
+              smallLine('Email', sellerAgent.email)
+            ]) +
+
+            '<div>' +
+              partyBlock("Purchaser's Agent:", [
+                '<div class="agent-title-line"><span class="line-label">Lic#</span><span class="line-value">' + escapeHtml(purchaserAgent.license_number || '') + '</span></div>',
+                smallLine('Name', purchaserAgent.display_name),
+                smallLine('Broker', purchaserAgent.broker_name),
+                smallLine('Phone', purchaserAgent.phone),
+                smallLine('Email', purchaserAgent.email)
+              ]) +
+              '<div class="property-condition">' +
+                'Has the buyer or their representative received a property condition statement? (condos/coops are exempt)' +
+                '<div class="checkbox-row">' +
+                  '<span><span class="box">' + (pcsYes ? '✓' : '') + '</span>Yes</span>' +
+                  '<span><span class="box">' + (pcsNo ? '✓' : '') + '</span>No</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="additional">' +
+            lineField('Additional Terms', deal.additional_terms) +
+            '<div class="extra-line"></div>' +
+            '<div class="extra-line"></div>' +
+          '</div>' +
+
+          '<div class="ack">' +
+            '<div class="ack-title">Acknowledgment of Receipt</div>' +
+            '<div class="ack-grid manual-signature-grid">' +
+              lineField('Seller(s) Signature:', '') +
+              lineField('Date:', '') +
+              lineField('Purchaser(s) Signature:', '') +
+              lineField('Date:', '') +
+            '</div>' +
+          '</div>' +
+
+          '<div class="notice">' +
+            '*Please note that in the following towns East Hampton, Riverhead, Shelter Island, Southampton and Southold the purchaser may have to pay an additional tax to the Peconic Bay Region Community Preservation Fund. For more information contact the township where the property is located for tax calculations and exemptions.' +
+          '</div>' +
+
+          '<div class="footer">' +
+            '<div class="footer-left"><span class="footer-logos"><span class="footer-logo realtor-logo" aria-label="REALTOR logo"><svg viewBox="0 0 100 100" role="img" focusable="false"><rect x="5" y="5" width="90" height="90" fill="none" stroke="#111827" stroke-width="7"/><text x="50" y="67" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="55" font-weight="900" fill="#111827">R</text></svg></span><span class="footer-logo equal-housing-logo" aria-label="Equal Housing Opportunity logo"><svg viewBox="0 0 100 100" role="img" focusable="false"><path d="M12 49 L50 17 L88 49" fill="none" stroke="#111827" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 48 V88 H78 V48" fill="none" stroke="#111827" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><line x1="35" y1="61" x2="65" y2="61" stroke="#111827" stroke-width="7" stroke-linecap="round"/><line x1="35" y1="76" x2="65" y2="76" stroke="#111827" stroke-width="7" stroke-linecap="round"/></svg></span></span><span>This is not a legal document.</span></div>' +
+            '<div>07/2024</div>' +
+          '</div>' +
+        '</main>';
+    }
+
+    async function loadPrintableSheet() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id) {
+        document.getElementById('app').innerHTML =
+          '<div class="error">Missing accepted offer file ID.</div>';
+        return;
+      }
+
+      try {
+        if (window.__DEALDESK_PRINT_RECORD__) {
+          render(window.__DEALDESK_PRINT_RECORD__);
+          return;
+        }
+
+        try {
+          var injectedKey = 'dealdesk_print_record_' + id;
+          var injectedRaw = sessionStorage.getItem(injectedKey) || localStorage.getItem(injectedKey);
+          if (injectedRaw) {
+            var injectedRecord = JSON.parse(injectedRaw);
+            if (injectedRecord && typeof injectedRecord === 'object') {
+              render(injectedRecord);
+              return;
+            }
+          }
+        } catch (err) {}
+
+        /* DEALDESK_PRINT_INJECTED_RECORD_SUPPORT_FINAL */
+        var response = await fetch('./api/deals/' + encodeURIComponent(id), {
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store'
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not load printable deal sheet');
+        }
+
+        render(data.record);
+      } catch (err) {
+        document.getElementById('app').innerHTML =
+          '<div class="error">Could not load printable deal sheet: ' +
+          escapeHtml(err.message) +
+          '</div>';
+      }
+    }
+
+    loadPrintableSheet();
+  </script>
+</body>
+</html>

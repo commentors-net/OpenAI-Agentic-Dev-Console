@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CLAIRE Email Picker | Deal Desk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f4f7fb; color:#0f172a; }
+    .top { background:linear-gradient(135deg,#0f172a,#0f766e); color:white; padding:16px; display:flex; justify-content:space-between; align-items:flex-start; gap:10px; position:sticky; top:0; z-index:5; }
+    .top h1 { margin:0; font-size:20px; line-height:1.15; }
+    .top p { margin:4px 0 0; color:#dbeafe; font-size:13px; }
+    .top a { color:white; text-decoration:none; border:1px solid rgba(255,255,255,.45); border-radius:10px; padding:8px 10px; font-size:13px; white-space:nowrap; }
+    .wrap { max-width:980px; margin:0 auto; padding:14px; display:grid; gap:12px; }
+    .bar { background:white; border:1px solid #dbe3ef; border-radius:16px; padding:12px; box-shadow:0 10px 26px rgba(15,23,42,.08); display:flex; justify-content:space-between; gap:8px; align-items:center; }
+    .card { background:white; border:1px solid #dbe3ef; border-radius:16px; padding:14px; box-shadow:0 10px 26px rgba(15,23,42,.08); }
+    .head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+    .subject { font-size:17px; font-weight:900; overflow-wrap:anywhere; }
+    .meta { margin-top:6px; color:#64748b; font-size:13px; overflow-wrap:anywhere; }
+    .badge { display:inline-block; border-radius:999px; padding:5px 9px; font-size:12px; font-weight:900; white-space:nowrap; background:#dcfce7; color:#166534; }
+    .seen { background:#e2e8f0; color:#334155; }
+    .actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+    button, .button { border:0; border-radius:12px; padding:12px; font-weight:900; cursor:pointer; text-align:center; text-decoration:none; background:#0f766e; color:white; font-size:15px; }
+    button.secondary { background:#334155; }
+    button.danger { background:#b91c1c; }
+    button:disabled { opacity:.55; cursor:wait; }
+    .empty { background:white; border:1px dashed #cbd5e1; border-radius:16px; padding:16px; color:#64748b; }
+    .result { background:#ecfdf5; border:1px solid #bbf7d0; color:#166534; border-radius:14px; padding:12px; font-weight:800; margin-top:10px; }
+    .error { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:14px; padding:12px; font-weight:800; }
+    @media (max-width:720px) {
+      .bar { display:grid; }
+      .actions { grid-template-columns:1fr; }
+      .top h1 { font-size:18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div>
+      <h1>CLAIRE Email Picker</h1>
+      <p>Pick which email should become an intake draft.</p>
+    </div>
+    <a href="./intake-inbox.html">Intake Inbox</a>
+  </div>
+
+  <main class="wrap">
+    <section class="bar">
+      <div id="status">Loading available emails...</div>
+      <button id="refreshBtn" class="secondary">Refresh</button>
+    </section>
+    <div id="messages" class="empty">Loading...</div>
+  </main>
+
+<script>
+function escapeHtml(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function(ch) {
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]);
+  });
+}
+function short(v, n) {
+  v = String(v || '').replace(/\s+/g, ' ').trim();
+  return v.length > n ? v.slice(0, n) + '...' : v;
+}
+function fmtDate(v) {
+  if (!v) return '';
+  try { return new Date(v).toLocaleString(); } catch(e) { return String(v); }
+}
+async function fetchJson(url, options) {
+  const res = await fetch(url, Object.assign({headers:{Accept:'application/json'}, cache:'no-store'}, options || {}));
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; }
+  catch (err) { throw new Error('API returned non-JSON HTTP ' + res.status + ': ' + text.replace(/<[^>]*>/g,' ').slice(0,180)); }
+  if (!res.ok || data.ok === false) throw new Error(data.error || 'Request failed');
+  return data;
+}
+async function load() {
+  const target = document.getElementById('messages');
+  target.className = 'empty';
+  target.textContent = 'Loading...';
+  document.getElementById('status').textContent = 'Loading available emails...';
+
+  try {
+    const data = await fetchJson('./api/email-intake/messages?limit=50');
+    document.getElementById('status').textContent = 'Mailbox: ' + (data.user || '') + ' | Messages shown: ' + (data.messages || []).length + ' of ' + (data.count || 0);
+    render(data.messages || []);
+  } catch (err) {
+    target.className = 'error';
+    target.textContent = err.message;
+  }
+}
+function render(messages) {
+  const target = document.getElementById('messages');
+
+  if (!messages.length) {
+    target.className = 'empty';
+    target.textContent = 'No emails found in the mailbox.';
+    return;
+  }
+
+  target.className = '';
+  target.innerHTML = messages.map(m => [
+    '<section class="card" data-uid="' + escapeHtml(m.uid) + '">',
+      '<div class="head">',
+        '<div>',
+          '<div class="subject">' + escapeHtml(short(m.subject || '(No subject)', 160)) + '</div>',
+          '<div class="meta"><strong>From:</strong> ' + escapeHtml(m.from || '(Unknown sender)') + '</div>',
+          '<div class="meta"><strong>Date:</strong> ' + escapeHtml(fmtDate(m.date)) + '</div>',
+          '<div class="meta"><strong>UID:</strong> ' + escapeHtml(m.uid) + '</div>',
+        '</div>',
+        '<span class="badge ' + (m.seen ? 'seen' : '') + '">' + (m.seen ? 'Seen' : 'Unread') + '</span>',
+      '</div>',
+      '<div class="actions">',
+        '<button data-import="' + escapeHtml(m.uid) + '">Import This Email</button>',
+        '<button class="danger" data-skip="' + escapeHtml(m.uid) + '">Skip / Mark Seen</button>',
+      '</div>',
+      '<div class="result" style="display:none"></div>',
+    '</section>'
+  ].join('')).join('');
+
+  target.querySelectorAll('[data-import]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.getAttribute('data-import');
+      const card = btn.closest('.card');
+      const resultBox = card.querySelector('.result');
+      btn.disabled = true;
+      btn.textContent = 'Importing...';
+      resultBox.style.display = 'block';
+      resultBox.className = 'result';
+      resultBox.textContent = 'Importing selected email...';
+
+      try {
+        const data = await fetchJson('./api/email-intake/messages/' + encodeURIComponent(uid) + '/import', { method:'POST' });
+        const draft = data.draft || {};
+        resultBox.innerHTML = 'Imported from: ' + escapeHtml(data.from || '') + '<br>Subject: ' + escapeHtml(data.subject || '') + '<br><br><a href="./intake-review.html?id=' + encodeURIComponent(draft.public_id) + '">Review intake draft</a>';
+        btn.textContent = 'Imported';
+      } catch (err) {
+        resultBox.className = 'error';
+        resultBox.textContent = err.message;
+        btn.disabled = false;
+        btn.textContent = 'Import This Email';
+      }
+    });
+  });
+
+  target.querySelectorAll('[data-skip]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.getAttribute('data-skip');
+      if (!confirm('Skip this email and mark it seen?')) return;
+      btn.disabled = true;
+      btn.textContent = 'Skipping...';
+      try {
+        await fetchJson('./api/email-intake/messages/' + encodeURIComponent(uid) + '/skip', { method:'POST' });
+        load();
+      } catch (err) {
+        alert(err.message);
+        btn.disabled = false;
+        btn.textContent = 'Skip / Mark Seen';
+      }
+    });
+  });
+}
+document.getElementById('refreshBtn').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

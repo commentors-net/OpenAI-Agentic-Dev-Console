@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Printable Deal Sheet | Accepted Offer to Close</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ink:#111827;
+      --muted:#6b7280;
+      --line:#d1d5db;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --accent:#0f766e;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+    }
+    .toolbar {
+      background:#111827;
+      color:white;
+      padding:14px 20px;
+      position:sticky;
+      top:0;
+      z-index:5;
+    }
+    .toolbar-inner {
+      max-width:980px;
+      margin:0 auto;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .toolbar a, .toolbar button {
+      color:white;
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(255,255,255,.1);
+      text-decoration:none;
+      border-radius:9px;
+      padding:10px 13px;
+      font-weight:800;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .page {
+      max-width:980px;
+      margin:24px auto;
+      background:white;
+      border:1px solid var(--line);
+      padding:28px;
+      box-shadow:0 8px 26px rgba(17,24,39,.08);
+    }
+    .top {
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      border-bottom:3px solid var(--ink);
+      padding-bottom:14px;
+      margin-bottom:18px;
+    }
+    h1 {
+      margin:0;
+      font-size:28px;
+      letter-spacing:.02em;
+    }
+    .sub {
+      color:var(--muted);
+      font-size:13px;
+      margin-top:5px;
+      line-height:1.35;
+    }
+    .status {
+      text-align:right;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .section {
+      border:1px solid var(--line);
+      margin-bottom:14px;
+    }
+    .section h2 {
+      margin:0;
+      padding:9px 11px;
+      background:#f9fafb;
+      border-bottom:1px solid var(--line);
+      font-size:15px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+    }
+    .grid.two {
+      grid-template-columns:repeat(2,1fr);
+    }
+    .field {
+      min-height:54px;
+      border-right:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      padding:8px 10px;
+    }
+    .field:nth-child(3n) {
+      border-right:0;
+    }
+    .grid.two .field:nth-child(3n) {
+      border-right:1px solid var(--line);
+    }
+    .grid.two .field:nth-child(2n) {
+      border-right:0;
+    }
+    .label {
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      font-weight:800;
+      margin-bottom:5px;
+    }
+    .value {
+      font-size:14px;
+      line-height:1.35;
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+    }
+    .full {
+      grid-column:1 / -1;
+      border-right:0;
+    }
+    .ack {
+      display:grid;
+      grid-template-columns:1fr 170px 1fr 170px;
+    }
+    .ack .field:nth-child(4n) {
+      border-right:0;
+    }
+    .footer-note {
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+      margin-top:16px;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+    }
+    .loading, .error {
+      max-width:980px;
+      margin:24px auto;
+      background:white;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:18px;
+      font-weight:800;
+    }
+    .error {
+      color:#b91c1c;
+      border-color:#fecaca;
+      background:#fef2f2;
+    }
+    @media print {
+      body {
+        background:white;
+      }
+      .toolbar {
+        display:none;
+      }
+      .page {
+        margin:0;
+        max-width:none;
+        border:0;
+        box-shadow:none;
+        padding:0;
+      }
+      @page {
+        size:letter;
+        margin:.45in;
+      }
+    }
+    @media (max-width:760px) {
+      .top, .grid, .grid.two, .ack {
+        grid-template-columns:1fr;
+        display:grid;
+      }
+      .status {
+        text-align:left;
+      }
+      .field, .field:nth-child(3n), .grid.two .field:nth-child(2n), .ack .field:nth-child(4n) {
+        border-right:0;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="./dealdesk-ui-lock.css?v=1">
+
+
+
+<style id="signature-print-branding-style">
+  body {
+    font-size: 11px !important;
+    line-height: 1.22 !important;
+  }
+
+  h1 {
+    font-size: 20px !important;
+    line-height: 1.1 !important;
+    margin: 0 0 6px !important;
+    padding-right: 210px !important;
+  }
+
+  h2, h3 {
+    font-size: 13px !important;
+    margin: 8px 0 5px !important;
+  }
+
+  p, div, td, th, li, span {
+    line-height: 1.22;
+  }
+
+  table {
+    font-size: 10.5px !important;
+  }
+
+  th, td {
+    padding: 4px 5px !important;
+  }
+
+  .card,
+  .section,
+  section {
+    margin-bottom: 7px !important;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+  }
+
+  .signature-print-branding {
+    position: fixed;
+    top: 10px;
+    right: 16px;
+    width: 185px;
+    z-index: 9999;
+    text-align: right;
+    background: white;
+  }
+
+  .signature-print-branding img {
+    width: 185px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .signature-print-disclaimer {
+    margin-top: 12px;
+    border-top: 1px solid #111827;
+    padding-top: 6px;
+    font-size: 8.8px !important;
+    line-height: 1.22 !important;
+    color: #111827;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .signature-print-disclaimer p {
+    margin: 2px 0 !important;
+    font-size: 8.8px !important;
+    line-height: 1.22 !important;
+  }
+
+  @media print {
+    @page {
+      margin: 0.35in;
+    }
+
+    body {
+      font-size: 10px !important;
+      line-height: 1.15 !important;
+    }
+
+    h1 {
+      font-size: 18px !important;
+      padding-right: 190px !important;
+    }
+
+    h2, h3 {
+      font-size: 12px !important;
+    }
+
+    th, td {
+      padding: 3px 4px !important;
+      font-size: 9.5px !important;
+    }
+
+    .signature-print-branding {
+      top: 6px;
+      right: 8px;
+      width: 170px;
+    }
+
+    .signature-print-branding img {
+      width: 170px;
+    }
+
+    .signature-print-disclaimer,
+    .signature-print-disclaimer p {
+      font-size: 7.8px !important;
+      line-height: 1.15 !important;
+    }
+  }
+</style>
+
+
+
+
+<style id="deal-sheet-paper-safe-override">
+  .sheet {
+    width: 7.7in !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 14px auto !important;
+    padding: .14in .16in .12in !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  .toolbar {
+    display: block;
+  }
+
+  .header {
+    display: grid !important;
+    grid-template-columns: 1fr 1.65in !important;
+    gap: .10in !important;
+    align-items: start !important;
+    position: static !important;
+    page-break-inside: avoid !important;
+  }
+
+  .deal-title {
+    font-size: 28px !important;
+    line-height: .95 !important;
+  }
+
+  .logo {
+    position: static !important;
+    width: 1.55in !important;
+    max-height: .34in !important;
+    margin: 0 0 0 auto !important;
+    display: block !important;
+  }
+
+  .disclaimer {
+    font-size: 7.4px !important;
+    line-height: 1.05 !important;
+    margin: .025in 0 .055in !important;
+  }
+
+  .disclaimer p {
+    margin: 1px 0 !important;
+  }
+
+  .top-line {
+    margin: .035in 0 .05in !important;
+    gap: .06in !important;
+  }
+
+  .financial-grid,
+  .party-grid {
+    column-gap: .12in !important;
+    row-gap: .02in !important;
+  }
+
+  .money-row,
+  .date-row,
+  .small-line {
+    min-height: .13in !important;
+  }
+
+  .line-label,
+  .small-line .line-label {
+    font-size: 7.4px !important;
+  }
+
+  .line-value {
+    font-size: 8px !important;
+    min-height: .105in !important;
+    padding-bottom: 0 !important;
+  }
+
+  .block-title {
+    font-size: 9.2px !important;
+    margin: 0 0 .03in !important;
+  }
+
+  .party-block {
+    margin-bottom: .03in !important;
+    break-inside: avoid !important;
+  }
+
+  .property-condition {
+    font-size: 7px !important;
+    line-height: 1.02 !important;
+    margin-top: .025in !important;
+  }
+
+  .additional {
+    margin-top: .035in !important;
+  }
+
+  .extra-line {
+    height: .13in !important;
+  }
+
+  .ack {
+    margin-top: .035in !important;
+  }
+
+  .ack-title {
+    font-size: 7.8px !important;
+    margin-bottom: .02in !important;
+  }
+
+  .notice {
+    font-size: 5.6px !important;
+    line-height: 1.0 !important;
+    margin-top: .035in !important;
+  }
+
+  .footer {
+    font-size: 6.5px !important;
+    margin-top: .025in !important;
+    padding-top: .015in !important;
+  }
+
+  @media print {
+    @page {
+      size: letter;
+      margin: .28in;
+    }
+
+    html,
+    body {
+      width: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+      overflow: visible !important;
+    }
+
+    .toolbar {
+      display: none !important;
+    }
+
+    .sheet {
+      width: auto !important;
+      max-width: none !important;
+      min-height: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+      page-break-inside: avoid !important;
+    }
+
+    .header,
+    .disclaimer,
+    .top-line,
+    .financial-grid,
+    .party-grid,
+    .additional,
+    .ack,
+    .notice,
+    .footer {
+      position: static !important;
+      max-width: 100% !important;
+    }
+
+    .logo {
+      position: static !important;
+      float: none !important;
+    }
+  }
+</style>
+
+</head>
+<body>
+<div class="toolbar">
+    <div class="toolbar-inner">
+      <strong>Accepted Offer to Close</strong>
+      <div>
+        <a id="backLink" href="./dashboard.html">Back</a>
+        <button type="button" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app">
+    <div class="loading">Loading printable deal sheet...</div>
+  </div>
+
+  <script>
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      var date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString();
+    }
+
+    function formatMoney(value) {
+      if (value == null || value === '') return '';
+      var n = Number(value);
+      if (!Number.isFinite(n)) return value;
+      return n.toLocaleString(undefined, { style:'currency', currency:'USD' });
+    }
+
+    function party(record, role) {
+      return (record.parties || []).find(function(p) { return p.role_key === role; }) || {};
+    }
+
+    function field(label, value, extraClass) {
+      return '<div class="field ' + (extraClass || '') + '">' +
+        '<div class="label">' + escapeHtml(label) + '</div>' +
+        '<div class="value">' + escapeHtml(value || '') + '</div>' +
+      '</div>';
+    }
+
+    function render(record) {
+      var deal = record.deal || {};
+      var f = record.financials || {};
+      var seller = party(record, 'seller');
+      var purchaser = party(record, 'purchaser');
+      var sellerAttorney = party(record, 'seller_attorney');
+      var purchaserAttorney = party(record, 'purchaser_attorney');
+      var sellerAgent = party(record, 'seller_agent');
+      var purchaserAgent = party(record, 'purchaser_agent');
+      var lender = party(record, 'lender');
+
+      document.getElementById('backLink').href = './detail.html?id=' + encodeURIComponent(deal.public_id);
+
+      document.getElementById('app').innerHTML =
+        '<main class="page">' +
+          '<div class="top">' +
+            '<div>' +
+              '<h1>Accepted Offer Deal Sheet</h1>' +
+              '<div class="sub">Generated from Accepted Offer to Close. This printable sheet is for brokerage transaction coordination and attorney handoff.</div>' +
+            '</div>' +
+            '<div class="status">' +
+              '<strong>Status:</strong> ' + escapeHtml(deal.transaction_status || '') + '<br>' +
+              '<strong>Printed:</strong> ' + escapeHtml(new Date().toLocaleString()) +
+            '</div>' +
+          '</div>' +
+
+          '<section class="section">' +
+            '<h2>Accepted Offer Information</h2>' +
+            '<div class="grid">' +
+              field('Accepted Offer Date', formatDate(deal.accepted_offer_date)) +
+              field('MLS Number', deal.mls_number) +
+              field('Property Address', deal.property_address) +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Financial Terms</h2>' +
+            '<div class="grid">' +
+              field('Purchase Price', formatMoney(f.purchase_price)) +
+              field('Seller Concession', formatMoney(f.seller_concession)) +
+              field('Contract Deposit', formatMoney(f.contract_deposit)) +
+              field('Mortgage Amount', formatMoney(f.mortgage_amount)) +
+              field('Cash at Closing', formatMoney(f.cash_at_closing)) +
+              field('Total', formatMoney(f.total_price)) +
+              field('On or About Contract Date', f.contract_date_text) +
+              field('On or About Closing Date', f.closing_date_text) +
+              field('Commission Paid by Seller', f.commission_paid_by_seller) +
+              field('Commission Paid by Purchaser', f.commission_paid_by_purchaser, 'full') +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Seller and Purchaser</h2>' +
+            '<div class="grid two">' +
+              field('Seller Name(s)', seller.display_name) +
+              field('Purchaser Name(s)', purchaser.display_name) +
+              field('Legal Address of Seller', seller.legal_address) +
+              field('Legal Address of Purchaser', purchaser.legal_address) +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Attorneys</h2>' +
+            '<div class="grid two">' +
+              field('Seller Attorney', sellerAttorney.display_name) +
+              field('Purchaser Attorney', purchaserAttorney.display_name) +
+              field('Seller Attorney Address', sellerAttorney.legal_address) +
+              field('Purchaser Attorney Address', purchaserAttorney.legal_address) +
+              field('Seller Attorney Phone', sellerAttorney.phone) +
+              field('Purchaser Attorney Phone', purchaserAttorney.phone) +
+              field('Seller Attorney Email', sellerAttorney.email) +
+              field('Purchaser Attorney Email', purchaserAttorney.email) +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Agents</h2>' +
+            '<div class="grid two">' +
+              field('Seller Agent', sellerAgent.display_name) +
+              field('Purchaser Agent', purchaserAgent.display_name) +
+              field('Seller Agent Broker', sellerAgent.broker_name) +
+              field('Purchaser Agent Broker', purchaserAgent.broker_name) +
+              field('Seller Agent License', sellerAgent.license_number) +
+              field('Purchaser Agent License', purchaserAgent.license_number) +
+              field('Seller Agent Phone', sellerAgent.phone) +
+              field('Purchaser Agent Phone', purchaserAgent.phone) +
+              field('Seller Agent Email', sellerAgent.email) +
+              field('Purchaser Agent Email', purchaserAgent.email) +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Lender</h2>' +
+            '<div class="grid two">' +
+              field('Lender / Loan Officer', lender.display_name) +
+              field('Company', lender.broker_name) +
+              field('Phone', lender.phone) +
+              field('Email', lender.email) +
+              field('Address', lender.legal_address, 'full') +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Property Condition Statement and Additional Terms</h2>' +
+            '<div class="grid two">' +
+              field('Has the buyer or representative received a property condition statement?', deal.property_condition_statement_status) +
+              field('Condos / Coops Exempt?', deal.property_condition_statement_status === 'Exempt - Condo/Coop' ? 'Yes' : '') +
+              field('Additional Terms', deal.additional_terms, 'full') +
+            '</div>' +
+          '</section>' +
+
+          '<section class="section">' +
+            '<h2>Acknowledgment of Receipt</h2>' +
+            '<div class="ack">' +
+              field('Seller(s)', deal.seller_acknowledgment_name) +
+              field('Date', formatDate(deal.seller_acknowledgment_date)) +
+              field('Purchaser(s)', deal.purchaser_acknowledgment_name) +
+              field('Date', formatDate(deal.purchaser_acknowledgment_date)) +
+            '</div>' +
+          '</section>' +
+
+          '<div class="footer-note">' +
+            'This printable deal sheet is not a legal document. It is intended to facilitate accepted-offer coordination, attorney handoff, contract preparation, and transaction follow-through. Broker compensation is negotiable and should be handled according to applicable brokerage policy, agreements, and law.' +
+          '</div>' +
+        '</main>';
+    }
+
+    async function loadPrintableSheet() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id) {
+        document.getElementById('app').innerHTML = '<div class="error">Missing accepted offer file ID.</div>';
+        return;
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id), {
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store'
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not load printable deal sheet');
+        }
+
+        render(data.record);
+      } catch (err) {
+        document.getElementById('app').innerHTML = '<div class="error">Could not load printable deal sheet: ' + escapeHtml(err.message) + '</div>';
+      }
+    }
+
+    loadPrintableSheet();
+  </script>
+
+<script id="signature-print-branding-script">
+(function() {
+  function ensureSignatureBranding() {
+    if (!document.getElementById('signaturePrintBranding')) {
+      var brand = document.createElement('div');
+      brand.id = 'signaturePrintBranding';
+      brand.className = 'signature-print-branding';
+      brand.innerHTML = '<img src="./assets/signature-premier-properties-logo.png?v=2" alt="Signature Premier Properties">';
+      document.body.appendChild(brand);
+    }
+
+    if (!document.getElementById('signaturePrintDisclaimer')) {
+      var disclaimer = document.createElement('div');
+      disclaimer.id = 'signaturePrintDisclaimer';
+      disclaimer.className = 'signature-print-disclaimer';
+      disclaimer.innerHTML =
+        '<p>This document is to facilitate the creation of the contract of sale and is not to be construed as legally binding.</p>' +
+        '<p>Broker compensation is not set by law or any REALTOR® association or OneKey® MLS and is fully negotiable.</p>' +
+        '<p>The rate or amount of commission charged for the sale, lease, appraisal or management of real estate shall be negotiated between each broker and their client.</p>';
+
+      var app = document.getElementById('app') || document.querySelector('main') || document.body;
+      app.appendChild(disclaimer);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ensureSignatureBranding);
+  } else {
+    ensureSignatureBranding();
+  }
+
+  window.addEventListener('load', function() {
+    setTimeout(ensureSignatureBranding, 250);
+    setTimeout(ensureSignatureBranding, 1000);
+    setTimeout(ensureSignatureBranding, 2000);
+  });
+})();
+</script>
+
+</body>
+</html>

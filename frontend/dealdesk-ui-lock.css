@@ -1,0 +1,55 @@
+/* Deal Desk UI Lock v1 */
+/* Canonical Command Center page hero */
+
+.dashboard-hero {
+  background:
+    radial-gradient(circle at top left, rgba(15,118,110,.18), transparent 34%),
+    linear-gradient(135deg,#102034 0%,#123b45 46%,#0f766e 100%);
+  color:white;
+  border-radius:22px;
+  padding:28px;
+  margin-bottom:18px;
+  box-shadow:0 18px 40px rgba(23,32,51,.14);
+  border:1px solid rgba(255,255,255,.16);
+}
+
+.dashboard-hero-inner {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.dashboard-eyebrow {
+  display:inline-block;
+  border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.10);
+  color:#d1fae5;
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.dashboard-title {
+  color:white;
+  font-size:42px;
+  line-height:1;
+  margin:0 0 10px;
+  letter-spacing:-.045em;
+}
+
+.dashboard-lead {
+  color:rgba(255,255,255,.78);
+  line-height:1.5;
+  margin:0;
+  max-width:760px;
+  font-size:16px;
+}
+
+@media (max-width:640px) {
+  .dashboard-title { font-size:32px; }
+  .dashboard-hero { padding:22px; }
+}

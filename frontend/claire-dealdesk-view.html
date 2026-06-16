@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CLAIRE Deal Desk View</title>
+  <style>
+    :root{--navy:#071b2c;--navy2:#0b263d;--teal:#14b8a6;--bg:#f4f7fb;--card:#fff;--text:#122033;--muted:#66758a;--border:#dbe5ef;--soft:#f8fbfe;--ok:#067647;--bad:#b42318;--warn:#b54708}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+    header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 20px;border-bottom:4px solid var(--teal)}
+    header h1{margin:0;font-size:23px} header p{margin:6px 0 0;color:#c7d8e8}
+    main{max-width:1320px;margin:18px auto 42px;padding:0 14px}.layout{display:grid;grid-template-columns:380px 1fr;gap:16px}@media(max-width:980px){.layout{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 26px rgba(15,35,55,.06);overflow:hidden}.card h2{margin:0;padding:14px 16px;font-size:16px;background:var(--soft);border-bottom:1px solid var(--border)}.body{padding:16px}
+    label{display:block;font-size:12px;font-weight:800;color:#344054;margin:12px 0 5px}input{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;font-size:14px}
+    button{border:0;border-radius:10px;padding:11px 13px;font-weight:800;cursor:pointer;background:var(--navy);color:white}button.secondary{background:#e6eef7;color:#102a43}button.teal{background:var(--teal);color:#06251f}button:disabled{opacity:.55;cursor:not-allowed}
+    .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.status{padding:12px 14px;border-radius:12px;margin-bottom:12px;border:1px solid var(--border);background:#f8fbfe;color:#344054;font-size:14px;white-space:pre-wrap}.status.ok{background:#ecfdf3;border-color:#abefc6;color:var(--ok)}.status.err{background:#fef3f2;border-color:#fecdca;color:var(--bad)}.status.warn{background:#fffaeb;border-color:#fedf89;color:var(--warn)}
+    .email-list{display:grid;gap:10px;max-height:660px;overflow:auto}.email{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;cursor:pointer}.email:hover{border-color:var(--teal);background:#f7fffd}.email.selected{border-color:var(--teal);box-shadow:0 0 0 3px rgba(20,184,166,.12)}.uid{font-size:12px;color:var(--teal);font-weight:900}.subj{font-weight:900;margin-top:5px}.meta{font-size:12px;color:var(--muted);margin-top:4px}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}@media(max-width:1050px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.summary{grid-template-columns:1fr}}
+    .metric{border:1px solid var(--border);background:#fff;border-radius:14px;padding:13px}.metric .label{font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}.metric .value{font-size:16px;font-weight:900;margin-top:6px;min-height:20px}
+    .section{margin-bottom:16px}.section-title{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}.section-title h2{background:none;border:0;padding:0;margin:0;font-size:18px}.pill{display:inline-block;padding:4px 9px;border-radius:999px;background:#e6eef7;color:#24415c;font-size:12px;font-weight:900}.pill.teal{background:#d1faf3;color:#075e54}.pill.warn{background:#fff0cf;color:#8a4b00}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:800px){.field-grid{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:#fff;border-radius:16px;overflow:hidden}.panel h3{margin:0;padding:12px 14px;background:#f8fbfe;border-bottom:1px solid var(--border);font-size:15px}.panel-body{padding:12px 14px}
+    .kv{display:grid;grid-template-columns:210px 1fr;border-top:1px solid #edf2f7}.kv:first-child{border-top:0}.kv .k{font-weight:900;color:#344054;padding:9px 10px;background:#fbfdff}.kv .v{padding:9px 10px;white-space:pre-wrap}@media(max-width:700px){.kv{grid-template-columns:1fr}.kv .k{padding-bottom:2px}.kv .v{padding-top:2px}}
+    .docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}@media(max-width:900px){.docs{grid-template-columns:1fr}}
+    .listline{padding:7px 0;border-top:1px solid #edf2f7}.listline:first-child{border-top:0}.raw{white-space:pre-wrap;border:1px solid var(--border);background:#fff;border-radius:14px;padding:14px;overflow:auto}.hidden{display:none}.placeholder{color:var(--muted);padding:28px;text-align:center}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{background:#e6eef7;color:#102a43}.tab.active{background:var(--navy);color:white}.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:12px}
+  </style>
+</head>
+<body>
+<header><h1>CLAIRE Deal Desk View</h1><p>Select an email, read it, and view the extracted information in Deal Desk fields.</p></header>
+
+<!-- DEALDESK_CLAIRE_INTEGRATION_V1_TOPNAV -->
+<style id="dealdesk-claire-topnav-style">
+  .dd-claire-topnav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: #ffffff;
+    border-bottom: 1px solid #dbe5ef;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .dd-claire-topnav .left,
+  .dd-claire-topnav .right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .dd-claire-topnav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: 10px;
+    background: #e6eef7;
+    color: #102a43 !important;
+    text-decoration: none !important;
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .dd-claire-topnav a.primary {
+    background: #071b2c;
+    color: #ffffff !important;
+    border: 2px solid #14b8a6;
+  }
+  .dd-claire-topnav .label {
+    font-weight: 900;
+    color: #344054;
+    font-size: 13px;
+  }
+  @media print {
+    .dd-claire-topnav { display: none !important; }
+  }
+</style>
+<div class="dd-claire-topnav">
+  <div class="left">
+    <span class="label">CLAIRE Deal Desk View</span>
+    <a href="./dashboard.html">Command Center</a>
+    <a href="./input.html">New Accepted Offer</a>
+    <a href="./index.html">Home</a>
+  </div>
+  <div class="right">
+    <a class="primary" href="./claire-dealdesk-view.html">Refresh CLAIRE View</a>
+  </div>
+</div>
+<!-- END_DEALDESK_CLAIRE_INTEGRATION_V1_TOPNAV -->
+
+
+<main>
+  <div class="layout">
+    <aside class="card">
+      <h2>Email Selection</h2>
+      <div class="body">
+        <div id="status" class="status warn">Ready. List emails, select one, then read selected email.</div>
+        <label>Search sender / subject</label><input id="search" value="zach">
+        <label>Limit</label><input id="limit" value="30">
+        <div class="buttons"><button id="listBtn">List Emails</button><button id="readBtn" class="teal">Read Selected Email</button></div>
+      </div>
+    </aside>
+    <section class="card"><h2>Emails</h2><div class="body"><div id="emails" class="email-list"><div class="placeholder">No emails loaded.</div></div></div></section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <h2>Deal Desk View</h2>
+    <div class="body">
+      <div class="actions"><button id="createDealBtn" class="teal">Create Deal File</button><button id="copyJson" class="secondary">Copy JSON</button><button id="copySummary" class="secondary">Copy Summary</button><button id="printBtn" class="secondary">Print</button></div>
+      <div class="tabs"><button class="tab active" data-tab="deal">Deal Fields</button><button class="tab" data-tab="docs">Documents</button><button class="tab" data-tab="raw">Raw JSON</button></div>
+      <div id="dealTab"><div class="placeholder">Read an email to populate Deal Desk fields.</div></div>
+      <div id="docsTab" class="hidden"></div>
+      <div id="rawTab" class="hidden"><div id="rawJson" class="raw">No JSON yet.</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  let selectedUid="", lastResult=null;
+
+  function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+  function setStatus(m,t){$("status").className="status "+(t||"");$("status").textContent=m}
+  function api(path){return "./api/claire-dealview"+path}
+  async function getJson(url){const r=await fetch(url,{headers:{Accept:"application/json"},cache:"no-store"});const tx=await r.text();let d;try{d=tx?JSON.parse(tx):{}}catch(e){throw new Error("Backend returned non-JSON: "+tx.slice(0,300))}if(!r.ok||d.ok===false)throw new Error(d.error||("HTTP "+r.status));return d}
+  function val(v){if(Array.isArray(v))return v.filter(Boolean).join(", "); if(v&&typeof v==="object")return Object.entries(v).filter(([k,x])=>x&&String(x).trim()).map(([k,x])=>`${k}: ${Array.isArray(x)?x.join(", "):x}`).join("\\n"); return v||""}
+  function kv(label,value){return `<div class="kv"><div class="k">${esc(label)}</div><div class="v">${esc(val(value)||"—")}</div></div>`}
+  function panel(title, rows){return `<div class="panel"><h3>${esc(title)}</h3><div class="panel-body">${rows.join("")}</div></div>`}
+
+  async function listEmails(){
+    setStatus("Listing emails...","");
+    $("emails").innerHTML='<div class="placeholder">Loading...</div>';
+    try{
+      const search=encodeURIComponent($("search").value||"");
+      const limit=encodeURIComponent($("limit").value||"30");
+      const d=await getJson(api(`/emails?search=${search}&limit=${limit}`));
+      renderEmails(d.emails||[]);
+      setStatus("Emails loaded. Select one email.","ok");
+    }catch(e){setStatus(e.message,"err");$("emails").innerHTML='<div class="placeholder">Could not load emails.</div>'}
+  }
+
+  function renderEmails(rows){
+    if(!rows.length){$("emails").innerHTML='<div class="placeholder">No matching emails.</div>';return}
+    $("emails").innerHTML=rows.map(x=>`<div class="email" data-uid="${esc(x.uid)}"><div class="uid">UID ${esc(x.uid)}</div><div class="subj">${esc(x.subject||"(no subject)")}</div><div class="meta">${esc(x.from)}</div><div class="meta">${esc(x.date)} ${x.seen?"seen":"unread"}</div></div>`).join("");
+    document.querySelectorAll(".email").forEach(el=>{el.onclick=()=>{document.querySelectorAll(".email").forEach(e=>e.classList.remove("selected"));el.classList.add("selected");selectedUid=el.dataset.uid;setStatus("Selected UID "+selectedUid+". Click Read Selected Email.","ok")}});
+  }
+
+  async function readSelected(){
+    if(!selectedUid){setStatus("Select an email first.","warn");return}
+    setStatus("CLAIRE is reading selected email and documents...","");
+    $("dealTab").innerHTML='<div class="placeholder">Reading email and attachments...</div>';
+    try{
+      const d=await getJson(api(`/read?uid=${encodeURIComponent(selectedUid)}`));
+      lastResult=d;
+      renderAll(d);
+      setStatus("Deal Desk view complete.","ok");
+    }catch(e){setStatus(e.message,"err");$("dealTab").innerHTML='<div class="placeholder">Read failed.</div>'}
+  }
+
+
+  function extractFirstJsonObjectFromText(raw){
+    const s=String(raw||"").trim();
+    const start=s.indexOf("{");
+    if(start<0)return "";
+    let depth=0,inString=false,escape=false;
+    for(let i=start;i<s.length;i++){
+      const ch=s[i];
+      if(inString){
+        if(escape){escape=false}
+        else if(ch==="\\"){escape=true}
+        else if(ch==='"'){inString=false}
+        continue;
+      }
+      if(ch==='"'){inString=true;continue}
+      if(ch==="{")depth++;
+      if(ch==="}"){
+        depth--;
+        if(depth===0)return s.slice(start,i+1);
+      }
+    }
+    return "";
+  }
+
+  function normalizeClaireResult(r){
+    if(!r)return {};
+    if(r.parse_error && r.raw_output){
+      const first=extractFirstJsonObjectFromText(r.raw_output);
+      try{return JSON.parse(first)}catch(e){}
+    }
+    if(r.raw_output && typeof r.raw_output==="string" && !r.dealdesk_fields){
+      const first=extractFirstJsonObjectFromText(r.raw_output);
+      try{return JSON.parse(first)}catch(e){}
+    }
+    return r;
+  }
+
+  function renderAll(d){
+    const r=normalizeClaireResult(d.result||{});
+    const f=r.dealdesk_fields||{};
+    const p=f.property||{}, seller=f.seller||{}, buyer=f.purchaser||{}, ls=f.listing_side||{}, bs=f.buyer_side||{}, at=f.attorneys||{}, fin=f.financial_terms||{}, loan=f.financing||{}, cont=f.contingencies||{};
+    $("rawJson").textContent=JSON.stringify(r,null,2);
+
+    $("dealTab").innerHTML=`
+      <div class="summary">
+        <div class="metric"><div class="label">File Status</div><div class="value">${esc(f.file_status||"Intake Review")}</div></div>
+        <div class="metric"><div class="label">Property</div><div class="value">${esc(p.address||"—")}</div></div>
+        <div class="metric"><div class="label">Seller(s)</div><div class="value">${esc(val(seller.names)||"—")}</div></div>
+        <div class="metric"><div class="label">Purchaser(s)</div><div class="value">${esc(val(buyer.names)||"—")}</div></div>
+      </div>
+      <div class="section"><div class="section-title"><h2>Deal Fields</h2><span class="pill teal">Reviewable draft</span></div>
+        <div class="field-grid">
+          ${panel("Property", [kv("Address",p.address),kv("MLS #",p.mls_number),kv("Property type",p.property_type)])}
+          ${panel("Seller", [kv("Name(s)",seller.names),kv("Address",seller.address),kv("Email",seller.email),kv("Phone",seller.phone)])}
+          ${panel("Purchaser", [kv("Name(s)",buyer.names),kv("Address",buyer.address),kv("Email",buyer.email),kv("Phone",buyer.phone)])}
+          ${panel("Listing Side", [kv("Broker",ls.broker),kv("Agent",ls.agent),kv("Agent license",ls.agent_license),kv("Email",ls.email),kv("Phone",ls.phone)])}
+          ${panel("Buyer Side", [kv("Broker",bs.broker),kv("Agent",bs.agent),kv("Agent license",bs.agent_license),kv("Email",bs.email),kv("Phone",bs.phone)])}
+          ${panel("Attorneys", [kv("Seller attorney",at.seller_attorney),kv("Purchaser attorney",at.purchaser_attorney)])}
+          ${panel("Financial Terms", [kv("Purchase price",fin.purchase_price),kv("Seller concession",fin.seller_concession),kv("Seller payment to buyer broker",fin.seller_payment_to_buyer_broker),kv("Down payment",fin.down_payment),kv("Mortgage amount",fin.mortgage_amount),kv("Balance due at closing",fin.balance_due_at_closing),kv("Net to seller",fin.net_to_seller)])}
+          ${panel("Financing", [kv("Type",loan.financing_type),kv("Lender",loan.lender),kv("Loan officer",loan.loan_officer),kv("Loan officer email",loan.loan_officer_email),kv("Loan officer phone",loan.loan_officer_phone),kv("Preapproval amount",loan.preapproval_amount),kv("Loan amount",loan.loan_amount),kv("Rate / APR",loan.rate_apr),kv("Loan term",loan.loan_term),kv("Preapproval expiration",loan.preapproval_expiration),kv("Financing contingency length",loan.financing_contingency_length)])}
+          ${panel("Contingencies", [kv("Financing",cont.financing),kv("Inspection",cont.inspection),kv("Sale of other property",cont.sale_of_other_property),kv("Other",cont.other)])}
+          ${panel("Operator Review", [kv("Next action",f.next_action||r.recommended_next_action),kv("Notes",f.notes),kv("Missing items",f.missing_items),kv("Conflicts",f.conflicts),kv("Review flags",f.review_flags)])}
+        </div>
+      </div>`;
+
+    renderDocs(r.documents||[]);
+  }
+
+  function renderDocs(docs){
+    if(!docs.length){$("docsTab").innerHTML='<div class="placeholder">No documents returned.</div>';return}
+    $("docsTab").innerHTML=`<div class="docs">${docs.map(doc=>{
+      const rows=[kv("Document type",doc.document_type),kv("Purpose",doc.purpose),kv("Confidence",doc.confidence),kv("Review flags",doc.review_flags)];
+      for(const item of doc.key_fields||[]) rows.push(kv(item.field,item.value));
+      for(const item of doc.people_companies||[]) rows.push(kv(item.role || "Person / company", item.name || item.email || item.phone ? `${item.name||""}${item.email?"\\n"+item.email:""}${item.phone?"\\n"+item.phone:""}${item.notes?"\\n"+item.notes:""}` : ""));
+      for(const item of doc.dates_deadlines||[]) rows.push(kv(item.field,item.value));
+      for(const item of doc.money_terms||[]) rows.push(kv(item.field,item.value));
+      for(const item of doc.conditions_contingencies||[]) rows.push(kv(item.field,item.value));
+      return `<div class="panel"><h3>Document ${esc(doc.number||"")} — ${esc(doc.filename||"")}</h3><div class="panel-body">${rows.join("")}</div></div>`;
+    }).join("")}</div>`;
+  }
+
+
+  function firstNonEmpty(){
+    for(let i=0;i<arguments.length;i++){
+      const v=arguments[i];
+      if(Array.isArray(v) && v.length)return v.filter(Boolean).join(", ");
+      if(v!==undefined && v!==null && String(v).trim()!=="")return String(v).trim();
+    }
+    return "";
+  }
+
+  function dateToInput(value){
+    const s=String(value||"").trim();
+    if(!s)return "";
+    let m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if(m)return `${m[3]}-${String(m[1]).padStart(2,"0")}-${String(m[2]).padStart(2,"0")}`;
+    m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m)return `${m[1]}-${m[2]}-${m[3]}`;
+    return "";
+  }
+
+  function findInDocs(r, label){
+    label=String(label||"").toLowerCase();
+    const docs=(r.documents||[]);
+    const buckets=["key_fields","dates_deadlines","money_terms","conditions_contingencies"];
+    for(const doc of docs){
+      for(const bucket of buckets){
+        for(const item of (doc[bucket]||[])){
+          const f=String(item.field||"").toLowerCase();
+          if(f.includes(label)){
+            return item.value || "";
+          }
+        }
+      }
+    }
+    return "";
+  }
+
+  function makeAdditionalTerms(r,f){
+    const issues=[];
+    const sellerAttorney=((f.attorneys||{}).seller_attorney)||{};
+    const rf=(f.review_flags||[]).join(" ").toLowerCase();
+    const conflicts=(f.conflicts||[]).join(" ").toLowerCase();
+
+    if(!sellerAttorney.name && !sellerAttorney.email && !sellerAttorney.phone)issues.push("seller attorney missing");
+    if(rf.includes("seller signature") || rf.includes("seller acceptance") || rf.includes("acceptance"))issues.push("seller acceptance not confirmed");
+    if(conflicts.includes("pre-approval") || conflicts.includes("preapproval") || conflicts.includes("gutierrez") || conflicts.includes("legal purchaser"))issues.push("verify purchaser/pre-approval name");
+    if(!issues.length && f.next_action)issues.push(String(f.next_action).replace(/\s+/g," ").trim());
+    if(!issues.length)issues.push("review CLAIRE source documents before attorney package");
+
+    let line="CLAIRE intake note: "+issues.slice(0,2).join("; ")+".";
+    if(line.length>240)line=line.slice(0,237)+"...";
+    return line;
+  }
+
+  function buildDealPayloadFromClaire(){
+    const r=normalizeClaireResult((lastResult&&lastResult.result)||{});
+    const f=r.dealdesk_fields||{};
+    const p=f.property||{};
+    const seller=f.seller||{};
+    const buyer=f.purchaser||{};
+    const ls=f.listing_side||{};
+    const bs=f.buyer_side||{};
+    const at=f.attorneys||{};
+    const sa=at.seller_attorney||{};
+    const pa=at.purchaser_attorney||{};
+    const fin=f.financial_terms||{};
+    const loan=f.financing||{};
+    const sellerNames=Array.isArray(seller.names)?seller.names.join(", "):(seller.names||"");
+    const buyerNames=Array.isArray(buyer.names)?buyer.names.join(", "):(buyer.names||"");
+    const proposedClosing=findInDocs(r,"proposed closing date");
+    const purchaserSigDate=findInDocs(r,"purchaser signature date");
+
+    return {
+      accepted_offer_date: "",
+      mls_number: p.mls_number || "",
+      transaction_status: "Accepted Offer Intake Started",
+      property_address: p.address || "",
+
+      purchase_price: fin.purchase_price || "",
+      seller_concession: fin.seller_concession || "",
+      contract_deposit: fin.down_payment || "",
+      mortgage_amount: firstNonEmpty(fin.mortgage_amount, loan.loan_amount),
+      cash_at_closing: fin.balance_due_at_closing || "",
+      total_price: fin.purchase_price || "",
+      contract_date_text: "",
+      closing_date_text: proposedClosing || "",
+      commission_paid_by_seller: fin.seller_payment_to_buyer_broker ? ("Seller payment to buyer broker: " + fin.seller_payment_to_buyer_broker) : "",
+      commission_paid_by_purchaser: "",
+
+      seller_name: sellerNames,
+      purchaser_name: buyerNames,
+      seller_legal_address: seller.address || "",
+      purchaser_legal_address: buyer.address || "",
+
+      seller_attorney_name: sa.name || "",
+      seller_attorney_address: sa.address || "",
+      seller_attorney_phone: sa.phone || "",
+      seller_attorney_email: sa.email || "",
+
+      purchaser_attorney_name: pa.name || "",
+      purchaser_attorney_address: pa.address || "",
+      purchaser_attorney_phone: pa.phone || "",
+      purchaser_attorney_email: pa.email || "",
+
+      seller_agent_name: ls.agent || "",
+      seller_agent_license: ls.agent_license || "",
+      seller_agent_broker: ls.broker || "",
+      seller_agent_phone: ls.phone || "",
+      seller_agent_email: ls.email || "",
+
+      purchaser_agent_name: bs.agent || "",
+      purchaser_agent_license: bs.agent_license || "",
+      purchaser_agent_broker: bs.broker || "",
+      purchaser_agent_phone: bs.phone || "",
+      purchaser_agent_email: bs.email || "",
+
+      lender_name: loan.loan_officer || "",
+      lender_company: loan.lender || "",
+      lender_phone: loan.loan_officer_phone || "",
+      lender_email: loan.loan_officer_email || "",
+      lender_address: "",
+
+      property_condition_statement_status: "Unknown",
+      inspection_status: "Open",
+      inspection_proof_note:"Home Inspection contingency identified in the Memorandum of Offer to Purchase/Sell. This confirms inspection is a contingency, but does not confirm whether inspection is scheduled, completed, waived, resolved, or still open.",
+      next_action: f.next_action || r.recommended_next_action || "",
+      additional_terms: makeAdditionalTerms(r,f),
+
+      seller_acknowledgment_name: sellerNames,
+      seller_acknowledgment_date: "",
+      purchaser_acknowledgment_name: buyerNames,
+      purchaser_acknowledgment_date: dateToInput(purchaserSigDate),
+
+      source_label: "CLAIRE email intake reader",
+      created_by: "claire"
+    };
+  }
+
+
+  async function saveClaireSourceDocsForDeal(deal,payload){
+    if(!lastResult || !lastResult.uid)return null;
+
+    const dealId=deal.id || deal.deal_id || "";
+    const publicId=deal.public_id || deal.publicId || "";
+    const body={
+      deal,
+      deal_id:dealId,
+      deal_public_id:publicId,
+      property_address:payload.property_address,
+      claire_result: normalizeClaireResult((lastResult&&lastResult.result)||{}),
+      inspection_prefill:{
+        status:"Complete",
+        proof_note:"Home Inspection contingency identified in the Memorandum of Offer to Purchase/Sell. This confirms inspection is a contingency, but does not confirm whether inspection is scheduled, completed, waived, resolved, or still open."
+      }
+    };
+
+    const res=await fetch("./api/claire-dealview/save-source-docs?uid="+encodeURIComponent(lastResult.uid),{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      cache:"no-store",
+      body:JSON.stringify(body)
+    });
+
+    const data=await res.json();
+    if(!res.ok || data.ok===false)throw new Error(data.error || "Could not save source documents");
+    return data;
+  }
+
+  function sourceDocsHtml(saveResult){
+    const docs=(saveResult && saveResult.manifest && saveResult.manifest.source_documents) || [];
+    if(!docs.length)return "";
+    return "<br><br><strong>Source Documents Attached:</strong><br>"+docs.map(d=>`<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.filename)}</a>`).join("<br>");
+  }
+
+
+
+  async function clearInspectionForCreatedDeal(deal,payload){
+    return {
+      ok:true,
+      skipped:true,
+      reason:"Offer memo identifies home inspection as a contingency only. Inspection is not auto-cleared without completion, waiver, or resolution proof."
+    };
+  }
+
+
+
+  async function generateDealSheetPdfForCreatedDeal(deal,payload,saveResult){
+    const body={
+      deal,
+      payload,
+      deal_id: deal.id || deal.deal_id || "",
+      deal_public_id: deal.public_id || "",
+      property_address: payload.property_address || deal.property_address || "",
+      source_documents: (saveResult && saveResult.manifest && saveResult.manifest.source_documents) || [],
+      claire_result: normalizeClaireResult((lastResult&&lastResult.result)||{}),
+      claire_raw_output: (lastResult&&lastResult.raw_output)||""
+    };
+
+    const res=await fetch("./api/claire-dealview/generate-deal-sheet-pdf",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      cache:"no-store",
+      body:JSON.stringify(body)
+    });
+
+    const data=await res.json();
+    if(!res.ok || data.ok===false)throw new Error(data.error || "Could not generate deal sheet PDF");
+    return data;
+  }
+
+
+  async function createDealFile(){
+    if(!lastResult || !lastResult.result){
+      setStatus("Read an email first, then create the deal file.","warn");
+      return;
+    }
+
+    const payload=buildDealPayloadFromClaire();
+    if(!payload.property_address){
+      setStatus("Cannot create deal file because property address is missing.","err");
+      return;
+    }
+
+    const btn=$("createDealBtn");
+    btn.disabled=true;
+    const oldText=btn.textContent;
+    btn.textContent="Creating Deal File...";
+    setStatus("Creating accepted-offer deal file...","");
+
+    try{
+      const response=await fetch("./api/deals",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        cache:"no-store",
+        body:JSON.stringify(payload)
+      });
+
+      const data=await response.json();
+      if(!response.ok || !data.ok){
+        throw new Error(data.error || "Create deal failed");
+      }
+
+      const deal=data.deal||{};
+      let saveResult=null;
+      try{
+        saveResult=await saveClaireSourceDocsForDeal(deal,payload);
+      }catch(docErr){
+        console.warn("Source document save failed",docErr);
+      }
+
+      const publicId=deal.public_id || deal.id || deal.deal_id || "";
+      const detailUrl=publicId ? "./detail.html?id="+encodeURIComponent(publicId) : "./dashboard.html";
+      const banner=`<div class="status ok"><strong>Deal file created.</strong><br>${esc(deal.property_address||payload.property_address)}<br>Status: ${esc(deal.transaction_status||payload.transaction_status)}<br>${sourceDocsHtml(saveResult)}<br><br><a href="${detailUrl}">Open Deal File</a> &nbsp; | &nbsp; <a href="./dashboard.html">Command Center</a></div>`;
+
+      $("dealTab").insertAdjacentHTML("afterbegin",banner);
+      setStatus("Deal file created. Open it from the link at the top of Deal Fields.","ok");
+    }catch(e){
+      setStatus("Could not create deal file: "+e.message,"err");
+    }finally{
+      btn.disabled=false;
+      btn.textContent=oldText;
+    }
+  }
+
+
+  $("createDealBtn").onclick=createDealFile;
+  $("listBtn").onclick=listEmails;
+  $("readBtn").onclick=readSelected;
+  $("copyJson").onclick=async()=>{await navigator.clipboard.writeText(JSON.stringify(lastResult?.result||{},null,2));setStatus("JSON copied.","ok")};
+  $("copySummary").onclick=async()=>{await navigator.clipboard.writeText(lastResult?.result?.operator_summary||lastResult?.result?.recommended_next_action||"");setStatus("Summary copied.","ok")};
+  $("printBtn").onclick=()=>window.print();
+  document.querySelectorAll(".tab").forEach(btn=>btn.onclick=()=>{document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");["deal","docs","raw"].forEach(t=>$(t+"Tab").classList.toggle("hidden",btn.dataset.tab!==t))});
+})();
+</script>
+
+<!-- DEALDESK_AUTO_PRINT_SEND_DEAL_SHEET_ON_CREATE_FINAL -->
+<script>
+(function(){
+  if (window.__dealdeskAutoPrintSendFinalInstalled) return;
+  window.__dealdeskAutoPrintSendFinalInstalled = true;
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]})}
+
+  function statusBox(){
+    var box=document.getElementById('dealdeskAutoPrintSendStatus');
+    if(box)return box;
+    box=document.createElement('div');
+    box.id='dealdeskAutoPrintSendStatus';
+    box.style.cssText='margin:12px 0;padding:12px;border-radius:12px;border:1px solid #dbe5ef;background:#f8fafc;color:#071b2c;font-weight:800;';
+    var target=document.querySelector('#dealTab') || document.querySelector('main') || document.body;
+    target.insertBefore(box,target.firstChild);
+    return box;
+  }
+
+  async function printAndSendDealSheet(deal,payload){
+    var property=(payload&&payload.property_address)||(deal&&deal.property_address)||'Deal Sheet';
+    var box=statusBox();
+    box.innerHTML='Creating the print Deal Sheet PDF and emailing it to dealsheets@servicedepartment.ai...';
+
+    var res=await fetch('./api/claire-dealview/print-deal-sheet-send',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      cache:'no-store',
+      body:JSON.stringify({
+        deal:deal||{},
+        payload:payload||{},
+        deal_id:(deal&&(deal.id||deal.deal_id))||'',
+        deal_public_id:(deal&&(deal.public_id||deal.id||deal.deal_id))||'',
+        property_address:property
+      })
+    });
+
+    var data=await res.json();
+
+    if(!res.ok || data.ok===false){
+      throw new Error(data.error||'Could not print/save/email Deal Sheet PDF');
+    }
+
+    box.innerHTML='<span style="color:#0f766e;">Deal Sheet PDF printed, saved, and emailed.</span><br>' +
+      '<a href="'+esc(data.pdf&&data.pdf.url)+'" target="_blank" rel="noopener">Open saved Deal Sheet PDF</a><br>' +
+      '<span style="color:#64748b;">Sent to '+esc(data.email&&data.email.to)+' | Subject: '+esc(data.email&&data.email.subject)+'</span>';
+  }
+
+  var originalFetch=window.fetch;
+
+  window.fetch=async function(input,init){
+    var method=String((init&&init.method)||'GET').toUpperCase();
+    var url=String(input&&input.url?input.url:input);
+    var normalized=url.replace(location.origin,'').replace(/^\.\//,'');
+    var bodyText=(init&&init.body&&typeof init.body==='string')?init.body:'';
+    var payload=null;
+
+    if(method==='POST' && /(^|\/)api\/deals\/?$/.test(normalized)){
+      try{payload=bodyText?JSON.parse(bodyText):null;}catch(e){}
+    }
+
+    var response=await originalFetch.apply(this,arguments);
+
+    if(payload && response && response.clone){
+      response.clone().json().then(function(data){
+        if(data && data.ok && data.deal){
+          setTimeout(function(){
+            printAndSendDealSheet(data.deal,payload).catch(function(err){
+              var box=statusBox();
+              box.innerHTML='<span style="color:#b91c1c;">Deal file created, but print/save/email failed:</span><br>'+esc(err.message||err);
+            });
+          },1500);
+        }
+      }).catch(function(){});
+    }
+
+    return response;
+  };
+})();
+</script>
+<!-- END_DEALDESK_AUTO_PRINT_SEND_DEAL_SHEET_ON_CREATE_FINAL -->
+
+</body>
+</html>

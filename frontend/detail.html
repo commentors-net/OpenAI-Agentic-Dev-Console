@@ -1,0 +1,3314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Accepted Offer File | Accepted Offer to Close</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#dbe3ee;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --accent:#0f766e;
+      --accent-dark:#115e59;
+      --danger:#b91c1c;
+      --gold:#b7791f;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    header {
+      background:white;
+      border-bottom:1px solid var(--line);
+      padding:18px 22px;
+    }
+    .wrap {
+      max-width:1140px;
+      margin:0 auto;
+    }
+    nav {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+    nav a {
+      color:var(--accent-dark);
+      font-weight:800;
+      text-decoration:none;
+    }
+    main {
+      padding:28px 22px 70px;
+    }
+    .hero {
+      background:linear-gradient(135deg,#111827,#0f766e);
+      color:white;
+      border-radius:18px;
+      padding:26px;
+      margin-bottom:20px;
+    }
+    .eyebrow {
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:12px;
+      opacity:.85;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+    h1 {
+      margin:0 0 8px;
+      font-size:34px;
+      line-height:1.1;
+    }
+    .hero p {
+      margin:0;
+      opacity:.94;
+      line-height:1.5;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+    }
+    .card {
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 6px 20px rgba(23,32,51,.04);
+      margin-bottom:18px;
+    }
+    .card h2 {
+      margin:0 0 14px;
+      font-size:21px;
+    }
+    .full {
+      grid-column:1 / -1;
+    }
+    .row {
+      display:grid;
+      grid-template-columns:190px 1fr;
+      gap:12px;
+      padding:9px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .row:last-child {
+      border-bottom:0;
+    }
+    .label {
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+    }
+    .value {
+      font-size:14px;
+      line-height:1.45;
+      overflow-wrap:anywhere;
+    }
+    .pill {
+      display:inline-block;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      padding:5px 10px;
+      font-size:13px;
+      font-weight:800;
+    }
+    .party-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .party {
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background:#fbfdff;
+    }
+    .party h3 {
+      margin:0 0 10px;
+      font-size:16px;
+      text-transform:capitalize;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+    }
+    th, td {
+      text-align:left;
+      padding:11px 10px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      font-size:14px;
+    }
+    th {
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .error {
+      background:#fef2f2;
+      color:var(--danger);
+      border:1px solid #fecaca;
+      border-radius:14px;
+      padding:16px;
+      font-weight:800;
+    }
+    .loading {
+      color:var(--muted);
+      background:white;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:16px;
+    }
+
+    .ai-zone {
+      border-left:5px solid var(--accent);
+    }
+    .status-control-form {
+      display:grid;
+      grid-template-columns:220px 1fr auto;
+      gap:10px;
+      align-items:end;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      margin-top:14px;
+    }
+    .status-control-form label {
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:5px;
+    }
+    .status-control-form select,
+    .status-control-form input {
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      font-size:14px;
+      background:white;
+      color:var(--ink);
+    }
+    .status-button {
+      background:var(--accent);
+      color:white;
+      border:0;
+      border-radius:10px;
+      padding:11px 14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .final-note {
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#92400e;
+      font-size:13px;
+      font-weight:800;
+    }
+    .communication-form {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin:12px 0 16px;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+    }
+    .communication-form .full-field {
+      grid-column:1 / -1;
+    }
+    .communication-form label {
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:5px;
+    }
+    .communication-form input,
+    .communication-form select,
+    .communication-form textarea {
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      font-size:14px;
+      background:white;
+      color:var(--ink);
+    }
+    .communication-form textarea {
+      min-height:74px;
+      resize:vertical;
+    }
+    .communication-entry {
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:14px;
+      margin-top:10px;
+    }
+    .communication-entry strong {
+      display:block;
+      margin-bottom:4px;
+    }
+    .tracker-form {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+      margin:12px 0 16px;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+    }
+    .tracker-form .full-field {
+      grid-column:1 / -1;
+    }
+    .tracker-form label {
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:5px;
+    }
+    .tracker-form input,
+    .tracker-form select,
+    .tracker-form textarea {
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      font-size:14px;
+      background:white;
+      color:var(--ink);
+    }
+    .tracker-form textarea {
+      min-height:74px;
+      resize:vertical;
+    }
+    .tracker-button {
+      background:var(--accent);
+      color:white;
+      border:0;
+      border-radius:10px;
+      padding:11px 14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .tracker-button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .email-body {
+      white-space:pre-wrap;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      margin-top:8px;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .email-actions {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .copy-email-button {
+      background:var(--accent);
+      color:white;
+      border:0;
+      border-radius:9px;
+      padding:9px 12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .send-button {
+      display:none;
+      background:#111827;
+      color:white;
+      border:0;
+      border-radius:9px;
+      padding:9px 12px;
+      font-weight:900;
+      cursor:pointer;
+      margin-top:8px;
+    }
+    .send-button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .review-collapse {
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#f8fafc;
+      margin-top:12px;
+      overflow:hidden;
+    }
+    .review-collapse summary {
+      cursor:pointer;
+      list-style:none;
+      padding:14px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      background:white;
+      border-bottom:1px solid var(--line);
+    }
+    .review-collapse summary::-webkit-details-marker {
+      display:none;
+    }
+    .review-collapse summary::after {
+      content:"Open";
+      color:var(--accent);
+      font-weight:900;
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .review-collapse[open] summary::after {
+      content:"Close";
+    }
+    .review-body {
+      white-space:pre-wrap;
+      padding:14px;
+      line-height:1.5;
+      font-size:14px;
+      background:#f8fafc;
+    }
+    .ai-output {
+      white-space:pre-wrap;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      line-height:1.5;
+      margin-top:12px;
+      font-size:14px;
+    }
+    .ai-button {
+      background:var(--accent);
+      color:white;
+      border:0;
+      border-radius:10px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .ai-button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .review-status-line {
+      display:none;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:800;
+    }
+    .review-status-line.active {
+      display:block;
+    }
+    .print-button {
+      display:inline-block;
+      margin-top:14px;
+      color:white;
+      border:1px solid rgba(255,255,255,.45);
+      background:rgba(255,255,255,.12);
+      text-decoration:none;
+      border-radius:10px;
+      padding:10px 13px;
+      font-weight:900;
+    }
+    .danger-zone {
+      border-left:5px solid var(--danger);
+    }
+    .danger-button {
+      background:var(--danger);
+      color:white;
+      border:0;
+      border-radius:10px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .danger-button:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .note {
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+      margin-top:8px;
+    }
+    @media (max-width:850px) {
+      .grid, .party-grid { grid-template-columns:1fr; }
+      h1 { font-size:28px; }
+      nav { flex-direction:column; align-items:flex-start; }
+      .row { grid-template-columns:1fr; gap:3px; }
+      .status-control-form { grid-template-columns:1fr; }
+      .communication-form { grid-template-columns:1fr; }
+      .tracker-form { grid-template-columns:1fr; }
+      table, thead, tbody, th, td, tr { display:block; }
+      thead { display:none; }
+      tr { border-bottom:1px solid var(--line); padding:10px 0; }
+      td { border:0; padding:5px 0; }
+      td::before {
+        content:attr(data-label);
+        display:block;
+        color:var(--muted);
+        font-size:12px;
+        text-transform:uppercase;
+        letter-spacing:.05em;
+        margin-bottom:2px;
+      }
+    }
+  
+    .clearance-rule-box {
+      border:1px solid #bbf7d0;
+      background:#ecfdf5;
+      color:#115e59;
+      border-radius:16px;
+      padding:14px 16px;
+      margin:14px 0;
+      line-height:1.45;
+      font-weight:700;
+    }
+    .clearance-rule-box strong {
+      display:block;
+      margin-bottom:6px;
+      color:#064e3b;
+      font-size:15px;
+    }
+
+
+  .visual-clearance-path.is-collapsed .visual-clearance-list {
+    display:none;
+  }
+  .visual-clearance-summary-actions {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .visual-clearance-toggle {
+    border:1px solid #0f766e;
+    background:#ffffff;
+    color:#0f766e;
+    border-radius:999px;
+    padding:7px 12px;
+    font-size:12px;
+    font-weight:900;
+    cursor:pointer;
+  }
+
+
+  .vc-contact-fields { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; width:100%; }
+  .visual-clearance-draft-preview { grid-column:1 / -1; width:100%; }
+  .vc-draft-card { border:1px solid rgba(15,118,110,.28); background:#f0fdfa; border-radius:12px; padding:10px; margin-top:8px; }
+  .vc-draft-label { font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:#0f766e; margin-bottom:5px; }
+  .vc-draft-subject { font-weight:900; color:#111827; margin-bottom:6px; }
+  .vc-draft-meta { color:#475569; font-size:12px; margin-bottom:8px; }
+  .vc-draft-body { white-space:pre-wrap; background:white; border:1px solid rgba(15,23,42,.12); border-radius:10px; padding:8px; max-height:220px; overflow:auto; font-size:12px; line-height:1.35; }
+
+  .vc-proof-grid {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .vc-proof-grid textarea {
+    min-height: 70px;
+    resize: vertical;
+  }
+
+  .vc-proof-status {
+    grid-column: 1 / -1;
+    border: 1px solid rgba(15,23,42,.12);
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 9px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .vc-proof-status strong {
+    color: #111827;
+  }
+
+  .vc-proof-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+
+<style id="visual-clearance-path-style">
+  .visual-clearance-path {
+    background:#ffffff;
+    border:1px solid #dbe3ef;
+    border-radius:18px;
+    padding:18px;
+    margin:18px 0;
+    box-shadow:0 10px 26px rgba(15,23,42,.06);
+  }
+  .visual-clearance-head {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    margin-bottom:14px;
+  }
+  .visual-clearance-head h2 {
+    margin:0;
+    font-size:20px;
+    color:#172033;
+  }
+  .visual-clearance-head p {
+    margin:5px 0 0;
+    color:#64748b;
+    line-height:1.35;
+  }
+  .visual-clearance-badge {
+    border:1px solid #99f6e4;
+    background:#f0fdfa;
+    color:#115e59;
+    border-radius:999px;
+    padding:6px 10px;
+    font-size:12px;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .visual-clearance-list {
+    display:grid;
+    gap:10px;
+  }
+  .visual-clearance-row {
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:13px;
+    background:#f8fafc;
+  }
+  .visual-clearance-row.complete {
+    background:#f0fdf4;
+    border-color:#bbf7d0;
+  }
+  .visual-clearance-row.needs_followup {
+    background:#fff7ed;
+    border-color:#fed7aa;
+  }
+  .visual-clearance-row.not_applicable {
+    background:#f1f5f9;
+    border-color:#cbd5e1;
+  }
+  .visual-clearance-main {
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:10px;
+    align-items:start;
+  }
+  .visual-clearance-symbol {
+    font-size:17px;
+    line-height:1.2;
+    font-family:monospace;
+    font-weight:900;
+  }
+  .visual-clearance-title {
+    font-weight:900;
+    color:#172033;
+  }
+  .visual-clearance-meta {
+    margin-top:4px;
+    color:#64748b;
+    font-size:13px;
+    line-height:1.4;
+  }
+  .visual-clearance-evidence {
+    margin-top:6px;
+    color:#334155;
+    font-size:13px;
+    line-height:1.4;
+  }
+  .visual-clearance-controls {
+    display:grid;
+    grid-template-columns:150px 170px 1fr auto auto;
+    gap:8px;
+    margin-top:10px;
+    align-items:center;
+  }
+  .visual-clearance-controls select,
+  .visual-clearance-controls input {
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    padding:9px 10px;
+    font-size:13px;
+    background:white;
+  }
+  .visual-clearance-controls button {
+    border:0;
+    border-radius:10px;
+    padding:10px 13px;
+    background:#0f766e;
+    color:white;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .visual-clearance-empty {
+    color:#64748b;
+    padding:12px;
+    border:1px dashed #cbd5e1;
+    border-radius:12px;
+    background:#f8fafc;
+  }
+  @media (max-width: 840px) {
+    .visual-clearance-controls {
+      grid-template-columns:1fr;
+    }
+    .visual-clearance-head {
+      display:block;
+    }
+    .visual-clearance-badge {
+      display:inline-block;
+      margin-top:10px;
+    }
+  }
+
+  /* DEALDESK_CLEARANCE_INLINE_EMAIL_FLOW_V1 */
+  .vc-email-status {
+    grid-column: 1 / -1;
+    display: none;
+    border: 1px solid #99f6e4;
+    background: #f0fdfa;
+    color: #115e59;
+    border-radius: 12px;
+    padding: 9px 10px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+  .vc-email-status.active {
+    display: block;
+  }
+  .vc-email-status.error {
+    display: block;
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #991b1b;
+  }
+  .vc-email-status.warning {
+    display: block;
+    border-color: #fde68a;
+    background: #fffbeb;
+    color: #92400e;
+  }
+  .vc-send-draft-email {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111827;
+    color: #ffffff;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-weight: 900;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .vc-send-draft-email:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+  }
+  .vc-draft-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .vc-draft-from {
+    color: #0f766e;
+    font-weight: 900;
+  }
+
+</style>
+
+  <link rel="stylesheet" href="./dealdesk-ui-lock.css?v=1">
+
+<style id="detail-back-only-header-style">
+  header nav {
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  header nav a {
+    color:var(--accent-dark, #115e59);
+    font-weight:800;
+    text-decoration:none;
+  }
+</style>
+
+
+<style id="dealdesk-support-panels-style">
+  /*
+    Deal detail support panels
+    Single style source for bottom/support panels:
+    - Accepted Offer Source Documents
+    - Generated / Sent Documents
+    - CLAIRE Intake Read
+    - Lender / Financing
+  */
+  .dd-support-stack {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 18px;
+    margin: 0 0 18px;
+  }
+
+  .dd-support-card {
+    background: var(--card, #ffffff);
+    border: 1px solid var(--line, #dbe3ee);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(23,32,51,.04);
+  }
+
+  .dd-support-card h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    color: var(--ink, #172033);
+  }
+
+  .dd-support-note {
+    color: var(--muted, #64748b);
+    font-size: 14px;
+    line-height: 1.45;
+    margin: 0 0 14px;
+  }
+
+  .dd-support-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .dd-support-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .dd-support-item-main {
+    min-width: 0;
+  }
+
+  .dd-support-item-title {
+    display: block;
+    color: #0f172a;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+  }
+
+  .dd-support-item-meta {
+    display: block;
+    color: var(--muted, #64748b);
+    font-size: 12px;
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  .dd-support-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent, #0f766e);
+    color: #ffffff !important;
+    text-decoration: none !important;
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-weight: 900;
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .dd-support-empty {
+    border: 1px dashed #cbd5e1;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--muted, #64748b);
+    line-height: 1.45;
+  }
+
+  .dd-support-fields {
+    display: grid;
+    gap: 8px;
+  }
+
+  .dd-support-field {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line, #dbe3ee);
+  }
+
+  .dd-support-field:last-child {
+    border-bottom: 0;
+  }
+
+  .dd-support-label {
+    color: var(--muted, #64748b);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .dd-support-value {
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    color: var(--ink, #172033);
+  }
+
+  @media (max-width: 850px) {
+    .dd-support-item {
+      display: block;
+    }
+
+    .dd-support-action {
+      margin-top: 10px;
+    }
+
+    .dd-support-field {
+      grid-template-columns: 1fr;
+      gap: 3px;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <header>
+  <div class="wrap">
+    <nav>
+      <a href="./dashboard.html">Back</a>
+    </nav>
+  </div>
+</header>
+
+  <main>
+    <div class="wrap" id="app">
+      <div class="loading">Loading accepted offer file...</div>
+    </div>
+  </main>
+
+  <script>
+    var currentRecord = null;
+    var reviewStatusTimer = null;
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatMoney(value) {
+      if (value == null || value === '') return '';
+      var n = Number(value);
+      if (!Number.isFinite(n)) return escapeHtml(value);
+      return n.toLocaleString(undefined, { style:'currency', currency:'USD' });
+    }
+
+    function formatDate(value) {
+      if (!value) return '';
+      var date = new Date(value);
+      if (Number.isNaN(date.getTime())) return escapeHtml(value);
+      return escapeHtml(date.toLocaleDateString());
+    }
+
+    function row(label, value, isHtml) {
+      var shown = value == null || value === '' ? '<span class="note">Not entered</span>' : (isHtml ? value : escapeHtml(value));
+      return '<div class="row"><div class="label">' + escapeHtml(label) + '</div><div class="value">' + shown + '</div></div>';
+    }
+
+    function roleName(role) {
+      return String(role || '').replace(/_/g, ' ');
+    }
+
+    function renderParties(parties) {
+      if (!parties || !parties.length) {
+        return '<div class="note">No party records found.</div>';
+      }
+
+      return '<div class="party-grid">' + parties.map(function(p) {
+        return '<div class="party">' +
+          '<h3>' + escapeHtml(roleName(p.role_key)) + '</h3>' +
+          row('Name', p.display_name) +
+          row('Legal Address', p.legal_address) +
+          row('Broker', p.broker_name) +
+          row('License', p.license_number) +
+          row('Phone', p.phone) +
+          row('Email', p.email) +
+        '</div>';
+      }).join('') + '</div>';
+    }
+
+    function renderChecklist(items) {
+      if (!items || !items.length) {
+        return '<div class="note">No checklist items found.</div>';
+      }
+
+      return '<table><thead><tr><th>Item</th><th>Status</th><th>Answer</th></tr></thead><tbody>' +
+        items.map(function(item) {
+          return '<tr>' +
+            '<td data-label="Item">' + escapeHtml(item.item_label) + '</td>' +
+            '<td data-label="Status"><span class="pill">' + escapeHtml(item.status) + '</span></td>' +
+            '<td data-label="Answer">' + escapeHtml(item.answer_text || '') + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody></table>';
+    }
+
+
+
+
+
+
+    function openTaskOptionsForCommunication(items) {
+      var openStatuses = ['Waiting', 'In Progress', 'Blocked'];
+      var openItems = (items || []).filter(function(item) {
+        return openStatuses.indexOf(item.status || '') !== -1;
+      });
+
+      if (!openItems.length) {
+        return '<option value="">No open clearance items</option>';
+      }
+
+      return '<option value="">No related item</option>' + openItems.map(function(item) {
+        var label = (item.category || 'Other') + ' - ' + (item.task_name || '') + ' [' + (item.status || 'Waiting') + ']';
+        return '<option value="' + escapeHtml(item.public_id) + '">' + escapeHtml(label) + '</option>';
+      }).join('');
+    }
+
+    function renderCommunicationLog(items) {
+      if (!items || !items.length) {
+        return '<div class="note">No communications have been logged yet.</div>';
+      }
+
+      return items.map(function(item) {
+        var who = [item.contact_name, item.contact_role, item.entity_name].filter(Boolean).join(' / ');
+        var contact = [item.contact_phone, item.contact_email].filter(Boolean).join(' / ');
+        return '<div class="communication-entry">' +
+          '<strong>' + escapeHtml(item.communication_type || 'Communication') + ' - ' + escapeHtml(who || item.entity_type || 'Transaction Contact') + '</strong>' +
+          '<div class="note">' + escapeHtml(item.direction || '') + ' | ' + escapeHtml(item.communication_at || '') + (contact ? ' | ' + escapeHtml(contact) : '') + '</div>' +
+          '<p>' + escapeHtml(item.summary || '') + '</p>' +
+          (item.confirmed_items ? '<p><strong>Confirmed:</strong> ' + escapeHtml(item.confirmed_items) + '</p>' : '') +
+          (item.task_result_status && item.task_result_status !== 'No Change' ? '<p><strong>Tracker Result:</strong> ' + escapeHtml(item.task_result_status) + '</p>' : '') +
+          (item.follow_up_needed ? '<p><strong>Follow-up:</strong> ' + escapeHtml(item.follow_up_needed) + (item.follow_up_due_date ? ' by ' + escapeHtml(item.follow_up_due_date) : '') + '</p>' : '') +
+        '</div>';
+      }).join('');
+    }
+
+    function renderEmailMessages(items) {
+      if (!items || !items.length) {
+        return '<div class="note">No clearance email drafts have been generated for this file yet.</div>';
+      }
+
+      return items.map(function(item) {
+        var status = item.email_status || 'Draft';
+
+        return '<div class="ai-output">' +
+          '<strong>' + escapeHtml(item.subject || '') + '</strong>' +
+          '<br><span class="note">To: ' + escapeHtml(item.to_name || '') + ' &lt;' + escapeHtml(item.to_email || '') + '&gt; | Status: ' + escapeHtml(status) + '</span>' +
+          '<br><span class="note">Draft saved inside this deal file. Use Copy Email to paste it into Gmail, Outlook, or another email system.</span>' +
+          (item.failure_reason ? '<br><span class="note">Failure: ' + escapeHtml(item.failure_reason) + '</span>' : '') +
+          '<div class="email-body">' + escapeHtml(item.body || '') + '</div>' +
+          '<div class="email-actions">' +
+            '<button class="copy-email-button" type="button" data-email-id="' + escapeHtml(item.public_id) + '">Copy Email</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+
+    function renderTransactionTaskUpdateForm(items) {
+      if (!items || !items.length) return '';
+
+      var options = items.map(function(item) {
+        var label = (item.category || 'Other') + ' - ' + (item.task_name || '') + ' - ' + (item.status || 'Waiting');
+        return '<option value="' + escapeHtml(item.public_id) + '">' + escapeHtml(label) + '</option>';
+      }).join('');
+
+      return '<form class="tracker-form" id="trackerUpdateForm">' +
+        '<div class="full-field"><strong>Update Clearance Item</strong><div class="note">Use this only to keep an item open, blocked, or in progress. To mark an item received, completed, waived, or not applicable, use the Communication Log so the file records who confirmed it.</div></div>' +
+        '<div><label for="tracker_update_item">Item</label><select id="tracker_update_item" name="task_public_id">' + options + '</select></div>' +
+        '<div><label for="tracker_update_status">New Status</label><select id="tracker_update_status" name="status"><option>Waiting</option><option>In Progress</option><option>Blocked</option></select></div>' +
+        '<div><label for="tracker_update_priority">Priority</label><select id="tracker_update_priority" name="priority"><option value="">Keep Current</option><option>Low</option><option>Normal</option><option>High</option><option>Urgent</option></select></div>' +
+        '<div><label for="tracker_update_waiting_on">Entity / Office</label><input id="tracker_update_waiting_on" name="waiting_on_name" type="text" placeholder="Example: Raupp Law"></div>' +
+        '<div><label for="tracker_update_contact_name">Who did we speak with?</label><input id="tracker_update_contact_name" name="office_contact_name" type="text" placeholder="Example: Amy"></div>' +
+        '<div><label for="tracker_update_contact_role">Role</label><input id="tracker_update_contact_role" name="office_contact_role" type="text" placeholder="Example: Paralegal"></div>' +
+        '<div><label for="tracker_update_contact_phone">Phone</label><input id="tracker_update_contact_phone" name="office_contact_phone" type="text"></div>' +
+        '<div><label for="tracker_update_contact_email">Email</label><input id="tracker_update_contact_email" name="office_contact_email" type="email"></div>' +
+        '<div><label for="tracker_update_due_date">Due Date</label><input id="tracker_update_due_date" name="due_date" type="date"></div>' +
+        '<div><label for="tracker_update_verified_at">Verified At</label><input id="tracker_update_verified_at" name="verified_at" type="datetime-local"></div>' +
+        '<div class="full-field"><label for="tracker_update_notes">Conversation / Verification Notes</label><textarea id="tracker_update_notes" name="verification_notes" placeholder="Example: Spoke with Amy, paralegal. She confirmed the contract request was received and will follow up tomorrow."></textarea></div>' +
+        '<div class="full-field"><button class="tracker-button" id="trackerUpdateButton" type="submit">Save Tracker Update</button></div>' +
+      '</form>';
+    }
+
+    function renderTransactionTasks(items) {
+      if (!items || !items.length) {
+        return '<div class="note">No clearance items have been added yet.</div>';
+      }
+
+      return '<table><thead><tr><th>Category</th><th>Waiting For</th><th>Entity</th><th>Spoke With / Verified By</th><th>Status</th><th>Due</th><th>Notes</th></tr></thead><tbody>' +
+        items.map(function(item) {
+          var spokeWith = [item.office_contact_name, item.office_contact_role, item.office_contact_phone, item.office_contact_email].filter(Boolean).join(' / ');
+          var notes = [item.verification_notes, item.notes].filter(Boolean).join(' | ');
+          return '<tr>' +
+            '<td data-label="Category">' + escapeHtml(item.category || '') + '</td>' +
+            '<td data-label="Waiting For"><strong>' + escapeHtml(item.task_name || '') + '</strong></td>' +
+            '<td data-label="Entity">' + escapeHtml(item.waiting_on_name || item.waiting_on_entity_type || '') + '</td>' +
+            '<td data-label="Spoke With">' + escapeHtml(spokeWith) + '</td>' +
+            '<td data-label="Status"><span class="pill">' + escapeHtml(item.status || 'Waiting') + '</span></td>' +
+            '<td data-label="Due">' + formatDate(item.due_date) + '</td>' +
+            '<td data-label="Notes">' + escapeHtml(notes) + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody></table>';
+    }
+
+    function renderGeneratedItems(items) {
+      if (!items || !items.length) {
+        return '<div class="note">No offer reviews generated yet.</div>';
+      }
+
+      return items.map(function(item, index) {
+        var openAttr = index === 0 ? ' open' : '';
+        var createdText = item.created_at ? ' | Created: ' + escapeHtml(item.created_at) : '';
+
+        return '<details class="review-collapse"' + openAttr + '>' +
+          '<summary>' +
+            '<span>' +
+              '<strong>' + escapeHtml(item.title || 'Offer Review') + '</strong>' +
+              '<br><span class="note">Status: ' + escapeHtml(item.item_status || 'Generated') + createdText + '</span>' +
+            '</span>' +
+          '</summary>' +
+          '<div class="review-body">' + escapeHtml(item.generated_text || '') + '</div>' +
+        '</details>';
+      }).join('');
+    }
+
+    function renderHistory(items) {
+      if (!items || !items.length) {
+        return '<div class="note">No history yet.</div>';
+      }
+
+      return '<table><thead><tr><th>Event</th><th>Summary</th><th>By</th><th>Time</th></tr></thead><tbody>' +
+        items.map(function(item) {
+          return '<tr>' +
+            '<td data-label="Event">' + escapeHtml(item.event_type) + '</td>' +
+            '<td data-label="Summary">' + escapeHtml(item.event_summary) + '</td>' +
+            '<td data-label="By">' + escapeHtml(item.created_by || '') + '</td>' +
+            '<td data-label="Time">' + escapeHtml(item.created_at || '') + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody></table>';
+    }
+
+    function render(record) {
+      currentRecord = record;
+      var app = document.getElementById('app');
+      var deal = record.deal;
+      var f = record.financials || {};
+      var seller = (record.parties || []).find(function(p) { return p.role_key === 'seller'; }) || {};
+      var purchaser = (record.parties || []).find(function(p) { return p.role_key === 'purchaser'; }) || {};
+
+      app.innerHTML =
+        '<section class="hero">' +
+          '<div class="eyebrow">Accepted Offer File</div>' +
+          '<h1>' + escapeHtml(deal.property_address) + '</h1>' +
+          '<p><strong>Status:</strong> ' + escapeHtml(deal.transaction_status) + ' &nbsp; | &nbsp; <strong>MLS:</strong> ' + escapeHtml(deal.mls_number || 'Not entered') + '</p>' +
+          '<a class="print-button" href="./print.html?id=' + encodeURIComponent(deal.public_id) + '">Print Deal Sheet</a>' +
+        '</section>' +
+
+        '<section class="card full" id="fileStatusSection">' +
+          '<h2>File Status</h2>' +
+          '<p class="note">Mark the accepted-offer file as it moves from accepted offer through contract, closing, and final file status.</p>' +
+          (deal.transaction_status === 'Closed' || deal.transaction_status === 'Final' ? '<div class="final-note">This file is marked ' + escapeHtml(deal.transaction_status) + '. Review can remain available for history, but operational follow-up should be complete.</div>' : '') +
+          '<form class="status-control-form" id="statusControlForm">' +
+            '<div><label for="transaction_status_select">Status</label><select id="transaction_status_select" name="transaction_status">' +
+              '<option' + (deal.transaction_status === 'Active' ? ' selected' : '') + '>Active</option>' +
+              '<option' + (deal.transaction_status === 'Contract Out' ? ' selected' : '') + '>Contract Out</option>' +
+              '<option' + (deal.transaction_status === 'In Contract' ? ' selected' : '') + '>In Contract</option>' +
+              '<option' + (deal.transaction_status === 'Closing Scheduled' ? ' selected' : '') + '>Closing Scheduled</option>' +
+              '<option' + (deal.transaction_status === 'Closed' ? ' selected' : '') + '>Closed</option>' +
+              '<option' + (deal.transaction_status === 'Final' ? ' selected' : '') + '>Final</option>' +
+              '<option' + (deal.transaction_status === 'On Hold' ? ' selected' : '') + '>On Hold</option>' +
+            '</select></div>' +
+            '<div><label for="status_note">Status Note</label><input id="status_note" name="status_note" type="text" placeholder="Optional note for audit history"></div>' +
+            '<button class="status-button" id="statusSaveButton" type="submit">Update Status</button>' +
+          '</form>' +
+        '</section>' +
+
+        '<div class="grid">' +
+          '<section class="card">' +
+            '<h2>Accepted Offer Summary</h2>' +
+            row('Accepted Offer Date', formatDate(deal.accepted_offer_date), true) +
+            row('Property Address', deal.property_address) +
+            row('Property Type', deal.property_type) +
+            row('Seller', seller.display_name) +
+            row('Purchaser', purchaser.display_name) +
+            row('MLS Number', deal.mls_number) +
+            row('Transaction Status', '<span class="pill">' + escapeHtml(deal.transaction_status) + '</span>', true) +
+            row('Next Action', deal.next_action || 'Review Clearance Path and verify required contacts.') +
+            row('Property Condition Statement', deal.property_condition_statement_status) +
+          '</section>' +
+
+          '<section class="card">' +
+            '<h2>Additional Terms and Acknowledgment</h2>' +
+            row('Additional Terms', deal.additional_terms) +
+            row('Seller Acknowledgment Name', deal.seller_acknowledgment_name) +
+            row('Seller Acknowledgment Date', formatDate(deal.seller_acknowledgment_date), true) +
+            row('Purchaser Acknowledgment Name', deal.purchaser_acknowledgment_name) +
+            row('Purchaser Acknowledgment Date', formatDate(deal.purchaser_acknowledgment_date), true) +
+          '</section>' +
+
+          '<section class="card">' +
+            '<h2>Financial Terms</h2>' +
+            row('Purchase Price', formatMoney(f.purchase_price), true) +
+            row('Seller Concession', formatMoney(f.seller_concession), true) +
+            row('Contract Deposit', formatMoney(f.contract_deposit), true) +
+            row('Mortgage Amount', formatMoney(f.mortgage_amount), true) +
+            row('Cash at Closing', formatMoney(f.cash_at_closing), true) +
+            row('Total Price', formatMoney(f.total_price), true) +
+            row('Commission Paid by Seller', f.commission_paid_by_seller) +
+            row('Commission Paid by Purchaser', f.commission_paid_by_purchaser) +
+            row('On or About Contract Date', f.contract_date_text) +
+            row('On or About Closing Date', f.closing_date_text) +
+          '</section>' +
+
+          '<section class="card full">' +
+            '<h2>Parties, Attorneys, and Agents</h2>' +
+            renderParties(record.parties) +
+          '</section>' +
+
+          '<section class="card full">' +
+            '<h2>Clearance Path</h2>' +
+            '<p class="note">The Clearance Path is the standard set of items that must be cleared before the accepted-offer file can move forward. Items should be cleared through the Communication Log, so the file records who was contacted, what was confirmed, and what changed.</p>' +
+            '<div class="clearance-rule-box">' +
+              '<strong>Clearance rule</strong>' +
+              'A clearance item should be closed by a Communication Log entry. Record who you spoke with, their office or role, what they confirmed, and then select the related clearance item and result.' +
+            '</div>' +
+            '<button class="tracker-button" id="buildPlanButton" type="button">Refresh Standard Clearance Path</button>' +
+            '<form class="tracker-form" id="trackerForm">' +
+              '<div><label for="tracker_category">Category</label><select id="tracker_category" name="category"><option>Attorney</option><option>Lender</option><option>Inspection</option><option>Appraisal</option><option>Title</option><option>Buyer</option><option>Seller</option><option>Agent</option><option>Brokerage</option><option>Closing</option><option>Other</option></select></div>' +
+              '<div><label for="tracker_task_name">What are we waiting for?</label><input id="tracker_task_name" name="task_name" type="text" required placeholder="Example: Contract from seller attorney"></div>' +
+              '<div><label for="tracker_status">Status</label><select id="tracker_status" name="status"><option>Waiting</option><option>In Progress</option><option>Blocked</option><option>Received</option><option>Completed</option><option>Waived</option><option>Not Applicable</option></select></div>' +
+              '<div><label for="tracker_entity_type">Entity Type</label><select id="tracker_entity_type" name="waiting_on_entity_type"><option>Attorney Office</option><option>Lender Office</option><option>Inspector</option><option>Appraiser</option><option>Title Company</option><option>Buyer</option><option>Seller</option><option>Agent</option><option>Brokerage</option><option>Other</option></select></div>' +
+              '<div><label for="tracker_waiting_on_name">Entity / Office</label><input id="tracker_waiting_on_name" name="waiting_on_name" type="text" placeholder="Example: Raupp Law"></div>' +
+              '<div><label for="tracker_due_date">Due Date</label><input id="tracker_due_date" name="due_date" type="date"></div>' +
+              '<div><label for="tracker_contact_name">Who did we speak with?</label><input id="tracker_contact_name" name="office_contact_name" type="text" placeholder="Example: Amy"></div>' +
+              '<div><label for="tracker_contact_role">Role</label><input id="tracker_contact_role" name="office_contact_role" type="text" placeholder="Example: Paralegal"></div>' +
+              '<div><label for="tracker_contact_phone">Phone</label><input id="tracker_contact_phone" name="office_contact_phone" type="text"></div>' +
+              '<div><label for="tracker_contact_email">Email</label><input id="tracker_contact_email" name="office_contact_email" type="email"></div>' +
+              '<div><label for="tracker_priority">Priority</label><select id="tracker_priority" name="priority"><option>Normal</option><option>High</option><option>Urgent</option><option>Low</option></select></div>' +
+              '<div><label for="tracker_verified_at">Verified At</label><input id="tracker_verified_at" name="verified_at" type="datetime-local"></div>' +
+              '<div class="full-field"><label for="tracker_verification_notes">Verification / Conversation Notes</label><textarea id="tracker_verification_notes" name="verification_notes" placeholder="Example: Spoke with Amy at seller attorney office. Confirmed contract request was received."></textarea></div>' +
+              '<div class="full-field"><label for="tracker_notes">Internal Notes</label><textarea id="tracker_notes" name="notes" placeholder="Any additional detail."></textarea></div>' +
+              '<div class="full-field"><button class="tracker-button" id="trackerSaveButton" type="submit">Add Clearance Item</button></div>' +
+            '</form>' +
+            renderTransactionTaskUpdateForm(record.transaction_tasks) +
+            renderTransactionTasks(record.transaction_tasks) +
+          '</section>' +
+
+          '<section class="card full">' +
+            '<h2>Communication Log</h2>' +
+            '<p class="note">Log calls, emails, texts, confirmations, and follow-ups with attorney offices, paralegals, lender processors, title, inspectors, appraisers, agents, buyer, and seller. If you enter Follow-Up Needed, the system automatically creates a clearance tracker item. To close or complete an open clearance item, select it as the Related Clearance Item and record the result. That communication becomes the proof for why the item was cleared.</p>' +
+            '<form class="communication-form" id="communicationForm">' +
+              '<div><label for="comm_type">Type</label><select id="comm_type" name="communication_type"><option>Phone</option><option>Email</option><option>Text</option><option>In Person</option><option>Voicemail</option><option>Other</option></select></div>' +
+              '<div><label for="comm_direction">Direction</label><select id="comm_direction" name="direction"><option>Outgoing</option><option>Incoming</option></select></div>' +
+              '<div><label for="comm_at">When</label><input id="comm_at" name="communication_at" type="datetime-local"></div>' +
+              '<div><label for="comm_entity_type">Entity Type</label><select id="comm_entity_type" name="entity_type"><option>Attorney Office</option><option>Lender Office</option><option>Title Company</option><option>Inspector</option><option>Appraiser</option><option>Buyer</option><option>Seller</option><option>Agent</option><option>Brokerage</option><option>Other</option></select></div>' +
+              '<div><label for="comm_entity_name">Entity / Office</label><input id="comm_entity_name" name="entity_name" type="text" placeholder="Example: Raupp Law"></div>' +
+              '<div><label for="comm_contact_name">Who did we speak with?</label><input id="comm_contact_name" name="contact_name" type="text" placeholder="Example: Amy"></div>' +
+              '<div><label for="comm_contact_role">Role</label><input id="comm_contact_role" name="contact_role" type="text" placeholder="Example: Paralegal"></div>' +
+              '<div><label for="comm_contact_phone">Phone</label><input id="comm_contact_phone" name="contact_phone" type="text"></div>' +
+              '<div><label for="comm_contact_email">Email</label><input id="comm_contact_email" name="contact_email" type="email"></div>' +
+              '<div class="full-field"><label for="comm_summary">Summary</label><textarea id="comm_summary" name="summary" required placeholder="What happened?"></textarea></div>' +
+              '<div class="full-field"><label for="comm_confirmed">Confirmed Items</label><textarea id="comm_confirmed" name="confirmed_items" placeholder="What did they verify?"></textarea></div>' +
+              '<div class="full-field"><label for="comm_follow_up">Follow-Up Needed</label><textarea id="comm_follow_up" name="follow_up_needed" placeholder="What needs to happen next?"></textarea></div>' +
+              '<div><label for="comm_follow_up_due">Follow-Up Due</label><input id="comm_follow_up_due" name="follow_up_due_date" type="date"></div>' +
+              '<div class="full-field"><label for="comm_related_task">Related Clearance Item</label><select id="comm_related_task" name="related_task_public_id">' + openTaskOptionsForCommunication(record.transaction_tasks) + '</select><div class="note">Use this when the communication resolves or changes an open clearance item.</div></div>' +
+              '<div><label for="comm_task_result_status">Tracker Result</label><select id="comm_task_result_status" name="task_result_status"><option>No Change</option><option>In Progress</option><option>Blocked</option><option>Received</option><option>Completed</option><option>Waived</option><option>Not Applicable</option></select></div>' +
+              '<div class="full-field"><button class="tracker-button" id="communicationSaveButton" type="submit">Log Communication</button></div>' +
+            '</form>' +
+            renderCommunicationLog(record.communication_log) +
+          '</section>' +
+
+
+
+          '<section class="card full ai-zone">' +
+            '<h2>Offer Review</h2>' +
+            '<p class="note">Generate a review for missing items, discrepancies, contract readiness, attorney handoff readiness, and next action. This is stored as generated only, not approved, sent, or used.</p>' +
+            '<button class="ai-button" id="aiReviewButton" type="button">Review Offer</button>' +
+            '<div class="review-status-line" id="reviewStatusLine"></div>' +
+            renderGeneratedItems(record.generated_items) +
+          '</section>' +
+
+          '<section class="card full">' +
+            '<h2>Audit History</h2>' +
+            renderHistory(record.history) +
+          '</section>' +
+
+          '<section class="card full danger-zone">' +
+            '<h2>Remove Accepted Offer</h2>' +
+            '<p class="note">This removes the accepted offer from the active dashboard but keeps an audit record in the system.</p>' +
+            '<button class="danger-button" id="removeDealButton" type="button">Remove Accepted Offer</button>' +
+          '</section>' +
+        '</div>';
+
+      var buildPlanButton = document.getElementById('buildPlanButton');
+      if (buildPlanButton) {
+        buildPlanButton.addEventListener('click', buildTransactionPlanFromFile);
+      }
+
+      var statusForm = document.getElementById('statusControlForm');
+      if (statusForm) {
+        statusForm.addEventListener('submit', updateDealStatusFromForm);
+      }
+
+      var communicationForm = document.getElementById('communicationForm');
+      if (communicationForm) {
+        communicationForm.addEventListener('submit', addCommunicationLog);
+      }
+
+      var generateButton = document.getElementById('generateStartEmailsButton');
+      if (generateButton) {
+        generateButton.addEventListener('click', generateStartEmails);
+      }
+
+      document.querySelectorAll('.send-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+          sendEmailFromButton(button);
+        });
+      });
+
+      var trackerUpdateForm = document.getElementById('trackerUpdateForm');
+      if (trackerUpdateForm) {
+        trackerUpdateForm.addEventListener('submit', updateTrackerItem);
+      }
+
+      var trackerForm = document.getElementById('trackerForm');
+      if (trackerForm) {
+        trackerForm.addEventListener('submit', addTrackerItem);
+      }
+
+      var aiButton = document.getElementById('aiReviewButton');
+      if (aiButton) {
+        aiButton.addEventListener('click', runAiReview);
+      }
+
+      var removeButton = document.getElementById('removeDealButton');
+      if (removeButton) {
+        removeButton.addEventListener('click', removeCurrentDeal);
+      }
+    }
+
+
+
+
+    function startReviewStatus() {
+      var line = document.getElementById('reviewStatusLine');
+      if (!line) return;
+
+      var steps = [
+        'Checking accepted-offer terms...',
+        'Reviewing parties, attorneys, and agents...',
+        'Looking for missing items...',
+        'Checking contract-readiness...',
+        'Reviewing attorney handoff readiness...',
+        'Preparing offer review...'
+      ];
+
+      var i = 0;
+      line.className = 'review-status-line active';
+      line.textContent = steps[i];
+
+      clearInterval(reviewStatusTimer);
+      reviewStatusTimer = setInterval(function() {
+        i = (i + 1) % steps.length;
+        line.textContent = steps[i];
+      }, 750);
+    }
+
+    function stopReviewStatus() {
+      clearInterval(reviewStatusTimer);
+      reviewStatusTimer = null;
+
+      var line = document.getElementById('reviewStatusLine');
+      if (line) {
+        line.className = 'review-status-line';
+        line.textContent = '';
+      }
+    }
+
+
+    function formToObject(formEl) {
+      var data = {};
+      var fd = new FormData(formEl);
+      fd.forEach(function(value, key) {
+        data[key] = String(value).trim();
+      });
+      return data;
+    }
+
+
+
+    function copyTextToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+      } finally {
+        document.body.removeChild(textarea);
+      }
+
+      return Promise.resolve();
+    }
+
+    async function copyEmailFromButton(button) {
+      var emailId = button.getAttribute('data-email-id');
+      var emails = currentRecord && currentRecord.email_messages ? currentRecord.email_messages : [];
+      var item = emails.find(function(email) {
+        return email.public_id === emailId;
+      });
+
+      if (!item) {
+        alert('Could not find this email draft.');
+        return;
+      }
+
+      var copyText = [
+        'To: ' + (item.to_name ? item.to_name + ' <' + item.to_email + '>' : item.to_email),
+        'Subject: ' + (item.subject || ''),
+        '',
+        item.body || ''
+      ].join('\\n');
+
+      try {
+        await copyTextToClipboard(copyText);
+        button.textContent = 'Copied';
+        setTimeout(function() {
+          button.textContent = 'Copy Email';
+        }, 1400);
+      } catch (err) {
+        alert('Could not copy email. You can still select the text manually.');
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      var button = event.target.closest ? event.target.closest('.copy-email-button') : null;
+      if (button) {
+        copyEmailFromButton(button);
+      }
+    });
+
+
+
+    async function buildTransactionPlanFromFile() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id) {
+        alert('Missing accepted offer file ID.');
+        return;
+      }
+
+      var ok = confirm('Refresh the standard transaction plan for this accepted-offer file?\n\nExisting matching clearance items will be skipped.');
+      if (!ok) return;
+
+      var button = document.getElementById('buildPlanButton');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Building...';
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/build-plan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify({ created_by: 'pilot' })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not build transaction plan');
+        }
+
+        alert('Clearance path refreshed. Added ' + data.plan.created_count + ' item(s). Skipped ' + data.plan.skipped_count + ' existing item(s).');
+        loadFile();
+      } catch (err) {
+        alert('Could not build transaction plan: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Refresh Standard Clearance Path';
+        }
+      }
+    }
+
+    async function updateDealStatusFromForm(event) {
+      event.preventDefault();
+
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      var form = document.getElementById('statusControlForm');
+      var button = document.getElementById('statusSaveButton');
+
+      if (!id || !form) {
+        alert('Could not identify this accepted offer file.');
+        return;
+      }
+
+      var payload = formToObject(form);
+      payload.updated_by = 'pilot';
+
+      if (payload.transaction_status === 'Closed' || payload.transaction_status === 'Final') {
+        var ok = confirm('Mark this file ' + payload.transaction_status + '?\n\nThis will record the status change in file history.');
+        if (!ok) return;
+      }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Saving...';
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify(payload)
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not update file status');
+        }
+
+        alert('File status updated.');
+        loadFile();
+      } catch (err) {
+        try {
+          var clearance = document.getElementById('visualClearancePath') ||
+            document.querySelector('.visual-clearance-path') ||
+            document.querySelector('[data-clearance-path]');
+          if (clearance) {
+            clearance.classList.add('open');
+            clearance.classList.add('expanded');
+            clearance.classList.add('is-open');
+            clearance.querySelectorAll('details').forEach(function(detail) { detail.open = true; });
+            clearance.querySelectorAll('[hidden]').forEach(function(el) { el.hidden = false; });
+            setTimeout(function() { clearance.scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+          }
+        } catch (scrollErr) {}
+        alert('Could not update file status: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Update Status';
+        }
+      }
+    }
+
+
+    async function addCommunicationLog(event) {
+      event.preventDefault();
+
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      var form = document.getElementById('communicationForm');
+      var button = document.getElementById('communicationSaveButton');
+
+      if (!id || !form) {
+        alert('Could not identify this accepted offer file.');
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Logging...';
+      }
+
+      try {
+        var payload = formToObject(form);
+        payload.created_by = 'pilot';
+
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/communications', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify(payload)
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not log communication');
+        }
+
+        alert('Communication logged.');
+        loadFile();
+      } catch (err) {
+        alert('Could not log communication: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Log Communication';
+        }
+      }
+    }
+
+    async function generateStartEmails() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id) {
+        alert('Missing accepted offer file ID.');
+        return;
+      }
+
+      var ok = confirm('Generate start email drafts for this accepted-offer file?\n\nThey will not be sent yet.');
+      if (!ok) return;
+
+      var button = document.getElementById('generateStartEmailsButton');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Generating...';
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/start-emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify({ created_by: 'pilot' })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not generate start emails');
+        }
+
+        alert('Start email draft(s) generated.');
+        loadFile();
+      } catch (err) {
+        alert('Could not generate start emails: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Generate Start Emails';
+        }
+      }
+    }
+
+    async function sendEmailFromButton(button) {
+      var emailId = button.getAttribute('data-email-id');
+      var toEmail = button.getAttribute('data-to-email') || '';
+
+      var ok = confirm('Send this email now?\n\nTo: ' + toEmail + '\n\nThis will record a sent event in the file history.');
+      if (!ok) return;
+
+      button.disabled = true;
+      button.textContent = 'Sending...';
+
+      try {
+        var response = await fetch('./api/emails/' + encodeURIComponent(emailId) + '/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify({ sent_by: 'pilot' })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not send email');
+        }
+
+        alert('Email sent.');
+        loadFile();
+      } catch (err) {
+        alert('Could not send email: ' + err.message);
+        button.disabled = false;
+        button.textContent = 'Send Email';
+      }
+    }
+
+
+    async function updateTrackerItem(event) {
+      event.preventDefault();
+
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      var form = document.getElementById('trackerUpdateForm');
+      var button = document.getElementById('trackerUpdateButton');
+
+      if (!id || !form) {
+        alert('Could not identify this accepted offer file.');
+        return;
+      }
+
+      var payload = formToObject(form);
+      var taskId = payload.task_public_id;
+      delete payload.task_public_id;
+      payload.updated_by = 'pilot';
+
+      if (!taskId) {
+        alert('Choose a clearance item to update.');
+        return;
+      }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Saving...';
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/tracker/' + encodeURIComponent(taskId) + '/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify(payload)
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not update tracker item');
+        }
+
+        alert('Tracker item updated.');
+        loadFile();
+      } catch (err) {
+        alert('Could not update tracker item: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Save Tracker Update';
+        }
+      }
+    }
+
+    async function addTrackerItem(event) {
+      event.preventDefault();
+
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+      var form = document.getElementById('trackerForm');
+      var button = document.getElementById('trackerSaveButton');
+
+      if (!id || !form) {
+        alert('Could not identify this accepted offer file.');
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Adding...';
+      }
+
+      try {
+        var payload = formToObject(form);
+        payload.created_by = 'pilot';
+
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/tracker', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify(payload)
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not add tracker item');
+        }
+
+        alert('Waiting-on item added.');
+        loadFile();
+      } catch (err) {
+        alert('Could not add clearance item: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Add Clearance Item';
+        }
+      }
+    }
+
+    async function runAiReview() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id) {
+        alert('Missing accepted offer file ID.');
+        return;
+      }
+
+      var ok = confirm('Generate an offer review for this accepted offer?\n\nThis will be stored as GENERATED only. It will not be approved, sent, or used.');
+      if (!ok) return;
+
+      var button = document.getElementById('aiReviewButton');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Reviewing...';
+      }
+      startReviewStatus();
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id) + '/ai-review', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify({
+            created_by: 'pilot'
+          })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Offer review failed');
+        }
+
+        stopReviewStatus();
+        alert('Offer review generated and saved.');
+        loadFile();
+      } catch (err) {
+        stopReviewStatus();
+        alert('Could not generate offer review: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Review Offer';
+        }
+      }
+    }
+
+    async function removeCurrentDeal() {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id || !currentRecord || !currentRecord.deal) {
+        alert('Could not identify this accepted offer file.');
+        return;
+      }
+
+      var property = currentRecord.deal.property_address || 'this accepted offer';
+
+      var ok = confirm('Are you sure you want to remove this accepted offer from the active dashboard?\n\n' + property + '\n\nThis keeps the audit record but removes it from the active list.');
+
+      if (!ok) return;
+
+      var button = document.getElementById('removeDealButton');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Removing...';
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id), {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          cache: 'no-store',
+          body: JSON.stringify({
+            removed_by: 'pilot',
+            removal_reason: 'Removed from accepted-offer dashboard from file view.'
+          })
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Remove failed');
+        }
+
+        alert('Accepted offer removed from the active dashboard.');
+        window.location.href = './index.html';
+      } catch (err) {
+        alert('Could not remove accepted offer: ' + err.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Remove Accepted Offer';
+        }
+      }
+    }
+
+    async function loadFile() {
+      var app = document.getElementById('app');
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get('id');
+
+      if (!id) {
+        app.innerHTML = '<div class="error">Missing accepted offer file ID.</div>';
+        return;
+      }
+
+      try {
+        var response = await fetch('./api/deals/' + encodeURIComponent(id), {
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store'
+        });
+
+        var data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || 'Could not load accepted offer file');
+        }
+
+        render(data.record);
+      } catch (err) {
+        app.innerHTML = '<div class="error">Could not load accepted offer file: ' + escapeHtml(err.message) + '</div>';
+      }
+    }
+
+    loadFile();
+  </script>
+
+
+
+<script id="dealdesk-safe-loader">
+(function() {
+  async function safeLoadAcceptedOfferFile() {
+    var app = document.getElementById('app');
+    if (!app) return;
+
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id');
+
+    if (!id) {
+      app.innerHTML = '<div class="error">Missing accepted offer file ID.</div>';
+      return;
+    }
+
+    try {
+      var response = await fetch('./api/deals/' + encodeURIComponent(id), {
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store'
+      });
+
+      var data = await response.json();
+
+      if (!response.ok || !data.ok || !data.record) {
+        throw new Error(data.error || 'Accepted offer file API did not return a record');
+      }
+
+      if (typeof render !== 'function') {
+        throw new Error('The deal-file render function is not available.');
+      }
+
+      render(data.record);
+    } catch (err) {
+      app.innerHTML = '<div class="error">Could not load accepted offer file: ' +
+        String(err.message || err).replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+        '</div>';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', safeLoadAcceptedOfferFile);
+})();
+</script>
+
+
+<script id="visual-clearance-path-script">
+(function() {
+  var visualClearanceExpanded = false;
+  function getDealId() {
+    return new URLSearchParams(window.location.search).get('id') || '';
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function(ch) {
+      return ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      })[ch];
+    });
+  }
+
+  function sourceLabel(value) {
+    var labels = {
+      operator_entered: 'Operator Entered',
+      deal_sheet: 'Deal Sheet',
+      communication_log: 'Communication Log',
+      ai_suggested: 'AI Suggested',
+      system_default: 'System Default'
+    };
+    return labels[value] || String(value || 'System Default').replace(/_/g, ' ');
+  }
+
+  function targetContainer() {
+    return document.getElementById('app') || document.querySelector('main') || document.body;
+  }
+
+  
+    async function dealdeskJsonFetch(url, options) {
+      options = options || {};
+      options.credentials = options.credentials || 'same-origin';
+      options.headers = Object.assign({ 'Accept': 'application/json' }, options.headers || {});
+
+      var response = await fetch(url, options);
+      var text = await response.text();
+      var data = null;
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (err) {
+        var clean = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        if (response.status === 401) {
+          throw new Error('The site login expired or the API request was not authenticated. Refresh the page, log in again if prompted, then try Draft Email again.');
+        }
+        throw new Error('API returned non-JSON response' + (response.status ? ' HTTP ' + response.status : '') + (clean ? ': ' + clean.slice(0, 180) : '.'));
+      }
+
+      if (!response.ok || data.ok === false) {
+        throw new Error((data && data.error) || ('Request failed HTTP ' + response.status));
+      }
+
+      return data;
+    }
+
+
+    async function loadVisualClearancePath() {
+    var dealId = getDealId();
+    if (!dealId) return;
+
+    var target = targetContainer();
+    if (!target) return;
+
+    var existing = document.getElementById('visualClearancePath');
+    if (!existing) {
+      existing = document.createElement('section');
+      existing.id = 'visualClearancePath';
+      existing.className = 'visual-clearance-path';
+
+      var fileStatusEl = document.getElementById('fileStatusSection');
+      if (fileStatusEl) {
+        fileStatusEl.parentNode.insertBefore(existing, fileStatusEl.nextSibling);
+      } else if (target.firstElementChild) {
+        target.insertBefore(existing, target.firstElementChild.nextSibling);
+      } else {
+        target.appendChild(existing);
+      }
+    }
+
+    existing.innerHTML = '<div class="visual-clearance-empty">Loading visual Clearance Path...</div>';
+
+    try {
+      var response = await fetch('./api/deals/' + encodeURIComponent(dealId) + '/clearance-controls', {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json' }
+      });
+
+      var data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || 'Could not load Clearance Path.');
+      }
+
+      renderVisualClearancePath(existing, dealId, data.clearance_items || []);
+    } catch (err) {
+      existing.innerHTML = '<div class="visual-clearance-empty">Could not load visual Clearance Path: ' + escapeHtml(err.message) + '</div>';
+    }
+  }
+
+
+  function renderClearanceDraftPreview(draft) {
+    if (!draft) return '';
+
+    var emailId = draft.public_id || draft.email_public_id || draft.email_id || draft.id || '';
+    var toLine = [draft.to_name, draft.to_email].filter(Boolean).join(' <');
+    if (draft.to_name && draft.to_email) toLine += '>';
+
+    var fromLine = draft.from_email || 'teamscher@servicedepartment.ai';
+
+    return [
+      '<div class="vc-draft-card" data-draft-email-id="' + escapeHtml(emailId) + '">',
+        '<div class="vc-draft-label">Draft Email Saved In This Clearance Item</div>',
+        '<div class="vc-draft-subject">' + escapeHtml(draft.subject || 'Draft email') + '</div>',
+        '<div class="vc-draft-meta">',
+          'To: ' + escapeHtml(toLine || draft.to_email || ''),
+          (draft.cc_email ? ' | CC: ' + escapeHtml(draft.cc_email) : ''),
+          ' | <span class="vc-draft-from">From: ' + escapeHtml(fromLine) + '</span>',
+        '</div>',
+        '<div class="vc-draft-body">' + escapeHtml(draft.body || '') + '</div>',
+        '<div class="vc-draft-actions">',
+          emailId ? '<button type="button" class="vc-send-draft-email" data-email-id="' + escapeHtml(emailId) + '" data-to-email="' + escapeHtml(draft.to_email || '') + '">Send Email</button>' : '<div class="vc-email-status warning active">Draft displayed, but no saved email ID came back from the server. The draft can be reviewed, but Send cannot run until the draft route returns an email ID.</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+
+  function renderClearanceProofStatus(item) {
+    var parts = [];
+
+    if (item.email_sent_at) {
+      parts.push('<div><strong>Email marked sent:</strong> ' + escapeHtml(item.email_sent_at) + (item.email_sent_by ? ' by ' + escapeHtml(item.email_sent_by) : '') + '</div>');
+    } else {
+      parts.push('<div><strong>Email marked sent:</strong> Not yet marked sent.</div>');
+    }
+
+    if (item.email_sent_proof_note) {
+      parts.push('<div><strong>Sent proof:</strong> ' + escapeHtml(item.email_sent_proof_note) + '</div>');
+    }
+
+    if (item.response_received_at) {
+      parts.push('<div><strong>Response received:</strong> ' + escapeHtml(item.response_received_at) + '</div>');
+    } else {
+      parts.push('<div><strong>Response received:</strong> Not yet logged.</div>');
+    }
+
+    if (item.response_summary) {
+      parts.push('<div><strong>Response summary:</strong> ' + escapeHtml(item.response_summary) + '</div>');
+    }
+
+    if (item.manager_proof_note) {
+      parts.push('<div><strong>Manager proof:</strong> ' + escapeHtml(item.manager_proof_note) + '</div>');
+    }
+
+    return '<div class="vc-proof-status">' + parts.join('') + '</div>';
+  }
+
+
+  function showClearanceEmailStatus(row, message, kind) {
+    if (!row) return;
+    var box = row.querySelector('.vc-email-status');
+    if (!box) return;
+    box.className = 'vc-email-status active' + (kind ? ' ' + kind : '');
+    box.textContent = message || '';
+  }
+
+  function clearClearanceEmailStatus(row) {
+    if (!row) return;
+    var box = row.querySelector('.vc-email-status');
+    if (!box) return;
+    box.className = 'vc-email-status';
+    box.textContent = '';
+  }
+
+  async function sendClearanceDraftEmail(dealId, row, emailId, toEmail) {
+    var subjectEl = row ? row.querySelector('.vc-draft-subject') : null;
+    var bodyEl = row ? row.querySelector('.vc-draft-body') : null;
+
+    var payload = {
+      deal_id: dealId,
+      email_id: emailId,
+      to_email: toEmail || '',
+      subject: subjectEl ? subjectEl.textContent : '',
+      body: bodyEl ? bodyEl.textContent : '',
+      sent_by: 'operator',
+      from_email: 'teamscher@servicedepartment.ai',
+      from_name: 'Team Scher'
+    };
+
+    var response = await fetch('./api/claire-dealview/send-clearance-email', {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      cache: 'no-store',
+      body: JSON.stringify(payload)
+    });
+
+    var text = await response.text();
+    var data = null;
+
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch (jsonErr) {
+      var clean = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      throw new Error('Clearance send route returned non-JSON response. HTTP ' + response.status + '. ' + clean.slice(0, 220));
+    }
+
+    if (!response.ok || !data.ok) {
+      throw new Error((data && data.error) || ('Send failed HTTP ' + response.status));
+    }
+
+    var proofNote = row.querySelector('.vc-sent-proof-note');
+    if (proofNote && !String(proofNote.value || '').trim()) {
+      proofNote.value = 'Sent from teamscher@servicedepartment.ai to ' + (toEmail || 'recipient') + ' through Deal Desk.';
+    }
+
+    var taskId = row.getAttribute('data-task');
+    if (taskId) {
+      try {
+        await postClearanceProof(dealId, taskId, collectClearanceProofPayload(row, 'mark_sent'));
+      } catch (proofErr) {
+        showClearanceEmailStatus(row, 'Email sent, but sent-proof could not be recorded: ' + proofErr.message, 'warning');
+        return data;
+      }
+    }
+
+    showClearanceEmailStatus(row, 'Email sent from teamscher@servicedepartment.ai to ' + (toEmail || 'recipient') + '.', '');
+    return data;
+  }
+
+
+  function renderVisualClearancePath(section, dealId, items) {
+    var completeCount = items.filter(function(item) {
+      return item.control_state === 'complete' || item.control_state === 'not_applicable';
+    }).length;
+
+    var rows = items.map(function(item) {
+      var state = item.control_state || 'open';
+      var title = item.task_name || item.category || 'Clearance item';
+      var evidence = item.clearance_evidence || item.operator_status_note || item.verification_notes || item.notes || '';
+      var waiting = item.waiting_on_name ? 'Waiting on: ' + item.waiting_on_name : '';
+      var source = item.clearance_source || 'system_default';
+
+      return [
+        '<div class="visual-clearance-row ' + escapeHtml(state) + '" data-task="' + escapeHtml(item.public_id) + '">',
+          '<div class="visual-clearance-main">',
+            '<div class="visual-clearance-symbol">' + escapeHtml(item.visual_symbol || '[ ]') + '</div>',
+            '<div>',
+              '<div class="visual-clearance-title">' + escapeHtml(title) + '</div>',
+              '<div class="visual-clearance-meta">',
+                escapeHtml(item.control_label || 'Open'),
+                ' - Source: ', escapeHtml(sourceLabel(source)),
+                waiting ? ' - ' + escapeHtml(waiting) : '',
+              '</div>',
+              evidence ? '<div class="visual-clearance-evidence">' + escapeHtml(evidence) + '</div>' : '',
+            '</div>',
+          '</div>',
+          '<div class="visual-clearance-controls">',
+            '<select class="vc-state">',
+              '<option value="open"' + (state === 'open' ? ' selected' : '') + '>Open</option>',
+              '<option value="complete"' + (state === 'complete' ? ' selected' : '') + '>Complete</option>',
+              '<option value="needs_followup"' + (state === 'needs_followup' ? ' selected' : '') + '>Needs Follow-up</option>',
+              '<option value="not_applicable"' + (state === 'not_applicable' ? ' selected' : '') + '>Not Applicable</option>',
+            '</select>',
+            '<select class="vc-source">',
+              '<option value="operator_entered"' + (source === 'operator_entered' ? ' selected' : '') + '>Operator Entered</option>',
+              '<option value="deal_sheet"' + (source === 'deal_sheet' ? ' selected' : '') + '>Deal Sheet</option>',
+              '<option value="communication_log"' + (source === 'communication_log' ? ' selected' : '') + '>Communication Log</option>',
+              '<option value="ai_suggested"' + (source === 'ai_suggested' ? ' selected' : '') + '>AI Suggested</option>',
+              '<option value="system_default"' + (source === 'system_default' ? ' selected' : '') + '>System Default</option>',
+            '</select>',
+            '<input class="vc-note" value="' + escapeHtml(evidence) + '" placeholder="Evidence / note, e.g. Inspection complete per operator">',
+            '<div class="vc-contact-fields">',
+              '<input class="vc-contact-name" value="' + escapeHtml(item.office_contact_name || item.waiting_on_name || '') + '" placeholder="Recipient / contact name">',
+              '<input class="vc-contact-email" value="' + escapeHtml(item.office_contact_email || '') + '" placeholder="Recipient email">',
+              '<input class="vc-contact-phone" value="' + escapeHtml(item.office_contact_phone || '') + '" placeholder="Phone, optional">',
+            '</div>',
+            '<div class="vc-proof-grid">',
+              renderClearanceProofStatus(item),
+              '<textarea class="vc-sent-proof-note" placeholder="Sent proof note, e.g. Sent manually from Outlook at 2:15 PM">' + escapeHtml(item.email_sent_proof_note || '') + '</textarea>',
+              '<textarea class="vc-response-summary" placeholder="Response summary, e.g. Seller attorney confirmed receipt and contract prep">' + escapeHtml(item.response_summary || '') + '</textarea>',
+              '<input class="vc-response-from-name" value="' + escapeHtml(item.response_from_name || '') + '" placeholder="Response from name">',
+              '<input class="vc-response-from-email" value="' + escapeHtml(item.response_from_email || '') + '" placeholder="Response from email">',
+              '<textarea class="vc-response-body" placeholder="Paste response text here, optional">' + escapeHtml(item.response_body || '') + '</textarea>',
+              '<textarea class="vc-manager-proof-note" placeholder="Manager proof / override note, optional">' + escapeHtml(item.manager_proof_note || '') + '</textarea>',
+              '<div class="vc-proof-actions">',
+                '<button type="button" class="vc-mark-sent">Mark Sent</button>',
+                '<button type="button" class="vc-log-response">Log Response</button>',
+              '</div>',
+            '</div>',
+            '<button type="button" class="vc-save">Save</button>',
+            '<button type="button" class="vc-email">Generate Draft Email</button>',
+            '<div class="vc-email-status" aria-live="polite"></div>',
+            '<div class="visual-clearance-draft-preview">' + renderClearanceDraftPreview(item.draft_email) + '</div>',
+          '</div>',
+        '</div>'
+      ].join('');
+    }).join('');
+
+    section.innerHTML = [
+      '<div class="visual-clearance-head">',
+        '<div>',
+          '<h2>Clearance Path</h2>',
+          '<p>Hard visual status for the operator and AI. Notes are evidence; this checklist is the operational source of truth.</p>',
+        '</div>',
+        '<div class="visual-clearance-summary-actions">',
+          '<div class="visual-clearance-badge">' + completeCount + ' of ' + items.length + ' cleared / N/A</div>',
+          '<button type="button" class="visual-clearance-toggle" id="visualClearanceToggle">' + (visualClearanceExpanded ? 'Collapse' : 'Open') + '</button>',
+        '</div>',
+      '</div>',
+      '<div class="visual-clearance-list">',
+        rows || '<div class="visual-clearance-empty">No clearance items found for this file.</div>',
+      '</div>'
+    ].join('');
+
+
+    if (visualClearanceExpanded) {
+      section.classList.remove('is-collapsed');
+    } else {
+      section.classList.add('is-collapsed');
+    }
+
+    var toggle = document.getElementById('visualClearanceToggle');
+    if (toggle) {
+      toggle.addEventListener('click', function() {
+        visualClearanceExpanded = !visualClearanceExpanded;
+        if (visualClearanceExpanded) {
+          section.classList.remove('is-collapsed');
+          toggle.textContent = 'Collapse';
+        } else {
+          section.classList.add('is-collapsed');
+          toggle.textContent = 'Open';
+        }
+      });
+    }
+
+
+    section.querySelectorAll('.vc-save').forEach(function(button) {
+      button.addEventListener('click', async function() {
+        var row = button.closest('.visual-clearance-row');
+        var taskId = row.getAttribute('data-task');
+        var state = row.querySelector('.vc-state').value;
+        var source = row.querySelector('.vc-source').value;
+        var note = row.querySelector('.vc-note').value;
+
+        button.disabled = true;
+        button.textContent = 'Saving';
+
+        try {
+          var response = await fetch('./api/deals/' + encodeURIComponent(dealId) + '/clearance-controls/' + encodeURIComponent(taskId), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              control_state: state,
+              clearance_source: source,
+              clearance_evidence: note,
+              office_contact_name: row.querySelector('.vc-contact-name') ? row.querySelector('.vc-contact-name').value : '',
+              office_contact_email: row.querySelector('.vc-contact-email') ? row.querySelector('.vc-contact-email').value : '',
+              office_contact_phone: row.querySelector('.vc-contact-phone') ? row.querySelector('.vc-contact-phone').value : '',
+              waiting_on_name: row.querySelector('.vc-contact-name') ? row.querySelector('.vc-contact-name').value : '',
+              email_sent_proof_note: row.querySelector('.vc-sent-proof-note') ? row.querySelector('.vc-sent-proof-note').value : '',
+              response_from_name: row.querySelector('.vc-response-from-name') ? row.querySelector('.vc-response-from-name').value : '',
+              response_from_email: row.querySelector('.vc-response-from-email') ? row.querySelector('.vc-response-from-email').value : '',
+              response_summary: row.querySelector('.vc-response-summary') ? row.querySelector('.vc-response-summary').value : '',
+              response_body: row.querySelector('.vc-response-body') ? row.querySelector('.vc-response-body').value : '',
+              manager_proof_note: row.querySelector('.vc-manager-proof-note') ? row.querySelector('.vc-manager-proof-note').value : '',
+              updated_by: 'operator'
+            })
+          });
+
+          var data = await response.json();
+
+          if (!response.ok || !data.ok) {
+            throw new Error(data.error || 'Save failed.');
+          }
+
+          renderVisualClearancePath(section, dealId, data.clearance_items || []);
+        } catch (err) {
+          alert('Could not save clearance item: ' + err.message);
+          button.disabled = false;
+          button.textContent = 'Save';
+        }
+      });
+    });
+
+
+    section.querySelectorAll('.vc-mark-sent').forEach(function(button) {
+      button.addEventListener('click', async function() {
+        var row = button.closest('.visual-clearance-row');
+        var taskId = row ? row.getAttribute('data-task') : '';
+        if (!taskId) return alert('Could not identify this clearance item.');
+
+        var proofNote = row.querySelector('.vc-sent-proof-note');
+        if (proofNote && !String(proofNote.value || '').trim()) {
+          proofNote.value = 'Sent manually by operator.';
+        }
+
+        button.disabled = true;
+        button.textContent = 'Marking';
+
+        try {
+          var data = await postClearanceProof(dealId, taskId, collectClearanceProofPayload(row, 'mark_sent'));
+          renderVisualClearancePath(section, dealId, data.clearance_items || []);
+        } catch (err) {
+          alert('Could not mark sent: ' + err.message);
+          button.disabled = false;
+          button.textContent = 'Mark Sent';
+        }
+      });
+    });
+
+    section.querySelectorAll('.vc-log-response').forEach(function(button) {
+      button.addEventListener('click', async function() {
+        var row = button.closest('.visual-clearance-row');
+        var taskId = row ? row.getAttribute('data-task') : '';
+        if (!taskId) return alert('Could not identify this clearance item.');
+
+        var summary = row.querySelector('.vc-response-summary');
+        if (summary && !String(summary.value || '').trim()) {
+          alert('Enter a response summary first.');
+          summary.focus();
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = 'Logging';
+
+        try {
+          var data = await postClearanceProof(dealId, taskId, collectClearanceProofPayload(row, 'log_response'));
+          renderVisualClearancePath(section, dealId, data.clearance_items || []);
+        } catch (err) {
+          alert('Could not log response: ' + err.message);
+          button.disabled = false;
+          button.textContent = 'Log Response';
+        }
+      });
+    });
+
+    section.querySelectorAll('.vc-email').forEach(function(button) {
+      button.addEventListener('click', async function() {
+        var row = button.closest('.visual-clearance-row');
+        var taskId = row ? row.getAttribute('data-task') : '';
+
+        if (!taskId) {
+          showClearanceEmailStatus(row, 'Could not identify this clearance item.', 'error');
+          return;
+        }
+
+        clearClearanceEmailStatus(row);
+
+        var nameInput = row.querySelector('.vc-contact-name');
+        var emailInput = row.querySelector('.vc-contact-email');
+        var phoneInput = row.querySelector('.vc-contact-phone');
+
+        var name = nameInput ? String(nameInput.value || '').trim() : '';
+        var email = emailInput ? String(emailInput.value || '').trim() : '';
+        var phone = phoneInput ? String(phoneInput.value || '').trim() : '';
+
+        if (!email) {
+          showClearanceEmailStatus(row, 'Enter the recipient email in this clearance box, then click Generate Draft Email again.', 'error');
+          if (emailInput) emailInput.focus();
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = 'Generating';
+        showClearanceEmailStatus(row, 'Generating draft inside this clearance item...', '');
+
+        try {
+          await fetch('./api/deals/' + encodeURIComponent(dealId) + '/clearance-controls/' + encodeURIComponent(taskId), {
+            credentials: 'same-origin',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            cache: 'no-store',
+            body: JSON.stringify({
+              control_state: row.querySelector('.vc-state') ? row.querySelector('.vc-state').value : 'open',
+              clearance_source: row.querySelector('.vc-source') ? row.querySelector('.vc-source').value : 'operator_entered',
+              clearance_evidence: row.querySelector('.vc-note') ? row.querySelector('.vc-note').value : '',
+              office_contact_name: name,
+              office_contact_email: email,
+              office_contact_phone: phone,
+              waiting_on_name: name,
+              updated_by: 'operator'
+            })
+          });
+
+          var draftUrls = [
+            './api/deals/' + encodeURIComponent(dealId) + '/clearance-draft-email',
+            './api/dealdesk/deals/' + encodeURIComponent(dealId) + '/clearance-draft-email',
+            './api/deals/' + encodeURIComponent(dealId) + '/clearance-controls/' + encodeURIComponent(taskId) + '/draft-email',
+            './api/dealdesk/deals/' + encodeURIComponent(dealId) + '/clearance-controls/' + encodeURIComponent(taskId) + '/draft-email'
+          ];
+
+          var response = null;
+          var rawText = '';
+
+          for (var draftUrlIndex = 0; draftUrlIndex < draftUrls.length; draftUrlIndex++) {
+            response = await fetch(draftUrls[draftUrlIndex], {
+              credentials: 'same-origin',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              cache: 'no-store',
+              body: JSON.stringify({
+                task_public_id: taskId,
+                to_email: email,
+                to_name: name,
+                office_contact_phone: phone,
+                from_email: 'teamscher@servicedepartment.ai',
+                from_name: 'Team Scher',
+                created_by: 'operator'
+              })
+            });
+
+            rawText = await response.text();
+            if (response.status !== 404) {
+              break;
+            }
+          }
+
+          var data = null;
+          try {
+            data = rawText ? JSON.parse(rawText) : {};
+          } catch (jsonError) {
+            var cleanText = rawText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+            throw new Error('Draft Email returned HTML instead of JSON. HTTP ' + (response ? response.status : '') + '. ' + cleanText.slice(0, 180));
+          }
+
+          if (!response.ok || !data.ok) {
+            throw new Error((data && data.error) || 'Could not create draft email.');
+          }
+
+          var draft = data.draft || data.email || data.email_message || data.message || null;
+          if (draft && !draft.from_email) draft.from_email = 'teamscher@servicedepartment.ai';
+
+          var preview = row.querySelector('.visual-clearance-draft-preview');
+          if (preview) {
+            preview.innerHTML = renderClearanceDraftPreview(draft);
+          }
+
+          showClearanceEmailStatus(row, 'Draft generated. Review it inside this clearance item, then click Send Email.', '');
+
+          button.disabled = false;
+          button.textContent = 'Generate Draft Email';
+        } catch (err) {
+          showClearanceEmailStatus(row, 'Could not create draft email: ' + err.message, 'error');
+          button.disabled = false;
+          button.textContent = 'Generate Draft Email';
+        }
+      });
+    });
+
+    // DEALDESK_CLEARANCE_SEND_DELEGATION_V1
+    // Send buttons are created after the draft returns, so direct listeners miss them.
+    // Use one delegated listener on the Clearance Path section.
+    if (!section.dataset.vcSendDraftEmailDelegated) {
+      section.dataset.vcSendDraftEmailDelegated = '1';
+
+      section.addEventListener('click', async function(event) {
+        var button = event.target && event.target.closest ? event.target.closest('.vc-send-draft-email') : null;
+        if (!button || !section.contains(button)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        var row = button.closest('.visual-clearance-row');
+        var emailId = button.getAttribute('data-email-id') || '';
+        var toEmail = button.getAttribute('data-to-email') || '';
+
+        if (!row || !emailId) {
+          showClearanceEmailStatus(row, 'Could not identify the saved draft email to send.', 'error');
+          return;
+        }
+
+        var ok = confirm('Send this email now?\n\nFrom: teamscher@servicedepartment.ai\nTo: ' + (toEmail || 'recipient') + '\n\nThis will record sent proof on this clearance item.');
+        if (!ok) return;
+
+        button.disabled = true;
+        button.textContent = 'Sending';
+        showClearanceEmailStatus(row, 'Sending email from teamscher@servicedepartment.ai...', '');
+
+        try {
+          await sendClearanceDraftEmail(dealId, row, emailId, toEmail);
+          button.textContent = 'Sent';
+        } catch (err) {
+          showClearanceEmailStatus(row, 'Could not send email: ' + err.message, 'error');
+          button.disabled = false;
+          button.textContent = 'Send Email';
+        }
+      });
+    }
+
+  }
+
+
+  function collectClearanceProofPayload(row, action) {
+    return {
+      proof_action: action,
+      control_state: row.querySelector('.vc-state') ? row.querySelector('.vc-state').value : 'open',
+      clearance_source: row.querySelector('.vc-source') ? row.querySelector('.vc-source').value : 'operator_entered',
+      clearance_evidence: row.querySelector('.vc-note') ? row.querySelector('.vc-note').value : '',
+      office_contact_name: row.querySelector('.vc-contact-name') ? row.querySelector('.vc-contact-name').value : '',
+      office_contact_email: row.querySelector('.vc-contact-email') ? row.querySelector('.vc-contact-email').value : '',
+      office_contact_phone: row.querySelector('.vc-contact-phone') ? row.querySelector('.vc-contact-phone').value : '',
+      waiting_on_name: row.querySelector('.vc-contact-name') ? row.querySelector('.vc-contact-name').value : '',
+      email_sent_proof_note: row.querySelector('.vc-sent-proof-note') ? row.querySelector('.vc-sent-proof-note').value : '',
+      response_from_name: row.querySelector('.vc-response-from-name') ? row.querySelector('.vc-response-from-name').value : '',
+      response_from_email: row.querySelector('.vc-response-from-email') ? row.querySelector('.vc-response-from-email').value : '',
+      response_summary: row.querySelector('.vc-response-summary') ? row.querySelector('.vc-response-summary').value : '',
+      response_body: row.querySelector('.vc-response-body') ? row.querySelector('.vc-response-body').value : '',
+      manager_proof_note: row.querySelector('.vc-manager-proof-note') ? row.querySelector('.vc-manager-proof-note').value : '',
+      updated_by: 'operator'
+    };
+  }
+
+  async function postClearanceProof(dealId, taskId, payload) {
+    var response = await fetch('./api/deals/' + encodeURIComponent(dealId) + '/clearance-controls/' + encodeURIComponent(taskId), {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      cache: 'no-store',
+      body: JSON.stringify(payload)
+    });
+
+    var text = await response.text();
+    var data = null;
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch (err) {
+      var clean = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      throw new Error('Clearance proof route returned HTML instead of JSON. HTTP ' + response.status + '. ' + clean.slice(0, 180));
+    }
+
+    if (!response.ok || !data.ok) {
+      throw new Error((data && data.error) || 'Could not save clearance proof.');
+    }
+
+    return data;
+  }
+
+  window.reloadVisualClearancePath = loadVisualClearancePath;
+
+  window.addEventListener('load', function() {
+    setTimeout(loadVisualClearancePath, 1200);
+    setTimeout(loadVisualClearancePath, 2800);
+  });
+})();
+</script>
+
+<script id="status-clearance-gate-script">
+(function () {
+  var CLEARED = ['complete','completed','not_applicable','not applicable','na','n/a'];
+
+  function dealId() {
+    return new URLSearchParams(window.location.search).get('id') || '';
+  }
+
+  function taskText(task) {
+    return Object.values(task || {}).filter(function(v) {
+      return v !== null && v !== undefined;
+    }).join(' ').toLowerCase();
+  }
+
+  function taskState(task) {
+    return String(task.control_state || task.status || '').toLowerCase();
+  }
+
+  function isCleared(task) {
+    return CLEARED.indexOf(taskState(task)) >= 0;
+  }
+
+  function matches(task, tests) {
+    var text = taskText(task);
+    return tests.every(function(test) { return test.test(text); });
+  }
+
+  function contractOutRequired(tasks) {
+    return [
+      { label:'Seller Attorney', found:tasks.find(function(t){ return matches(t, [/seller/, /attorney/]); }) },
+      { label:'Purchaser Attorney', found:tasks.find(function(t){ return matches(t, [/(purchaser|buyer)/, /attorney/]); }) },
+      { label:'Inspection', found:tasks.find(function(t){ return matches(t, [/inspection/]); }) },
+      { label:'Seller acknowledgment', found:tasks.find(function(t){ return matches(t, [/seller/, /acknowledg/]); }) },
+      { label:'Purchaser acknowledgment', found:tasks.find(function(t){ return matches(t, [/(purchaser|buyer)/, /acknowledg/]); }) },
+      { label:'Property Condition Statement', found:tasks.find(function(t){ return matches(t, [/property/, /condition/]); }) }
+    ];
+  }
+
+  function inContractRequired(tasks) {
+    return [
+      { label:'Contract', found:tasks.find(function(t){ return matches(t, [/contract/]); }) }
+    ];
+  }
+
+  async function getClearanceTasks() {
+    var id = dealId();
+    if (!id) return [];
+
+    var urls = [
+      './api/deals/' + encodeURIComponent(id) + '/clearance-controls',
+      './api/dealdesk/deals/' + encodeURIComponent(id) + '/clearance-controls'
+    ];
+
+    for (var i = 0; i < urls.length; i++) {
+      try {
+        var response = await fetch(urls[i], {
+          headers:{ 'Accept':'application/json' },
+          cache:'no-store'
+        });
+        if (!response.ok) continue;
+
+        var data = await response.json();
+        var tasks = data.tasks || data.items || data.clearance || data.rows || [];
+        if (Array.isArray(tasks) && tasks.length) return tasks;
+      } catch (err) {}
+    }
+
+    return [];
+  }
+
+  function messageBox(form) {
+    var box = document.getElementById('statusGateMessage');
+    if (!box && form) {
+      box = document.createElement('div');
+      box.id = 'statusGateMessage';
+      box.style.margin = '0 0 12px';
+      box.style.padding = '12px 14px';
+      box.style.borderRadius = '14px';
+      box.style.border = '1px solid #fde68a';
+      box.style.background = '#fffbeb';
+      box.style.color = '#92400e';
+      box.style.fontWeight = '800';
+      box.style.lineHeight = '1.4';
+      box.style.display = 'none';
+      form.parentNode.insertBefore(box, form);
+    }
+    return box;
+  }
+
+  function showBlock(form, title, items) {
+    var box = messageBox(form);
+    if (!box) return;
+
+    box.innerHTML =
+      title + '<br>' +
+      'Clear or mark Not Applicable first:<br>- ' +
+      items.map(function(x) { return String(x); }).join('<br>- ');
+
+    box.style.display = 'block';
+    openClearancePath();
+    box.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  function hideBlock(form) {
+    var box = messageBox(form);
+    if (box) {
+      box.style.display = 'none';
+      box.innerHTML = '';
+    }
+  }
+
+  function openClearancePath() {
+    var clearance = document.getElementById('visualClearancePath') ||
+      document.querySelector('.visual-clearance-path') ||
+      document.querySelector('[data-clearance-path]');
+
+    if (!clearance) return;
+
+    clearance.classList.add('open');
+    clearance.classList.add('expanded');
+    clearance.classList.add('is-open');
+
+    clearance.querySelectorAll('details').forEach(function(detail) {
+      detail.open = true;
+    });
+
+    clearance.querySelectorAll('[hidden]').forEach(function(el) {
+      el.hidden = false;
+    });
+
+    Array.from(clearance.querySelectorAll('button, a')).forEach(function(el) {
+      var text = (el.textContent || '').toLowerCase();
+      if (/show|open|expand|details|clearance/.test(text)) {
+        try { el.click(); } catch (err) {}
+      }
+    });
+
+    setTimeout(function() {
+      clearance.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 100);
+  }
+
+  function unique(values) {
+    var seen = {};
+    return values.filter(function(value) {
+      if (!value || seen[value]) return false;
+      seen[value] = true;
+      return true;
+    });
+  }
+
+  function lockStatusOptions(select) {
+    if (!select || select.dataset.stageGateLocked === '1') return;
+
+    var current = select.value || 'Current Status';
+    select.dataset.currentStatus = current;
+
+    var values;
+
+    if (current === 'Contract Out') {
+      values = ['Contract Out', 'In Contract', 'On Hold'];
+    } else if (current === 'In Contract') {
+      values = ['In Contract', 'Closing Scheduled', 'On Hold'];
+    } else if (current === 'Closing Scheduled') {
+      values = ['Closing Scheduled', 'Closed', 'On Hold'];
+    } else if (current === 'Closed' || current === 'Final') {
+      values = [current];
+    } else {
+      values = [current, 'Contract Out', 'On Hold'];
+    }
+
+    values = unique(values);
+
+    select.innerHTML = values.map(function(value) {
+      return '<option' + (value === current ? ' selected' : '') + '>' + value + '</option>';
+    }).join('');
+
+    select.dataset.stageGateLocked = '1';
+  }
+
+  function blockersFrom(required) {
+    return required
+      .filter(function(item) { return !item.found || !isCleared(item.found); })
+      .map(function(item) { return item.label; });
+  }
+
+  function installGate() {
+    var form = document.getElementById('statusControlForm');
+    var select = document.getElementById('transaction_status_select');
+    var note = document.getElementById('status_note');
+
+    if (!form || !select || form.dataset.clearanceGateInstalled === '1') return;
+
+    lockStatusOptions(select);
+    form.dataset.clearanceGateInstalled = '1';
+
+    form.addEventListener('submit', async function(event) {
+      if (form.dataset.clearanceGatePassed === '1') return;
+
+      var selected = select.value;
+      var current = select.dataset.currentStatus || '';
+
+      hideBlock(form);
+
+      if (selected === current) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      if (selected === 'On Hold' && note && !String(note.value || '').trim()) {
+        showBlock(form, 'Cannot place file On Hold yet.', ['Status Note is required.']);
+        return;
+      }
+
+      var tasks = await getClearanceTasks();
+      var blockers = [];
+
+      if (selected === 'Contract Out') {
+        blockers = blockersFrom(contractOutRequired(tasks));
+        if (blockers.length) {
+          showBlock(form, 'Cannot update to Contract Out yet.', blockers);
+          return;
+        }
+      }
+
+      if (selected === 'In Contract') {
+        if (current !== 'Contract Out') {
+          showBlock(form, 'Cannot update to In Contract yet.', ['File must first be Contract Out.']);
+          return;
+        }
+
+        blockers = blockersFrom(inContractRequired(tasks));
+        if (blockers.length) {
+          showBlock(form, 'Cannot update to In Contract yet.', blockers);
+          return;
+        }
+      }
+
+      form.dataset.clearanceGatePassed = '1';
+      form.dispatchEvent(new Event('submit', { bubbles:true, cancelable:true }));
+      setTimeout(function() {
+        delete form.dataset.clearanceGatePassed;
+      }, 0);
+    }, true);
+  }
+
+  function schedule() {
+    setTimeout(installGate, 300);
+    setTimeout(installGate, 1000);
+    setTimeout(installGate, 2000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', schedule);
+  } else {
+    schedule();
+  }
+})();
+</script>
+<!-- DEALDESK_CLAIRE_INTEGRATION_V1 -->
+<style id="dealdesk-claire-integration-style">
+  .dd-claire-launcher {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2147483000;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: #071b2c;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 12px 32px rgba(7, 27, 44, .28);
+    border: 2px solid #14b8a6;
+  }
+  .dd-claire-launcher:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 38px rgba(7, 27, 44, .34);
+  }
+  .dd-claire-launcher span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #14b8a6;
+  }
+  @media print {
+    .dd-claire-launcher { display: none !important; }
+  }
+</style>
+<a class="dd-claire-launcher" href="./claire-dealdesk-view.html" title="Open CLAIRE Deal Desk View">
+  <span></span>
+  CLAIRE Intake Reader
+</a>
+<!-- END_DEALDESK_CLAIRE_INTEGRATION_V1 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- DEALDESK_SUPPORT_PANELS_CLEAN_V1 -->
+<script>
+(function(){
+  if (window.__dealdeskSupportPanelsCleanV1) return;
+  window.__dealdeskSupportPanelsCleanV1 = true;
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function(c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];
+    });
+  }
+
+  function value(v) {
+    if (v === null || v === undefined) return '';
+    return String(v).trim();
+  }
+
+  function first() {
+    for (var i = 0; i < arguments.length; i++) {
+      var v = value(arguments[i]);
+      if (v) return v;
+    }
+    return '';
+  }
+
+  function money(v) {
+    if (v === null || v === undefined || v === '') return '';
+    var n = Number(String(v).replace(/[^0-9.-]/g, ''));
+    if (!Number.isFinite(n)) return String(v);
+    return n.toLocaleString('en-US', { style:'currency', currency:'USD', maximumFractionDigits:0 });
+  }
+
+  function getDealId() {
+    var p = new URLSearchParams(location.search);
+    return p.get('id') || p.get('deal_id') || p.get('public_id') || '';
+  }
+
+  async function fetchJson(url) {
+    var res = await fetch(url, { headers:{ Accept:'application/json' }, cache:'no-store' });
+    var data = await res.json();
+    if (!res.ok || data.ok === false) throw new Error(data.error || ('HTTP ' + res.status));
+    return data;
+  }
+
+  async function loadDealRecord(id) {
+    try {
+      var data = await fetchJson('./api/deals/' + encodeURIComponent(id));
+      return data.record || data.deal || data;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function roleKey(p) {
+    return String((p && (p.role_key || p.role || p.roleKey || p.party_role)) || '').toLowerCase();
+  }
+
+  function findParty(record, role) {
+    var parties = record && (record.parties || record.deal_parties || record.contacts || []);
+    if (!Array.isArray(parties)) return {};
+    role = String(role || '').toLowerCase();
+
+    for (var i = 0; i < parties.length; i++) {
+      var p = parties[i] || {};
+      if (roleKey(p) === role) return p;
+    }
+
+    if (role === 'lender') {
+      for (var j = 0; j < parties.length; j++) {
+        var q = parties[j] || {};
+        var hay = [
+          q.display_name, q.name, q.full_name, q.company_name, q.broker_name,
+          q.email, q.role_key, q.role
+        ].join(' ').toLowerCase();
+
+        if (hay.indexOf('lender') !== -1 || hay.indexOf('loan') !== -1 || hay.indexOf('mortgage') !== -1 || hay.indexOf('rate') !== -1 || hay.indexOf('affinity') !== -1) {
+          return q;
+        }
+      }
+    }
+
+    return {};
+  }
+
+  function supportCard(id, title, note, bodyHtml) {
+    var section = document.createElement('section');
+    section.id = id;
+    section.className = 'dd-support-card';
+    section.innerHTML =
+      '<h2>' + esc(title) + '</h2>' +
+      (note ? '<p class="dd-support-note">' + esc(note) + '</p>' : '') +
+      bodyHtml;
+    return section;
+  }
+
+  function supportItem(title, meta, href, actionText) {
+    return '<div class="dd-support-item">' +
+      '<div class="dd-support-item-main">' +
+        '<strong class="dd-support-item-title">' + esc(title || 'Document') + '</strong>' +
+        '<span class="dd-support-item-meta">' + esc(meta || '') + '</span>' +
+      '</div>' +
+      (href ? '<a class="dd-support-action" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(actionText || 'View') + '</a>' : '') +
+    '</div>';
+  }
+
+  function supportField(label, val) {
+    val = value(val);
+    return '<div class="dd-support-field">' +
+      '<div class="dd-support-label">' + esc(label) + '</div>' +
+      '<div class="dd-support-value">' + esc(val || '—') + '</div>' +
+    '</div>';
+  }
+
+  async function buildSourceDocumentsPanel(id) {
+    var docs = [];
+    var claireResult = null;
+
+    try {
+      var data = await fetchJson('./api/claire-dealview/source-docs?deal_id=' + encodeURIComponent(id));
+      docs = data.source_documents || [];
+      claireResult = data.claire_result || null;
+    } catch (err) {}
+
+    var body = '';
+    if (docs.length) {
+      body = '<div class="dd-support-list">' + docs.map(function(d) {
+        return supportItem(d.filename || 'Source document', 'PDF source document', d.url, 'View PDF');
+      }).join('') + '</div>';
+    } else {
+      body = '<div class="dd-support-empty">No CLAIRE PDF source links found yet. Recreate the deal from the CLAIRE reader or save source documents again.</div>';
+    }
+
+    if (claireResult) {
+      var f = claireResult.dealdesk_fields || {};
+      var bits = [];
+      function list(label, arr) {
+        if (!Array.isArray(arr) || !arr.length) return;
+        bits.push('<div class="dd-support-item"><div class="dd-support-item-main"><strong class="dd-support-item-title">' + esc(label) + '</strong><span class="dd-support-item-meta">' + esc(arr.join(' | ')) + '</span></div></div>');
+      }
+      list('Notes', f.notes || claireResult.notes);
+      list('Review Flags', f.review_flags || claireResult.review_flags);
+      list('Missing Items', f.missing_items || claireResult.missing_items);
+      if (bits.length) body += '<details style="margin-top:12px;"><summary style="cursor:pointer;font-weight:900;">CLAIRE Intake Notes</summary><div class="dd-support-list" style="margin-top:10px;">' + bits.join('') + '</div></details>';
+    }
+
+    return supportCard(
+      'accepted-offer-source-documents',
+      'Accepted Offer Source Documents',
+      'Original PDFs and CLAIRE source documents preserved from intake.',
+      body
+    );
+  }
+
+  async function buildGeneratedDocumentsPanel(id) {
+    var docs = [];
+
+    try {
+      var data = await fetchJson('./api/claire-dealview/generated-docs?deal_id=' + encodeURIComponent(id));
+      docs = data.documents || [];
+    } catch (err) {}
+
+    var body = docs.length
+      ? '<div class="dd-support-list">' + docs.map(function(d) {
+          var meta = 'Status: ' + (d.email_status || 'created');
+          if (d.email_to) meta += ' | Sent to: ' + d.email_to;
+          if (d.email_subject) meta += ' | Subject: ' + d.email_subject;
+          return supportItem(d.filename || 'Generated document', meta, d.url, 'View PDF');
+        }).join('') + '</div>'
+      : '<div class="dd-support-empty">No generated/sent documents yet. This section will show the printed Deal Sheet PDF after CLAIRE creates the deal and emails it.</div>';
+
+    return supportCard(
+      'generatedSentDocumentsPanel',
+      'Generated / Sent Documents',
+      'Documents Deal Desk creates from the accepted-offer file and sends automatically.',
+      body
+    );
+  }
+
+  function buildClaireIntakePanel(id) {
+    var body = '<div class="dd-support-item">' +
+      '<div class="dd-support-item-main">' +
+        '<strong class="dd-support-item-title">CLAIRE Intake Read / Notes</strong>' +
+        '<span class="dd-support-item-meta">Full CLAIRE document read, notes, flags, missing items, and conflicts preserved from intake.</span>' +
+      '</div>' +
+      '<a class="dd-support-action" href="./claire-intake-read.html?id=' + encodeURIComponent(id) + '">View Read</a>' +
+    '</div>';
+
+    return supportCard(
+      'claire-intake-read-link-card',
+      'CLAIRE Intake Read',
+      'Full CLAIRE intake read and document notes for this accepted-offer file.',
+      body
+    );
+  }
+
+  function buildLenderPanel(record) {
+    record = record || {};
+    var deal = record.deal || record || {};
+    var f = record.financials || {};
+    var lender = findParty(record, 'lender');
+
+    var lenderName = first(lender.display_name, lender.name, lender.full_name, lender.contact_name, lender.loan_officer_name, deal.lender_name, deal.loan_officer_name);
+    var lenderCompany = first(lender.company_name, lender.broker_name, lender.lender_company, deal.lender_company, deal.lender, deal.financing_lender);
+    var lenderEmail = first(lender.email, lender.email_address, lender.loan_officer_email, deal.lender_email, deal.loan_officer_email);
+    var lenderPhone = first(lender.phone, lender.phone_number, lender.mobile, lender.loan_officer_phone, deal.lender_phone, deal.loan_officer_phone);
+    var nmls = first(lender.nmls, lender.nmls_number, deal.nmls, deal.loan_officer_nmls);
+    var mortgage = first(f.mortgage_amount, f.loan_amount, deal.mortgage_amount, deal.loan_amount);
+    var preapprovalAmount = first(deal.preapproval_amount, deal.preapproval_offer_price, f.preapproval_amount);
+    var financingStatus = first(deal.financing_status, deal.mortgage_status, deal.financing, f.financing_status);
+    var contingency = first(deal.financing_contingency_length, deal.financing_contingency, f.financing_contingency_length);
+    var expiration = first(deal.preapproval_expiration, f.preapproval_expiration);
+
+    var fields =
+      supportField('Lender / Company', lenderCompany) +
+      supportField('Loan Officer / Contact', lenderName) +
+      supportField('Email', lenderEmail) +
+      supportField('Phone', lenderPhone) +
+      supportField('NMLS', nmls) +
+      supportField('Mortgage / Loan Amount', mortgage ? money(mortgage) : '') +
+      supportField('Preapproval Amount', preapprovalAmount ? money(preapprovalAmount) : '') +
+      supportField('Financing Status', financingStatus) +
+      supportField('Financing Contingency', contingency) +
+      supportField('Preapproval Expiration', expiration);
+
+    return supportCard(
+      'lenderFinancingPanel',
+      'Lender / Financing',
+      'Loan, lender, and financing information saved to this accepted-offer file.',
+      '<div class="dd-support-fields">' + fields + '</div>'
+    );
+  }
+
+  function removeOldPanels() {
+    [
+      'dealDocumentsPanel',
+      'accepted-offer-source-documents',
+      'generatedSentDocumentsPanel',
+      'claire-intake-read-link-card',
+      'lenderFinancingPanel',
+      'dealdeskSupportPanelsStack'
+    ].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.remove();
+    });
+
+    Array.from(document.querySelectorAll('.claire-pdf-source-links-card,.claire-source-docs-card')).forEach(function(el) {
+      el.remove();
+    });
+  }
+
+  function findDangerZone() {
+    return document.querySelector('.danger-zone') || Array.from(document.querySelectorAll('section,.card')).find(function(el) {
+      return /remove accepted offer/i.test(el.textContent || '');
+    });
+  }
+
+  async function renderSupportPanels() {
+    var id = getDealId();
+    if (!id) return;
+
+    var danger = findDangerZone();
+    if (!danger || !danger.parentNode) return;
+
+    removeOldPanels();
+
+    var record = await loadDealRecord(id);
+
+    var stack = document.createElement('div');
+    stack.id = 'dealdeskSupportPanelsStack';
+    stack.className = 'dd-support-stack';
+
+    var sourcePanel = await buildSourceDocumentsPanel(id);
+    var generatedPanel = await buildGeneratedDocumentsPanel(id);
+    var clairePanel = buildClaireIntakePanel(id);
+    var lenderPanel = buildLenderPanel(record);
+
+    stack.appendChild(sourcePanel);
+    stack.appendChild(generatedPanel);
+    stack.appendChild(clairePanel);
+    stack.appendChild(lenderPanel);
+
+    danger.parentNode.insertBefore(stack, danger);
+  }
+
+  function scheduleRender() {
+    renderSupportPanels();
+    var tries = 0;
+    var timer = setInterval(function() {
+      tries += 1;
+      renderSupportPanels();
+      if (tries >= 8) clearInterval(timer);
+    }, 500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scheduleRender);
+  } else {
+    scheduleRender();
+  }
+
+  window.addEventListener('load', function() {
+    setTimeout(scheduleRender, 800);
+  });
+})();
+</script>
+<!-- END_DEALDESK_SUPPORT_PANELS_CLEAN_V1 -->
+
+</body>
+</html>

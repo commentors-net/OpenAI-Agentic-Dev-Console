@@ -47,6 +47,13 @@ async function migrate() {
                 try {
                     await conn.query(sql);
                     await conn.query('INSERT INTO dd_migrations (filename) VALUES (?)', [file]);
+                } catch (err) {
+                    if (err.errno === 1060 || err.errno === 1061 || err.code === 'ER_DUP_FIELDNAME' || err.code === 'ER_DUP_KEYNAME') {
+                        console.log(`[Warning] Migration ${file} has duplicate columns/keys but is assumed applied: ${err.message}`);
+                        await conn.query('INSERT INTO dd_migrations (filename) VALUES (?)', [file]);
+                    } else {
+                        throw err;
+                    }
                 } finally {
                     conn.release();
                 }

@@ -35,3 +35,5 @@ If the database table for the Dev Agent is missing, run the migration manually:
 ```bash
 node backend/scripts/run-migration.js
 ```
+
+End of document

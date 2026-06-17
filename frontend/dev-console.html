@@ -311,7 +311,7 @@
             setLoading(true);
 
             try {
-                const response = await fetch('/api/dev-agent/chat', {
+                const response = await fetch('api/dev-agent/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -391,7 +391,7 @@
             if (!token && !isLocal) return;
 
             try {
-                const response = await fetch('/api/dev-agent/pending', {
+                const response = await fetch('api/dev-agent/pending', {
                     headers: { 'x-dev-agent-token': token }
                 });
                 const data = await response.json();
@@ -495,7 +495,7 @@
             
             try {
                 modalApproveBtn.disabled = true;
-                const response = await fetch('/api/dev-agent/approve', {
+                const response = await fetch('api/dev-agent/approve', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -523,7 +523,7 @@
             
             try {
                 modalConfirmRejectBtn.disabled = true;
-                const response = await fetch('/api/dev-agent/reject', {
+                const response = await fetch('api/dev-agent/reject', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -27,6 +27,8 @@ load_env_file() {
                     BACKEND_PATH) TARGET_BACKEND="$value" ;;
                     FRONTEND_PATH) TARGET_FRONTEND="$value" ;;
                     PM2_NAME) PM2_NAME="$value" ;;
+                    SYS_USER) SYS_USER="$value" ;;
+                    SYS_GROUP) SYS_GROUP="$value" ;;
                 esac
             fi
         done < "$env_file"
@@ -59,12 +61,20 @@ if [ ! -z "$EXISTING_ENV" ]; then
         TARGET_FRONTEND=${TARGET_FRONTEND:-/home/servicedepartmen/public_html/dealdesk-2}
         PM2_NAME=${PM2_NAME:-$(basename "$TARGET_BACKEND")}
         SERVER_PORT=${SERVER_PORT:-3017}
+        
+        # Load user/group defaults in update mode if not in env
+        DEFAULT_USER=$(logname 2>/dev/null || echo $SUDO_USER || whoami)
+        DEFAULT_GROUP=$(id -gn "$DEFAULT_USER" 2>/dev/null || echo "$DEFAULT_USER")
+        SYS_USER=${SYS_USER:-$DEFAULT_USER}
+        SYS_GROUP=${SYS_GROUP:-$DEFAULT_GROUP}
+
         echo "Loaded existing configuration:"
         echo "  Backend Path:  $TARGET_BACKEND"
         echo "  Frontend Path: $TARGET_FRONTEND"
         echo "  Database Name: $DB_NAME"
         echo "  Server Port:   $SERVER_PORT"
         echo "  PM2 Name:      $PM2_NAME"
+        echo "  System Owner:  $SYS_USER:$SYS_GROUP"
         echo ""
     fi
 fi
@@ -90,6 +100,17 @@ if [ "$IS_UPDATE" = false ]; then
     read -p "Database Name: " DB_NAME
     read -p "Database User: " DB_USER
     read -s -p "Database Password: " DB_PASSWORD
+    echo ""
+
+    # Gather System User & Group
+    DEFAULT_USER=$(logname 2>/dev/null || echo $SUDO_USER || whoami)
+    DEFAULT_GROUP=$(id -gn "$DEFAULT_USER" 2>/dev/null || echo "$DEFAULT_USER")
+
+    read -p "System Owner User [$DEFAULT_USER]: " SYS_USER
+    SYS_USER=${SYS_USER:-$DEFAULT_USER}
+
+    read -p "System Owner Group [$DEFAULT_GROUP]: " SYS_GROUP
+    SYS_GROUP=${SYS_GROUP:-$DEFAULT_GROUP}
     echo ""
 fi
 
@@ -120,6 +141,8 @@ DB_PASSWORD=$DB_PASSWORD
 DB_NAME=$DB_NAME
 BACKEND_PATH=$TARGET_BACKEND
 FRONTEND_PATH=$TARGET_FRONTEND
+SYS_USER=$SYS_USER
+SYS_GROUP=$SYS_GROUP
 EOF
 fi
 
@@ -165,10 +188,13 @@ else
     exit 1
 fi
 
-# 7. Setup Frontend
+# 7. Setup Frontend (Only deploy the Developer Console and Apache configuration)
 echo "Setting up frontend at $TARGET_FRONTEND..."
 mkdir -p "$TARGET_FRONTEND"
-cp -r ../frontend/* "$TARGET_FRONTEND/"
+cp "../frontend/dev-console.html" "$TARGET_FRONTEND/"
+cp "../frontend/dev-console.html" "$TARGET_FRONTEND/index.html"
+cp "../frontend/dealdesk-ui-lock.css" "$TARGET_FRONTEND/"
+cp "../frontend/.htaccess" "$TARGET_FRONTEND/"
 
 # 8. Start/Restart Process
 echo "Launching via PM2..."
@@ -176,6 +202,16 @@ if pm2 describe "$PM2_NAME" > /dev/null 2>&1; then
     pm2 restart "$PM2_NAME" --update-env
 else
     pm2 start server.js --name "$PM2_NAME"
+fi
+
+# 9. Set Ownership
+if [ "$EUID" -eq 0 ]; then
+    echo "Setting ownership of files to $SYS_USER:$SYS_GROUP..."
+    chown -R "$SYS_USER":"$SYS_GROUP" "$TARGET_BACKEND"
+    chown -R "$SYS_USER":"$SYS_GROUP" "$TARGET_FRONTEND"
+else
+    echo "WARNING: Running as non-root. Skipping 'chown' operation."
+    echo "If you encounter permission errors, run the installer with sudo."
 fi
 
 echo "==============================================="

@@ -602,7 +602,7 @@ const DEV_AGENT_INSTRUCTIONS = `You are the Deal Desk Dev Agent Bridge (v3).
 Your role is to help the developer interrogate the live application state, modify files securely, and manage/create sibling applications in the workspace context.
 
 RULES:
-- You can read, search, write, modify, and delete files within Deal Desk, sibling backend devapps, and sibling public_html directories.
+- You are fully authorized to read, search, write, modify, and delete files and directories anywhere within the user's home folder path (/home/servicedepartmen/) which acts as your sandboxed workspace. This includes Deal Desk, sibling backend devapps, and sibling public_html directories.
 - You can execute whitelisted development commands (such as npm build/test, git diff/status, node check, or pm2 commands) using run_command.
 - You can pass a 'cwd' parameter to run_command to execute commands in sibling app directories.
 - Always use the provided tools to gather information before answering or writing files.
@@ -2816,7 +2816,6 @@ async function logDevAgentAudit(data) {
 
 function validateProposedJsSyntax(name, args) {
   const fs = require('fs');
-  const path = require('path');
   const vm = require('vm');
 
   const filePath = args.file_path || '';
@@ -2825,12 +2824,10 @@ function validateProposedJsSyntax(name, args) {
   if (!isJs && !isJson) return;
 
   let contentToValidate = '';
-  const ROOT_DIR = path.resolve(__dirname, '..');
-  const resolvedPath = path.isAbsolute(filePath)
-    ? path.resolve(filePath)
-    : path.resolve(ROOT_DIR, filePath);
-
-  if (!resolvedPath.startsWith(ROOT_DIR)) {
+  let resolvedPath;
+  try {
+    resolvedPath = devAgentTools.getSafePath(filePath);
+  } catch (err) {
     throw new Error(`Access Denied: Path '${filePath}' is outside the project workspace.`);
   }
 

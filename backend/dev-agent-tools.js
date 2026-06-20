@@ -31,10 +31,62 @@ function redact(text) {
     return redacted;
 }
 
-const ROOT_DIR = path.resolve(__dirname, '..');
-const parentDir = path.resolve(ROOT_DIR, '..');
+const os = require('os');
+
+const ROOT_DIR = fs.existsSync(path.resolve(__dirname, '..'))
+    ? fs.realpathSync(path.resolve(__dirname, '..'))
+    : path.resolve(__dirname, '..');
+
+// We resolve the primary parentDir (user home directory / parent of ROOT_DIR)
+const parentDir = fs.existsSync(path.resolve(ROOT_DIR, '..'))
+    ? fs.realpathSync(path.resolve(ROOT_DIR, '..'))
+    : path.resolve(ROOT_DIR, '..');
+
 const DEVAPPS_DIR = path.resolve(parentDir, 'devapps');
 const PUBLIC_HTML_DIR = path.resolve(parentDir, 'public_html');
+
+// We define our whitelisted parent directories (the authorized sandboxes)
+const SAFE_PARENTS = [];
+
+// 1. The primary parent directory
+SAFE_PARENTS.push(parentDir);
+
+// 2. The OS-detected home directory
+try {
+    const home = os.homedir();
+    if (home) {
+        SAFE_PARENTS.push(fs.existsSync(home) ? fs.realpathSync(home) : home);
+    }
+} catch (e) {
+    // Ignore
+}
+
+// 3. The default home directory on Linux
+const defaultHome = '/home/servicedepartmen';
+if (fs.existsSync(defaultHome)) {
+    try {
+        SAFE_PARENTS.push(fs.realpathSync(defaultHome));
+    } catch (e) {
+        SAFE_PARENTS.push(defaultHome);
+    }
+} else {
+    SAFE_PARENTS.push(defaultHome);
+}
+
+// Remove duplicates and normalize
+const whitelistedParents = Array.from(new Set(SAFE_PARENTS.map(p => path.resolve(p))));
+
+/**
+ * Checks if two paths point to the same file or directory.
+ */
+function isSamePath(pathA, pathB) {
+    if (!pathA || !pathB) return false;
+    try {
+        return fs.realpathSync(pathA) === fs.realpathSync(pathB);
+    } catch (e) {
+        return path.resolve(pathA) === path.resolve(pathB);
+    }
+}
 
 /**
  * Resolves a given path relative to the project root and checks if it's safe (sandboxed).
@@ -49,16 +101,51 @@ function getSafePath(inputPath) {
         ? path.resolve(inputPath) 
         : path.resolve(ROOT_DIR, inputPath);
         
-    // Check if it's within whitelisted sandboxes (Deal Desk, devapps, public_html)
-    const allowedRoots = [ROOT_DIR, DEVAPPS_DIR, PUBLIC_HTML_DIR];
-    const isAllowed = allowedRoots.some(root => resolvedPath.startsWith(root));
-    
-    if (!isAllowed) {
+    // Resolve symlinks for resolvedPath
+    let realResolvedPath = resolvedPath;
+    try {
+        realResolvedPath = fs.realpathSync(resolvedPath);
+    } catch (e) {
+        // If the file/dir doesn't exist, resolve closest existing parent
+        let tempPath = resolvedPath;
+        while (tempPath && tempPath !== path.dirname(tempPath)) {
+            try {
+                const realParentOfTemp = fs.realpathSync(path.dirname(tempPath));
+                realResolvedPath = path.join(realParentOfTemp, path.basename(tempPath));
+                break;
+            } catch (err) {
+                tempPath = path.dirname(tempPath);
+            }
+        }
+    }
+
+    // Verify if realResolvedPath is inside at least one of the whitelisted parents
+    let isSafe = false;
+    let matchedRelative = '';
+
+    for (const parent of whitelistedParents) {
+        let realParent = parent;
+        try {
+            realParent = fs.realpathSync(parent);
+        } catch (e) {
+            // Ignore
+        }
+
+        const relative = path.relative(realParent, realResolvedPath);
+        const inside = relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
+        if (inside) {
+            isSafe = true;
+            matchedRelative = relative;
+            break;
+        }
+    }
+
+    if (!isSafe) {
         throw new Error(`Access Denied: Path '${inputPath}' is outside authorized workspaces.`);
     }
-    
+
     // Prevent modification of Git files/folders
-    const relativeParts = path.relative(parentDir, resolvedPath).split(path.sep);
+    const relativeParts = matchedRelative.split(path.sep);
     if (relativeParts.includes('.git')) {
         throw new Error(`Access Denied: Cannot access Git files.`);
     }
@@ -68,7 +155,7 @@ function getSafePath(inputPath) {
         throw new Error(`Access Denied: Cannot access node_modules.`);
     }
 
-    return resolvedPath;
+    return realResolvedPath;
 }
 
 /**
@@ -586,17 +673,17 @@ async function delete_path(args) {
 
     // Safety checks:
     // 1. Cannot delete ROOT_DIR (Deal Desk root), backend folder, or Deal Desk frontend
-    if (safePath === ROOT_DIR || safePath === path.join(ROOT_DIR, 'backend')) {
+    if (isSamePath(safePath, ROOT_DIR) || isSamePath(safePath, path.join(ROOT_DIR, 'backend'))) {
         throw new Error("Access Denied: Cannot delete the primary application backend directory.");
     }
     
     const frontendPath = path.resolve(ROOT_DIR, '..', 'frontend');
-    if (safePath === frontendPath) {
+    if (isSamePath(safePath, frontendPath)) {
         throw new Error("Access Denied: Cannot delete the primary application frontend directory.");
     }
 
     // 2. Cannot delete the base devapps or public_html directories themselves
-    if (safePath === DEVAPPS_DIR || safePath === PUBLIC_HTML_DIR) {
+    if (isSamePath(safePath, DEVAPPS_DIR) || isSamePath(safePath, PUBLIC_HTML_DIR)) {
         throw new Error("Access Denied: Cannot delete the root application hosting directories.");
     }
 
@@ -666,7 +753,8 @@ module.exports = {
     get_dashboard_snapshot,
     list_directory,
     delete_path,
-    check_port
+    check_port,
+    getSafePath
 };
 
 

@@ -628,7 +628,7 @@ const DEV_AGENT_TOOLS = [
         type: 'object',
         properties: {
           file_key: { type: 'string', enum: ['index.html', 'dashboard.html', 'detail.html', 'input.html', 'contacts.html', 'print.html', 'server.js', '.htaccess'] },
-          file_path: { type: 'string', description: 'Relative path in the workspace, e.g., backend/server.js' },
+          file_path: { type: 'string', description: 'Relative or absolute path in the workspace, e.g. "backend/server.js" or "/home/servicedepartmen/devapps/app/server.js"' },
           start_line: { type: 'integer' },
           end_line: { type: 'integer' }
         }
@@ -644,7 +644,7 @@ const DEV_AGENT_TOOLS = [
         type: 'object',
         properties: {
           file_key: { type: 'string', enum: ['index.html', 'dashboard.html', 'detail.html', 'input.html', 'contacts.html', 'print.html', 'server.js', '.htaccess'] },
-          file_path: { type: 'string', description: 'Relative path in the workspace' },
+          file_path: { type: 'string', description: 'Relative or absolute path in the workspace' },
           pattern: { type: 'string' }
         },
         required: ['pattern']
@@ -659,7 +659,7 @@ const DEV_AGENT_TOOLS = [
       parameters: {
         type: 'object',
         properties: {
-          file_path: { type: 'string', description: 'Relative or absolute path in the workspace.' },
+          file_path: { type: 'string', description: 'Relative or absolute path in the workspace, e.g. "/home/servicedepartmen/devapps/app/index.js".' },
           content: { type: 'string', description: 'Complete content to write to the file.' }
         },
         required: ['file_path', 'content']
@@ -674,7 +674,7 @@ const DEV_AGENT_TOOLS = [
       parameters: {
         type: 'object',
         properties: {
-          file_path: { type: 'string', description: 'Relative or absolute path in the workspace.' },
+          file_path: { type: 'string', description: 'Relative or absolute path in the workspace, e.g. "/home/servicedepartmen/devapps/app/index.js".' },
           target_content: { type: 'string', description: 'The exact substring to replace.' },
           replacement_content: { type: 'string', description: 'The content to replace target_content with.' }
         },
@@ -771,7 +771,7 @@ const DEV_AGENT_TOOLS = [
       parameters: {
         type: 'object',
         properties: {
-          dir_path: { type: 'string', description: 'Relative path in the workspace, e.g. "backend" or "backend/sql". Defaults to root ".".' }
+          dir_path: { type: 'string', description: 'Relative or absolute folder path in the workspace. Use "/home/servicedepartmen" or ".." to list the home directory. Defaults to ".".' }
         }
       }
     }
@@ -784,7 +784,7 @@ const DEV_AGENT_TOOLS = [
       parameters: {
         type: 'object',
         properties: {
-          path_to_delete: { type: 'string', description: 'Relative or absolute directory/file path to delete, e.g., "../devapps/hr-system".' }
+          path_to_delete: { type: 'string', description: 'Relative or absolute directory/file path to delete, e.g., "/home/servicedepartmen/devapps/hr-system".' }
         },
         required: ['path_to_delete']
       }

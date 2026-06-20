@@ -170,7 +170,12 @@ describe('Dev Agent Tools Unit Tests', () => {
 
     describe('Port Checker Tool', () => {
         it('should detect a free port', async () => {
-            const port = 49152 + Math.floor(Math.random() * 1000);
+            const net = require('net');
+            const tempServer = net.createServer();
+            await new Promise((resolve) => tempServer.listen(0, '127.0.0.1', resolve));
+            const port = tempServer.address().port;
+            await new Promise((resolve) => tempServer.close(resolve));
+
             const resultStr = await tools.check_port({ port });
             const result = JSON.parse(resultStr);
             expect(result.port).toBe(port);

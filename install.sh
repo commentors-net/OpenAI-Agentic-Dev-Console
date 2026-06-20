@@ -30,6 +30,8 @@ load_env_file() {
                     SYS_USER) SYS_USER="$value" ;;
                     SYS_GROUP) SYS_GROUP="$value" ;;
                     AUTH_USER_FILE) AUTH_USER_FILE="$value" ;;
+                    OPENAI_API_KEY) OPENAI_API_KEY="$value" ;;
+                    DEALDESK_DEV_AGENT_TOKEN) DEALDESK_DEV_AGENT_TOKEN="$value" ;;
                 esac
             fi
         done < "$env_file"
@@ -118,6 +120,18 @@ if [ "$IS_UPDATE" = false ]; then
     read -p "AuthUserFile Path [/home/servicedepartmen/.dealdesk_htpasswd]: " AUTH_USER_FILE
     AUTH_USER_FILE=${AUTH_USER_FILE:-/home/servicedepartmen/.dealdesk_htpasswd}
     echo ""
+
+    read -s -p "OpenAI API Key (sk-...): " OPENAI_API_KEY
+    echo ""
+
+    read -p "Dev Agent Token [generate random]: " DEV_AGENT_TOKEN_INPUT
+    if [ -z "$DEV_AGENT_TOKEN_INPUT" ]; then
+        DEALDESK_DEV_AGENT_TOKEN=$(node -e "console.log(require('crypto').randomBytes(24).toString('hex'))")
+        echo "Generated Dev Agent Token: $DEALDESK_DEV_AGENT_TOKEN"
+    else
+        DEALDESK_DEV_AGENT_TOKEN="$DEV_AGENT_TOKEN_INPUT"
+    fi
+    echo ""
 fi
 
 # 2. Setup Directory and Clone Code
@@ -136,6 +150,17 @@ fi
 # 3. Create/Update .env file
 if [ "$IS_UPDATE" = true ] && [ -f "backend/.env" ]; then
     echo "Preserving existing backend/.env configuration..."
+    # Ensure keys are present in preserved file
+    if ! grep -q "OPENAI_API_KEY" "backend/.env"; then
+        read -s -p "OpenAI API Key (sk-...): " OPENAI_API_KEY
+        echo ""
+        echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> backend/.env
+    fi
+    if ! grep -q "DEALDESK_DEV_AGENT_TOKEN" "backend/.env"; then
+        DEALDESK_DEV_AGENT_TOKEN=$(node -e "console.log(require('crypto').randomBytes(24).toString('hex'))")
+        echo "DEALDESK_DEV_AGENT_TOKEN=$DEALDESK_DEV_AGENT_TOKEN" >> backend/.env
+        echo "Generated and appended DEALDESK_DEV_AGENT_TOKEN"
+    fi
 else
     echo "Configuring .env file..."
     cat <<EOF > backend/.env
@@ -150,6 +175,8 @@ FRONTEND_PATH=$TARGET_FRONTEND
 SYS_USER=$SYS_USER
 SYS_GROUP=$SYS_GROUP
 AUTH_USER_FILE=$AUTH_USER_FILE
+OPENAI_API_KEY=$OPENAI_API_KEY
+DEALDESK_DEV_AGENT_TOKEN=$DEALDESK_DEV_AGENT_TOKEN
 EOF
 fi
 

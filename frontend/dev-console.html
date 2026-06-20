@@ -234,13 +234,25 @@
             <p class="dashboard-lead" style="font-size: 14px; margin:0; color:#64748b;">Interrogate live application state and modify workspace files securely under human supervision.</p>
         </div>
 
-        <div class="chat-container">
-            <div class="chat-messages" id="chat-messages">
-                <div class="message agent">Hello! I am your Dev Agent. How can I help you build or inspect the application today?</div>
+        <div style="display: flex; gap: 20px; flex: 1; overflow: hidden;">
+            <div class="chat-container" style="flex: 2; display: flex; flex-direction: column;">
+                <div class="chat-messages" id="chat-messages" style="flex: 1; overflow-y: auto;">
+                    <div class="message agent">Hello! I am your Dev Agent. How can I help you build or inspect the application today?</div>
+                </div>
+                <div class="chat-input-area">
+                    <textarea id="prompt" rows="1" placeholder="Ask a development question... (e.g., 'Check git status' or 'Write a test file')" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendMessage(); }"></textarea>
+                    <button id="send-btn" onclick="sendMessage()">Send</button>
+                </div>
             </div>
-            <div class="chat-input-area">
-                <textarea id="prompt" rows="1" placeholder="Ask a development question... (e.g., 'Check git status' or 'Write a test file')" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); sendMessage(); }"></textarea>
-                <button id="send-btn" onclick="sendMessage()">Send</button>
+
+            <div style="flex: 1; background: var(--chat-bg); border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow: hidden;">
+                <div style="background: #f1f5f9; padding: 14px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); letter-spacing: 0.05em;">Live Audit Log</h3>
+                    <button onclick="loadAuditLogs()" style="background: var(--accent-color); color: white; padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 6px; border: none; cursor: pointer;">Refresh</button>
+                </div>
+                <div id="audit-logs" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
+                    <div style="color: var(--text-dim); text-align: center; padding-top: 40px; font-size: 13px;">Initializing audit log...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -294,6 +306,125 @@
 
         let history = [];
 
+        async function loadAuditLogs() {
+            const token = tokenInput.value.trim();
+            const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            if (!token && !isLocal) return;
+
+            try {
+                const response = await fetch('api/dev-agent/audit', {
+                    headers: { 'x-dev-agent-token': token }
+                });
+                const data = await response.json();
+                if (data.ok && data.audit) {
+                    renderAuditLogs(data.audit);
+                }
+            } catch (err) {
+                console.error('Failed to load audit logs:', err);
+            }
+        }
+
+        function renderAuditLogs(auditList) {
+            const container = document.getElementById('audit-logs');
+            container.innerHTML = '';
+            if (auditList.length === 0) {
+                container.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding-top: 40px; font-size: 13px;">No audit logs found.</div>';
+                return;
+            }
+
+            auditList.forEach(log => {
+                const div = document.createElement('div');
+                div.style.background = '#f8fafc';
+                div.style.border = '1px solid #e2e8f0';
+                div.style.borderRadius = '8px';
+                div.style.padding = '12px';
+                div.style.display = 'flex';
+                div.style.flexDirection = 'column';
+                div.style.gap = '8px';
+                div.style.boxShadow = '0 1px 3px rgba(0,0,0,0.02)';
+
+                const header = document.createElement('div');
+                header.style.display = 'flex';
+                header.style.justifyContent = 'space-between';
+                header.style.alignItems = 'center';
+
+                const toolBadge = document.createElement('span');
+                toolBadge.textContent = log.tool_name;
+                toolBadge.style.fontFamily = 'monospace';
+                toolBadge.style.fontSize = '11px';
+                toolBadge.style.fontWeight = '700';
+                toolBadge.style.padding = '3px 8px';
+                toolBadge.style.borderRadius = '4px';
+                
+                if (log.allowed) {
+                    toolBadge.style.background = '#d1fae5';
+                    toolBadge.style.color = '#065f46';
+                } else {
+                    toolBadge.style.background = '#fee2e2';
+                    toolBadge.style.color = '#991b1b';
+                }
+
+                const time = document.createElement('span');
+                time.textContent = new Date(log.created_at).toLocaleTimeString();
+                time.style.fontSize = '11px';
+                time.style.color = 'var(--text-dim)';
+
+                header.appendChild(toolBadge);
+                header.appendChild(time);
+                div.appendChild(header);
+
+                if (log.user_prompt) {
+                    const prompt = document.createElement('div');
+                    prompt.style.fontSize = '12px';
+                    prompt.style.color = 'var(--text-main)';
+                    prompt.style.fontStyle = 'italic';
+                    prompt.innerHTML = `<strong>Prompt:</strong> ${escapeHtml(log.user_prompt)}`;
+                    div.appendChild(prompt);
+                }
+
+                if (log.tool_args_json) {
+                    const args = document.createElement('div');
+                    args.style.fontSize = '11px';
+                    args.style.fontFamily = 'monospace';
+                    args.style.color = '#475569';
+                    args.style.background = '#e2e8f0';
+                    args.style.padding = '6px';
+                    args.style.borderRadius = '4px';
+                    args.style.whiteSpace = 'pre-wrap';
+                    args.style.wordBreak = 'break-all';
+                    args.textContent = `Args: ${log.tool_args_json}`;
+                    div.appendChild(args);
+                }
+
+                if (!log.allowed && log.blocked_reason) {
+                    const blocked = document.createElement('div');
+                    blocked.style.fontSize = '12px';
+                    blocked.style.color = '#ef4444';
+                    blocked.style.background = 'rgba(239, 68, 68, 0.05)';
+                    blocked.style.padding = '6px';
+                    blocked.style.borderRadius = '4px';
+                    blocked.style.border = '1px solid rgba(239, 68, 68, 0.15)';
+                    blocked.innerHTML = `<strong>Error/Blocked:</strong> ${escapeHtml(log.blocked_reason)}`;
+                    div.appendChild(blocked);
+                } else if (log.tool_result_preview) {
+                    const preview = document.createElement('div');
+                    preview.style.fontSize = '11px';
+                    preview.style.fontFamily = 'monospace';
+                    preview.style.color = '#0f766e';
+                    preview.style.background = '#f0fdfa';
+                    preview.style.padding = '6px';
+                    preview.style.borderRadius = '4px';
+                    preview.style.whiteSpace = 'pre-wrap';
+                    preview.style.maxHeight = '100px';
+                    preview.style.overflowY = 'auto';
+                    preview.textContent = `Result: ${log.tool_result_preview}`;
+                    div.appendChild(preview);
+                }
+
+                container.appendChild(div);
+            });
+        }
+
         async function sendMessage() {
             const prompt = promptInput.value.trim();
             const token = tokenInput.value.trim();
@@ -328,6 +459,7 @@
                     history.push({ role: 'user', content: prompt });
                     history.push({ role: 'assistant', content: data.answer });
                     if (history.length > 10) history = history.slice(-10);
+                    loadAuditLogs(); // Refresh logs after reply
                 } else {
                     appendMessage('agent', 'Error: ' + (data.error || 'Unknown error occurred.'));
                 }
@@ -405,6 +537,8 @@
 
         // Start polling loop
         setInterval(pollPendingActions, 2000);
+        setInterval(loadAuditLogs, 5000);
+
 
         function showApprovalModal(action) {
             isPolling = false; // Pause polling while modal is open
@@ -458,6 +592,12 @@
                 modalTargetPath.style.display = 'none';
                 modalContentLabel.textContent = 'Command Line';
                 modalDiffContainer.textContent = action.details.command;
+            } else if (action.type === 'delete_path') {
+                modalTargetLabel.style.display = 'block';
+                modalTargetPath.style.display = 'block';
+                modalTargetPath.textContent = action.details.path_to_delete;
+                modalContentLabel.textContent = 'Action Description';
+                modalDiffContainer.innerHTML = '<span style="color:#ef4444; font-weight:bold;">⚠️ WARNING: This will permanently delete this directory/file and all its contents recursively.</span>';
             }
 
             approvalModal.style.display = 'flex';
@@ -506,6 +646,7 @@
                 const data = await response.json();
                 if (data.ok) {
                     closeModal();
+                    loadAuditLogs();
                 } else {
                     alert('Error: ' + data.error);
                 }
@@ -534,6 +675,7 @@
                 const data = await response.json();
                 if (data.ok) {
                     closeModal();
+                    loadAuditLogs();
                 } else {
                     alert('Error: ' + data.error);
                 }
@@ -559,9 +701,11 @@
         // Initialize from localStorage if token exists
         if (localStorage.getItem('dd_dev_token')) {
             tokenInput.value = localStorage.getItem('dd_dev_token');
+            loadAuditLogs();
         }
         tokenInput.addEventListener('change', () => {
             localStorage.setItem('dd_dev_token', tokenInput.value);
+            loadAuditLogs();
         });
     </script>
 </body>

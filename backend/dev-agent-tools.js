@@ -32,6 +32,9 @@ function redact(text) {
 }
 
 const ROOT_DIR = path.resolve(__dirname, '..');
+const parentDir = path.resolve(ROOT_DIR, '..');
+const DEVAPPS_DIR = path.resolve(parentDir, 'devapps');
+const PUBLIC_HTML_DIR = path.resolve(parentDir, 'public_html');
 
 /**
  * Resolves a given path relative to the project root and checks if it's safe (sandboxed).
@@ -46,19 +49,22 @@ function getSafePath(inputPath) {
         ? path.resolve(inputPath) 
         : path.resolve(ROOT_DIR, inputPath);
         
-    // Check if it's within the sandbox (ROOT_DIR)
-    if (!resolvedPath.startsWith(ROOT_DIR)) {
-        throw new Error(`Access Denied: Path '${inputPath}' is outside the project workspace.`);
+    // Check if it's within whitelisted sandboxes (Deal Desk, devapps, public_html)
+    const allowedRoots = [ROOT_DIR, DEVAPPS_DIR, PUBLIC_HTML_DIR];
+    const isAllowed = allowedRoots.some(root => resolvedPath.startsWith(root));
+    
+    if (!isAllowed) {
+        throw new Error(`Access Denied: Path '${inputPath}' is outside authorized workspaces.`);
     }
     
     // Prevent modification of Git files/folders
-    const relative = path.relative(ROOT_DIR, resolvedPath);
-    if (relative.startsWith('.git') || relative.split(path.sep).includes('.git')) {
+    const relativeParts = path.relative(parentDir, resolvedPath).split(path.sep);
+    if (relativeParts.includes('.git')) {
         throw new Error(`Access Denied: Cannot access Git files.`);
     }
     
     // Prevent modification of node_modules
-    if (relative.split(path.sep).includes('node_modules')) {
+    if (relativeParts.includes('node_modules')) {
         throw new Error(`Access Denied: Cannot access node_modules.`);
     }
 
@@ -229,10 +235,10 @@ function validateCommand(command) {
     const tokens = trimmed.split(/\s+/);
     const baseCmd = tokens[0];
 
-    // Whitelist of allowed base commands
-    const allowedCommands = ['git', 'npm', 'node'];
+    // Whitelist of allowed base commands (extended for PM2 in V3)
+    const allowedCommands = ['git', 'npm', 'node', 'pm2'];
     if (!allowedCommands.includes(baseCmd)) {
-        throw new Error(`Access Denied: Command '${baseCmd}' is not whitelisted. Only git, npm, and node are allowed.`);
+        throw new Error(`Access Denied: Command '${baseCmd}' is not whitelisted. Only git, npm, node, and pm2 are allowed.`);
     }
 
     // Whitelist of allowed subcommands
@@ -269,6 +275,18 @@ function validateCommand(command) {
         } else {
             throw new Error(`Access Denied: 'node ${arg || ""}' is not allowed. Only 'node --check' and 'node scripts/run-migration.js' are allowed.`);
         }
+    } else if (baseCmd === 'pm2') {
+        const allowedPm2Sub = ['status', 'list', 'start', 'restart', 'stop', 'delete', 'describe', 'logs'];
+        const sub = tokens[1];
+        if (!sub || !allowedPm2Sub.includes(sub)) {
+            throw new Error(`Access Denied: 'pm2 ${sub || ""}' is not allowed. Whitelisted pm2 subcommands: ${allowedPm2Sub.join(', ')}.`);
+        }
+        if (sub === 'start') {
+            const script = tokens[2];
+            if (script && !script.endsWith('.js') && !script.endsWith('.json')) {
+                throw new Error(`Access Denied: Only JS files or ecosystem config files can be launched via PM2.`);
+            }
+        }
     }
 
     return trimmed;
@@ -278,12 +296,17 @@ function validateCommand(command) {
  * Tool: run_command
  */
 async function run_command(args) {
-    const { command } = args;
+    const { command, cwd } = args;
     const validatedCmd = validateCommand(command);
+
+    let execCwd = ROOT_DIR;
+    if (cwd) {
+        execCwd = getSafePath(cwd);
+    }
 
     return new Promise((resolve) => {
         // Execute with a timeout of 15 seconds
-        exec(validatedCmd, { cwd: ROOT_DIR, timeout: 15000 }, (error, stdout, stderr) => {
+        exec(validatedCmd, { cwd: execCwd, timeout: 15000 }, (error, stdout, stderr) => {
             let output = '';
             if (stdout) output += stdout;
             if (stderr) output += `\nStderr:\n${stderr}`;
@@ -456,6 +479,92 @@ async function get_dashboard_snapshot(args, pool) {
     }, null, 2);
 }
 
+/**
+ * Tool: list_directory
+ */
+async function list_directory(args) {
+    const { dir_path = '.' } = args;
+    const safePath = getSafePath(dir_path);
+    
+    if (!fs.existsSync(safePath)) {
+        throw new Error(`Directory not found: ${dir_path}`);
+    }
+    
+    const stats = fs.statSync(safePath);
+    if (!stats.isDirectory()) {
+        throw new Error(`Path is not a directory: ${dir_path}`);
+    }
+    
+    const entries = fs.readdirSync(safePath, { withFileTypes: true });
+    const list = entries
+        .filter(entry => {
+            const name = entry.name;
+            return name !== 'node_modules' && name !== '.git';
+        })
+        .map(entry => {
+            const entryPath = path.join(safePath, entry.name);
+            let size = null;
+            if (entry.isFile()) {
+                try {
+                    size = fs.statSync(entryPath).size;
+                } catch (e) {
+                    // Ignore errors during stat
+                }
+            }
+            return {
+                name: entry.name,
+                is_directory: entry.isDirectory(),
+                is_file: entry.isFile(),
+                size
+            };
+        });
+        
+    return JSON.stringify(list, null, 2);
+}
+
+/**
+ * Tool: delete_path
+ */
+async function delete_path(args) {
+    const { path_to_delete } = args;
+    if (!path_to_delete) {
+        throw new Error("Missing parameter: 'path_to_delete' is required.");
+    }
+
+    const safePath = getSafePath(path_to_delete);
+
+    // Safety checks:
+    // 1. Cannot delete ROOT_DIR (Deal Desk root), backend folder, or Deal Desk frontend
+    if (safePath === ROOT_DIR || safePath === path.join(ROOT_DIR, 'backend')) {
+        throw new Error("Access Denied: Cannot delete the primary application backend directory.");
+    }
+    
+    const frontendPath = path.resolve(ROOT_DIR, '..', 'frontend');
+    if (safePath === frontendPath) {
+        throw new Error("Access Denied: Cannot delete the primary application frontend directory.");
+    }
+
+    // 2. Cannot delete the base devapps or public_html directories themselves
+    if (safePath === DEVAPPS_DIR || safePath === PUBLIC_HTML_DIR) {
+        throw new Error("Access Denied: Cannot delete the root application hosting directories.");
+    }
+
+    // Ensure it exists (checked after safety matches)
+    if (!fs.existsSync(safePath)) {
+        throw new Error(`Path not found: ${path_to_delete}`);
+    }
+
+    // Perform removal recursively
+    const stats = fs.statSync(safePath);
+    if (stats.isDirectory()) {
+        fs.rmSync(safePath, { recursive: true, force: true });
+    } else {
+        fs.unlinkSync(safePath);
+    }
+
+    return `Success: Deleted path ${path.relative(parentDir, safePath)}`;
+}
+
 module.exports = {
     redact,
     read_file,
@@ -468,5 +577,9 @@ module.exports = {
     mysql_schema,
     mysql_select,
     get_deal_clearance_snapshot,
-    get_dashboard_snapshot
+    get_dashboard_snapshot,
+    list_directory,
+    delete_path
 };
+
+

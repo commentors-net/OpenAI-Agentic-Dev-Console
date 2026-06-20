@@ -584,32 +584,39 @@ async function requestDeveloperApproval(actionType, details, userPrompt) {
       created_at: Date.now()
     });
 
-    // Timeout after 2 minutes to prevent hanging forever
+    // Timeout after 10 minutes to prevent hanging forever (V3 Upgrade)
     setTimeout(() => {
       if (pendingActions.has(actionId)) {
         const act = pendingActions.get(actionId);
         if (act.status === 'pending') {
           act.status = 'timed_out';
           pendingActions.delete(actionId);
-          reject(new Error('Approval request timed out after 2 minutes.'));
+          reject(new Error('Approval request timed out after 10 minutes.'));
         }
       }
-    }, 120000);
+    }, 600000);
   });
 }
 
-const DEV_AGENT_INSTRUCTIONS = `You are the Deal Desk Dev Agent Bridge (v2). 
-Your role is to help the developer interrogate the live application state and modify files securely in the workspace.
+const DEV_AGENT_INSTRUCTIONS = `You are the Deal Desk Dev Agent Bridge (v3). 
+Your role is to help the developer interrogate the live application state, modify files securely, and manage/create sibling applications in the workspace context.
 
 RULES:
-- You can now read, search, write, and modify files in the workspace.
-- You can execute whitelisted development commands (such as npm build/test, git diff/status, or node check) using run_command.
+- You can read, search, write, modify, and delete files within Deal Desk, sibling backend devapps, and sibling public_html directories.
+- You can execute whitelisted development commands (such as npm build/test, git diff/status, node check, or pm2 commands) using run_command.
+- You can pass a 'cwd' parameter to run_command to execute commands in sibling app directories.
 - Always use the provided tools to gather information before answering or writing files.
-- Do not guess or invent information.
 - Redact all API keys, passwords, and secrets from your final answer.
-- Prefer existing files and existing structure.
-- When you want to modify a file, use the appropriate write or replacement tools.
-- To execute database schema changes (like creating or altering tables), write a new migration file (e.g., backend/sql/002_name.sql) and then run the migration runner command: node scripts/run-migration.js.`;
+- When spinning up sibling apps (e.g., an HR system):
+  1. Suggest the target path explicitly: Backends go to '../devapps/app-name', Frontends go to '../public_html/app-name'.
+  2. Dynamically allocate ports between 3020 and 3050. Read, write, and update 'backend/storage/dev-agent-ports.json' to register allocated ports.
+  3. Ensure the sibling app frontend contains a public .htaccess file that maps API routing to its unique port, overriding parent folder authentication basic auth.
+  4. Prompt the developer with the exact paths and port you will use before initiating creation.
+- When removing/deleting a sibling app:
+  1. Stop and delete the PM2 process first using run_command (e.g., "pm2 stop app-name", "pm2 delete app-name").
+  2. Use delete_path to remove the backend directory (e.g., "../devapps/app-name") and the frontend directory (e.g., "../public_html/app-name").
+  3. Read 'backend/storage/dev-agent-ports.json', remove the deleted app port record, and write it back.
+  4. Inform the developer of the completed cleanup steps.`;
 
 const DEV_AGENT_TOOLS = [
   {
@@ -679,11 +686,12 @@ const DEV_AGENT_TOOLS = [
     type: 'function',
     function: {
       name: 'run_command',
-      description: 'Executes a whitelisted shell command (git, npm, node --check) in the workspace.',
+      description: 'Executes a whitelisted shell command (git, npm, node --check, pm2) in the workspace.',
       parameters: {
         type: 'object',
         properties: {
-          command: { type: 'string', description: 'The whitelisted command to execute, e.g., "git status", "npm test", "node --check server.js".' }
+          command: { type: 'string', description: 'The whitelisted command to execute, e.g., "git status", "npm test", "node --check server.js", "pm2 list".' },
+          cwd: { type: 'string', description: 'Optional relative or absolute directory path to run the command in.' }
         },
         required: ['command']
       }
@@ -753,6 +761,33 @@ const DEV_AGENT_TOOLS = [
       name: 'node_check',
       description: 'Runs a syntax check on server.js.',
       parameters: { type: 'object', properties: {} }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'list_directory',
+      description: 'Lists files and directories in a given workspace folder path.',
+      parameters: {
+        type: 'object',
+        properties: {
+          dir_path: { type: 'string', description: 'Relative path in the workspace, e.g. "backend" or "backend/sql". Defaults to root ".".' }
+        }
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'delete_path',
+      description: 'Deletes a file or directory recursively inside whitelisted workspace directories (devapps or public_html).',
+      parameters: {
+        type: 'object',
+        properties: {
+          path_to_delete: { type: 'string', description: 'Relative or absolute directory/file path to delete, e.g., "../devapps/hr-system".' }
+        },
+        required: ['path_to_delete']
+      }
     }
   }
 ];
@@ -2765,6 +2800,58 @@ async function logDevAgentAudit(data) {
   }
 }
 
+function validateProposedJsSyntax(name, args) {
+  const fs = require('fs');
+  const path = require('path');
+  const vm = require('vm');
+
+  const filePath = args.file_path || '';
+  const isJs = filePath.endsWith('.js');
+  const isJson = filePath.endsWith('.json');
+  if (!isJs && !isJson) return;
+
+  let contentToValidate = '';
+  const ROOT_DIR = path.resolve(__dirname, '..');
+  const resolvedPath = path.isAbsolute(filePath)
+    ? path.resolve(filePath)
+    : path.resolve(ROOT_DIR, filePath);
+
+  if (!resolvedPath.startsWith(ROOT_DIR)) {
+    throw new Error(`Access Denied: Path '${filePath}' is outside the project workspace.`);
+  }
+
+  if (name === 'write_file') {
+    contentToValidate = args.content || '';
+  } else if (name === 'replace_file_content') {
+    if (!fs.existsSync(resolvedPath)) {
+      throw new Error(`File not found: ${filePath}`);
+    }
+    const fileContent = fs.readFileSync(resolvedPath, 'utf8');
+    const { target_content, replacement_content } = args;
+    if (target_content === undefined || replacement_content === undefined) {
+      throw new Error("Missing target_content or replacement_content");
+    }
+    if (!fileContent.includes(target_content)) {
+      throw new Error(`Target content not found in file ${filePath}.`);
+    }
+    contentToValidate = fileContent.split(target_content).join(replacement_content);
+  }
+
+  if (isJs) {
+    try {
+      new vm.Script(contentToValidate);
+    } catch (err) {
+      throw new Error(`Syntax Error in JavaScript code: ${err.message}`);
+    }
+  } else if (isJson) {
+    try {
+      JSON.parse(contentToValidate);
+    } catch (err) {
+      throw new Error(`Syntax Error in JSON content: ${err.message}`);
+    }
+  }
+}
+
 async function callDevAgentOpenAi(prompt, history = []) {
   const apiKey = process.env.OPENAI_API_KEY;
   const model = process.env.OPENAI_MODEL || 'gpt-4o'; // Standard model for tool calling
@@ -2824,8 +2911,13 @@ async function callDevAgentOpenAi(prompt, history = []) {
         let blocked_reason = null;
 
         try {
-          // Check if this tool requires human-in-the-loop approval
-          const requiresApproval = ['write_file', 'replace_file_content', 'run_command'].includes(name);
+          // Pre-validation syntax check for code changes (V3 Self-Healing)
+          if (['write_file', 'replace_file_content'].includes(name)) {
+            validateProposedJsSyntax(name, args);
+          }
+
+          // Check if this tool requires human-in-the-loop approval (V3 Deletion included)
+          const requiresApproval = ['write_file', 'replace_file_content', 'run_command', 'delete_path'].includes(name);
           if (requiresApproval) {
             // Wait for developer approval, passing the user prompt as context
             await requestDeveloperApproval(name, args, prompt);
@@ -5728,7 +5820,7 @@ async function handleRequest(req, res) {
     try {
       const reply = (typeof answerSmartManagerChat === 'function')
         ? await answerSmartManagerChat(body)
-        : await answerManagerChatLive(body);
+        : await answerManagerChat(body);
 
       await logManagerChatQuestion({
         question: body.question,
@@ -5814,6 +5906,21 @@ if (req.method === 'GET' && url.pathname === '/api/dealdesk/health') {
           answer: result.answer,
           audit_id: result.audit_id
         });
+      } catch (err) {
+        sendJson(res, 500, { ok: false, error: err.message });
+      }
+      return;
+    }
+
+    if (req.method === 'GET' && url.pathname === '/api/dev-agent/audit') {
+      try {
+        const [rows] = await pool.query(
+          `SELECT id, public_id, user_prompt, tool_name, tool_args_json, tool_result_preview, allowed, blocked_reason, created_by, created_at 
+           FROM dd_dev_agent_audit 
+           ORDER BY created_at DESC 
+           LIMIT 50`
+        );
+        sendJson(res, 200, { ok: true, audit: rows });
       } catch (err) {
         sendJson(res, 500, { ok: false, error: err.message });
       }

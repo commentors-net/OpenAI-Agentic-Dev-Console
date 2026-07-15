@@ -47,7 +47,15 @@ To ensure system safety, the Dev Agent cannot write files, delete paths, or exec
     *   It requests a `run_command` call with `npm test`. The UI displays the command. The developer clicks **Approve**.
 5.  **Outcome:** The files are updated and tests are executed successfully, with all actions audited in `dd_dev_agent_audit` and rendered instantly in the Live Audit Log pane.
 
-### 2.2 Database Schema Migrations
+### 2.2 Database Capabilities & Schema Migrations
+The Dev Agent Console has access to the database using the credentials configured in `backend/.env`.
+
+#### Database Capabilities & Restrictions:
+*   **Whitelisted Tables:** Direct interrogation via the agent is restricted to whitelisted tables (e.g., `dd_deals`, `dd_transaction_tasks`, `dd_deal_history`, `dd_communications`, `dd_directory_contacts`, `dd_manager_chat_questions`).
+*   **Read-Only Chat Queries:** Direct database queries via chat are restricted to `SELECT` operations. Destructive SQL keywords (`CREATE`, `DROP`, `ALTER`, `INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`) are strictly forbidden and blocked in direct query tools.
+*   **OS Sudo is Not Required:** Performing database engine operations (including creating tables or databases) does **not** require system root/sudo privileges. It only requires that the database user (`DB_USER` in `.env`) has been granted appropriate privileges (e.g. `CREATE`, `ALTER`) in the MySQL/MariaDB server configuration.
+
+#### Executing Schema Changes (e.g. Creating Tables or Databases):
 For database schema modifications (such as creating tables, altering columns, or adding indexes):
 1.  **Migration File Creation:** The Dev Agent writes a version-controlled SQL migration file to `backend/sql/` (e.g., `002_person.sql`). The UI prompts you to review and approve the file contents.
 2.  **Migration Execution:** The agent requests permission to run `node scripts/run-migration.js` via the console's command execution flow.

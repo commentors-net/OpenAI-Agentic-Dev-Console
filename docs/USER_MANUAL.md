@@ -53,6 +53,18 @@ For database schema modifications (such as creating tables, altering columns, or
 2.  **Migration Execution:** The agent requests permission to run `node scripts/run-migration.js` via the console's command execution flow.
 3.  **Approval Flow:** Review the SQL diff and the command in the approval modal, then click **Approve** to run it safely.
 
+### 2.3 Security Restrictions & Sandbox Limitations (Critical Guardrails)
+
+> [!CAUTION]
+> **Sudo Execution and Sandbox Escapes are Strictly Blocked**
+> 
+> The Dev Agent Bridge does **not** support executing commands with `sudo` (root privileges) or interacting with files/directories outside the authorized home directory sandbox (`/home/servicedepartmen/`).
+> 
+> **Why these limitations are enforced:**
+> 1. **Prevention of Web Shell Vulnerabilities:** Allowing root command execution (`sudo`) or removing path containment would effectively transform the Dev Console into an uncontained, privilege-escalated web shell. If the `DEALDESK_DEV_AGENT_TOKEN` is leaked, exposed, or if a command injection vulnerability is discovered, an attacker would gain complete administrative control of the entire server.
+> 2. **Process Privilege Isolation:** The Node.js application process runs under a restricted OS user account. Running commands with `sudo` requires passwordless access in `/etc/sudoers`, which violates the principle of least privilege.
+> 3. **Protection Against Destructive Operations:** System-level deletions or modifications (e.g. modifying system config files or system binaries) are prevented at both the application level and the OS-permission level to avoid irreversible damage to the hosting server.
+
 ---
 
 ## 3. Sibling Web Applications & Sandbox Whitelisting (V3 Orchestrator)
